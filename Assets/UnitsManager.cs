@@ -33,12 +33,12 @@ public class LoadingBarManager : MonoBehaviour
     private readonly float maxBarWidth = 300f;
 
     // Files d'attente pour gérer les améliorations en attente
-    private Queue<string> unitT1Queue = new Queue<string>();
-    private Queue<string> unitT2Queue = new Queue<string>();
-    private Queue<string> unitT3Queue = new Queue<string>();
+    private readonly Queue<string> unitT1Queue = new();
+    private readonly Queue<string> unitT2Queue = new();
+    private readonly Queue<string> unitT3Queue = new();
 
     // Variable pour le multiplicateur
-    private int[] multiplicators = { 1, 5, 10, 50 };
+    private readonly int[] multiplicators = { 1, 5, 10, 50 };
     private int currentMultiplicatorIndex = 0;
 
     void Start()
