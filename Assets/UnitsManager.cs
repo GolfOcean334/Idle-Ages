@@ -13,6 +13,7 @@ public class LoadingBarManager : MonoBehaviour
     [SerializeField] private Button buttonT1;
     [SerializeField] private Button buttonT2;
     [SerializeField] private Button buttonT3;
+    [SerializeField] private Button multiplicatorButton; // Bouton pour le multiplicateur
     [SerializeField] private TextMeshProUGUI UnitsT1Text;
     [SerializeField] private TextMeshProUGUI UnitsT2Text;
     [SerializeField] private TextMeshProUGUI UnitsT3Text;
@@ -28,7 +29,7 @@ public class LoadingBarManager : MonoBehaviour
     private bool isLoadingT3 = false;
 
     // Constantes pour le temps de chargement et la largeur maximale de la barre
-    private readonly float loadingTime = 5f; 
+    private readonly float loadingTime = 5f;
     private readonly float maxBarWidth = 300f;
 
     // Files d'attente pour gérer les améliorations en attente
@@ -36,50 +37,67 @@ public class LoadingBarManager : MonoBehaviour
     private Queue<string> unitT2Queue = new Queue<string>();
     private Queue<string> unitT3Queue = new Queue<string>();
 
+    // Variable pour le multiplicateur
+    private int[] multiplicators = { 1, 5, 10, 50 };
+    private int currentMultiplicatorIndex = 0;
+
     void Start()
     {
         // Ajouter des listeners pour les boutons
         buttonT1.onClick.AddListener(() => OnStartButtonClick("T1"));
         buttonT2.onClick.AddListener(() => OnStartButtonClick("T2"));
         buttonT3.onClick.AddListener(() => OnStartButtonClick("T3"));
+        multiplicatorButton.onClick.AddListener(ChangeMultiplicator); // Ajouter un listener pour le bouton multiplicateur
 
         // Initialiser l'affichage des unités
         UpdateUnitsT1Text();
         UpdateUnitsT2Text();
         UpdateUnitsT3Text();
+
+        // Initialiser le texte du bouton multiplicateur
+        multiplicatorButton.GetComponentInChildren<TextMeshProUGUI>().text = "x" + multiplicators[currentMultiplicatorIndex];
+    }
+
+    // Méthode pour changer le multiplicateur
+    void ChangeMultiplicator()
+    {
+        currentMultiplicatorIndex = (currentMultiplicatorIndex + 1) % multiplicators.Length;
+        multiplicatorButton.GetComponentInChildren<TextMeshProUGUI>().text = "x" + multiplicators[currentMultiplicatorIndex];
     }
 
     // Méthode appelée lorsque l'un des boutons est cliqué
     void OnStartButtonClick(string unitType)
     {
-        if (unitType == "T1")
-        {
-            unitT1Queue.Enqueue(unitType); // Ajouter une amélioration à la file d'attente pour T1
+        int multiplier = multiplicators[currentMultiplicatorIndex];
 
-            // Démarrer la coroutine si aucune amélioration n'est en cours
-            if (!isLoadingT1)
+        for (int i = 0; i < multiplier; i++)
+        {
+            if (unitType == "T1")
             {
-                StartCoroutine(ProcessQueue(unitType));
+                unitT1Queue.Enqueue(unitType); // Ajouter une amélioration à la file d'attente pour T1
+                // Démarrer la coroutine si aucune amélioration n'est en cours
+                if (!isLoadingT1)
+                {
+                    StartCoroutine(ProcessQueue(unitType));
+                }
             }
-        }
-        else if (unitType == "T2")
-        {
-            unitT2Queue.Enqueue(unitType); // Ajouter une amélioration à la file d'attente pour T2
-
-            // Démarrer la coroutine si aucune amélioration n'est en cours
-            if (!isLoadingT2)
+            else if (unitType == "T2")
             {
-                StartCoroutine(ProcessQueue(unitType));
+                unitT2Queue.Enqueue(unitType); // Ajouter une amélioration à la file d'attente pour T2
+                // Démarrer la coroutine si aucune amélioration n'est en cours
+                if (!isLoadingT2)
+                {
+                    StartCoroutine(ProcessQueue(unitType));
+                }
             }
-        }
-        else if (unitType == "T3")
-        {
-            unitT3Queue.Enqueue(unitType); // Ajouter une amélioration à la file d'attente pour T3
-
-            // Démarrer la coroutine si aucune amélioration n'est en cours
-            if (!isLoadingT3)
+            else if (unitType == "T3")
             {
-                StartCoroutine(ProcessQueue(unitType));
+                unitT3Queue.Enqueue(unitType); // Ajouter une amélioration à la file d'attente pour T3
+                // Démarrer la coroutine si aucune amélioration n'est en cours
+                if (!isLoadingT3)
+                {
+                    StartCoroutine(ProcessQueue(unitType));
+                }
             }
         }
     }
