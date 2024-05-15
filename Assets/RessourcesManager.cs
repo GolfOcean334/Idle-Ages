@@ -11,10 +11,10 @@ public class ResourcesManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI resource4Text;
 
     // Compteurs pour les ressources
-    private int resource1 = 0;
-    private int resource2 = 0;
-    private int resource3 = 0;
-    private int resource4 = 0;
+    public int resource1 = 0;
+    public int resource2 = 0;
+    public int resource3 = 0;
+    public int resource4 = 0;
 
     // Vitesse de gain des ressources
     private readonly int resourcesPerSecond = 5;

@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
+using System.Resources;
 
 public class LoadingBarManager : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class LoadingBarManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI UnitsT1Text;
     [SerializeField] private TextMeshProUGUI UnitsT2Text;
     [SerializeField] private TextMeshProUGUI UnitsT3Text;
+
+    // Référence au ResourcesManager
+    [SerializeField] private ResourcesManager resourcesManager;
 
     // Compteurs pour les unités
     public int UnitsT1 = 0;
@@ -69,10 +73,12 @@ public class LoadingBarManager : MonoBehaviour
     void OnStartButtonClick(string unitType)
     {
         int multiplier = multiplicators[currentMultiplicatorIndex];
+        int ressourceCost = 2 * multiplicators[currentMultiplicatorIndex];
 
-        for (int i = 0; i < multiplier; i++)
+        if (unitType == "T1" && resourcesManager.resource1 >= ressourceCost)
         {
-            if (unitType == "T1")
+            resourcesManager.resource1 -= ressourceCost;
+            for (int i = 0; i < multiplier; i++)
             {
                 unitT1Queue.Enqueue(unitType); // Ajouter une amélioration à la file d'attente pour T1
                 // Démarrer la coroutine si aucune amélioration n'est en cours
@@ -81,7 +87,11 @@ public class LoadingBarManager : MonoBehaviour
                     StartCoroutine(ProcessQueue(unitType));
                 }
             }
-            else if (unitType == "T2")
+        }
+        else if (unitType == "T2" && resourcesManager.resource2 >= ressourceCost)
+        {
+            resourcesManager.resource2 -= ressourceCost;
+            for (int i = 0; i < multiplier; i++)
             {
                 unitT2Queue.Enqueue(unitType); // Ajouter une amélioration à la file d'attente pour T2
                 // Démarrer la coroutine si aucune amélioration n'est en cours
@@ -90,7 +100,11 @@ public class LoadingBarManager : MonoBehaviour
                     StartCoroutine(ProcessQueue(unitType));
                 }
             }
-            else if (unitType == "T3")
+        }
+        else if (unitType == "T3" && resourcesManager.resource3 >= ressourceCost)
+        {
+            resourcesManager.resource3 -= ressourceCost;
+            for (int i = 0; i < multiplier; i++)
             {
                 unitT3Queue.Enqueue(unitType); // Ajouter une amélioration à la file d'attente pour T3
                 // Démarrer la coroutine si aucune amélioration n'est en cours
