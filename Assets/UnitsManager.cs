@@ -24,6 +24,11 @@ public class UnitsManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI buttonT2Text;
     [SerializeField] private TextMeshProUGUI buttonT3Text;
 
+    // Référence aux textes utilisés pour afficher le cooldown de fin de formation de chaque unité
+    [SerializeField] private TextMeshProUGUI UnitsT1CooldownText;
+    [SerializeField] private TextMeshProUGUI UnitsT2CooldownText;
+    [SerializeField] private TextMeshProUGUI UnitsT3CooldownText;
+
     // Référence au ResourcesManager
     [SerializeField] private ResourcesManager resourcesManager;
 
@@ -68,6 +73,11 @@ public class UnitsManager : MonoBehaviour
 
         // Initialiser les textes des boutons d'achat avec le coût
         UpdateButtonCosts();
+
+        // Initialiser les textes des cooldowns à 0
+        UnitsT1CooldownText.text = "";
+        UnitsT2CooldownText.text = "";
+        UnitsT3CooldownText.text = "";
     }
 
     // Méthode pour changer le multiplicateur
@@ -132,6 +142,8 @@ public class UnitsManager : MonoBehaviour
                 }
             }
         }
+
+        UpdateCooldownTexts(); // Mettre à jour les textes des cooldowns
     }
 
     // Coroutine pour traiter la file d'attente des améliorations
@@ -143,7 +155,7 @@ public class UnitsManager : MonoBehaviour
             {
                 isLoadingT1 = true;
                 unitT1Queue.Dequeue(); // Retirer une amélioration de la file d'attente
-                yield return StartCoroutine(LoadOverTime(loadingBarT1)); // Effectuer l'animation de la barre de chargement
+                yield return StartCoroutine(LoadOverTime(loadingBarT1, UnitsT1CooldownText)); // Effectuer l'animation de la barre de chargement
                 IncreaseUnitsT1();
             }
             isLoadingT1 = false;
@@ -154,7 +166,7 @@ public class UnitsManager : MonoBehaviour
             {
                 isLoadingT2 = true;
                 unitT2Queue.Dequeue(); // Retirer une amélioration de la file d'attente
-                yield return StartCoroutine(LoadOverTime(loadingBarT2)); // Effectuer l'animation de la barre de chargement
+                yield return StartCoroutine(LoadOverTime(loadingBarT2, UnitsT2CooldownText)); // Effectuer l'animation de la barre de chargement
                 IncreaseUnitsT2();
             }
             isLoadingT2 = false;
@@ -165,15 +177,17 @@ public class UnitsManager : MonoBehaviour
             {
                 isLoadingT3 = true;
                 unitT3Queue.Dequeue(); // Retirer une amélioration de la file d'attente
-                yield return StartCoroutine(LoadOverTime(loadingBarT3)); // Effectuer l'animation de la barre de chargement
+                yield return StartCoroutine(LoadOverTime(loadingBarT3, UnitsT3CooldownText)); // Effectuer l'animation de la barre de chargement
                 IncreaseUnitsT3();
             }
             isLoadingT3 = false;
         }
+
+        UpdateCooldownTexts(); // Mettre à jour les textes des cooldowns après chaque amélioration
     }
 
-    // Coroutine pour animer la barre de chargement
-    IEnumerator LoadOverTime(RectTransform loadingBar)
+    // Coroutine pour animer la barre de chargement et mettre à jour le cooldown
+    IEnumerator LoadOverTime(RectTransform loadingBar, TextMeshProUGUI cooldownText)
     {
         float elapsedTime = 0f;
         float initialBarWidth = 0f;
@@ -185,11 +199,36 @@ public class UnitsManager : MonoBehaviour
             // Calculer la nouvelle largeur de la barre
             float newWidth = Mathf.Lerp(initialBarWidth, maxBarWidth, elapsedTime / loadingTime);
             loadingBar.sizeDelta = new Vector2(newWidth, loadingBar.sizeDelta.y);
+
+            // Mettre à jour le texte du cooldown
+            cooldownText.text = "Cooldown: " + (loadingTime - elapsedTime).ToString("F2") + "s";
             yield return null; // Attendre la frame suivante
         }
 
         // Assurer que la barre atteint la largeur maximale
         loadingBar.sizeDelta = new Vector2(maxBarWidth, loadingBar.sizeDelta.y);
+
+        // Réinitialiser le texte du cooldown
+        cooldownText.text = "";
+    }
+
+    // Mettre à jour les textes des cooldowns pour refléter le temps total restant pour chaque type d'unité
+    void UpdateCooldownTexts()
+    {
+        UnitsT1CooldownText.text = CalculateTotalCooldown(unitT1Queue.Count, isLoadingT1);
+        UnitsT2CooldownText.text = CalculateTotalCooldown(unitT2Queue.Count, isLoadingT2);
+        UnitsT3CooldownText.text = CalculateTotalCooldown(unitT3Queue.Count, isLoadingT3);
+    }
+
+    // Calculer le temps total restant en fonction de la file d'attente et de l'état de chargement
+    string CalculateTotalCooldown(int queueCount, bool isLoading)
+    {
+        float totalCooldown = queueCount * loadingTime;
+        if (isLoading)
+        {
+            totalCooldown += loadingTime; // Ajouter le temps restant pour l'unité en cours de chargement
+        }
+        return totalCooldown > 0 ? "Total Cooldown: " + totalCooldown.ToString("F2") + "s" : "";
     }
 
     void IncreaseUnitsT1()
