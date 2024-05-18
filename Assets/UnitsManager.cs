@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Resources;
 
-public class LoadingBarManager : MonoBehaviour
+public class UnitsManager : MonoBehaviour
 {
     // Références aux éléments UI pour les barres de chargement et les boutons
     [SerializeField] private RectTransform loadingBarT1;
@@ -19,13 +19,18 @@ public class LoadingBarManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI UnitsT2Text;
     [SerializeField] private TextMeshProUGUI UnitsT3Text;
 
+    // Références aux textes des boutons pour afficher le coût en ressources
+    [SerializeField] private TextMeshProUGUI buttonT1Text;
+    [SerializeField] private TextMeshProUGUI buttonT2Text;
+    [SerializeField] private TextMeshProUGUI buttonT3Text;
+
     // Référence au ResourcesManager
     [SerializeField] private ResourcesManager resourcesManager;
 
     // Compteurs pour les unités
-    public int UnitsT1 = 0;
-    public int UnitsT2 = 0;
-    public int UnitsT3 = 0;
+    private int UnitsT1 = 0;
+    private int UnitsT2 = 0;
+    private int UnitsT3 = 0;
 
     // Indicateurs pour savoir si une barre de chargement est en cours
     private bool isLoadingT1 = false;
@@ -60,6 +65,9 @@ public class LoadingBarManager : MonoBehaviour
 
         // Initialiser le texte du bouton multiplicateur
         multiplicatorButton.GetComponentInChildren<TextMeshProUGUI>().text = "x" + multiplicators[currentMultiplicatorIndex];
+
+        // Initialiser les textes des boutons d'achat avec le coût
+        UpdateButtonCosts();
     }
 
     // Méthode pour changer le multiplicateur
@@ -67,17 +75,27 @@ public class LoadingBarManager : MonoBehaviour
     {
         currentMultiplicatorIndex = (currentMultiplicatorIndex + 1) % multiplicators.Length;
         multiplicatorButton.GetComponentInChildren<TextMeshProUGUI>().text = "x" + multiplicators[currentMultiplicatorIndex];
+        UpdateButtonCosts(); // Mettre à jour les coûts sur les boutons
+    }
+
+    // Méthode pour mettre à jour les coûts affichés sur les boutons d'achat
+    void UpdateButtonCosts()
+    {
+        int resourceCost = 2 * multiplicators[currentMultiplicatorIndex];
+        buttonT1Text.text = "Buy T1\nCost: " + resourceCost + " Res1";
+        buttonT2Text.text = "Buy T2\nCost: " + resourceCost + " Res2";
+        buttonT3Text.text = "Buy T3\nCost: " + resourceCost + " Res3";
     }
 
     // Méthode appelée lorsque l'un des boutons est cliqué
     void OnStartButtonClick(string unitType)
     {
         int multiplier = multiplicators[currentMultiplicatorIndex];
-        int ressourceCost = 2 * multiplicators[currentMultiplicatorIndex];
+        int resourceCost = 2 * multiplicators[currentMultiplicatorIndex];
 
-        if (unitType == "T1" && resourcesManager.resource1 >= ressourceCost)
+        if (unitType == "T1" && resourcesManager.resource1 >= resourceCost)
         {
-            resourcesManager.resource1 -= ressourceCost;
+            resourcesManager.resource1 -= resourceCost;
             for (int i = 0; i < multiplier; i++)
             {
                 unitT1Queue.Enqueue(unitType); // Ajouter une amélioration à la file d'attente pour T1
@@ -88,9 +106,9 @@ public class LoadingBarManager : MonoBehaviour
                 }
             }
         }
-        else if (unitType == "T2" && resourcesManager.resource2 >= ressourceCost)
+        else if (unitType == "T2" && resourcesManager.resource2 >= resourceCost)
         {
-            resourcesManager.resource2 -= ressourceCost;
+            resourcesManager.resource2 -= resourceCost;
             for (int i = 0; i < multiplier; i++)
             {
                 unitT2Queue.Enqueue(unitType); // Ajouter une amélioration à la file d'attente pour T2
@@ -101,9 +119,9 @@ public class LoadingBarManager : MonoBehaviour
                 }
             }
         }
-        else if (unitType == "T3" && resourcesManager.resource3 >= ressourceCost)
+        else if (unitType == "T3" && resourcesManager.resource3 >= resourceCost)
         {
-            resourcesManager.resource3 -= ressourceCost;
+            resourcesManager.resource3 -= resourceCost;
             for (int i = 0; i < multiplier; i++)
             {
                 unitT3Queue.Enqueue(unitType); // Ajouter une amélioration à la file d'attente pour T3
@@ -183,7 +201,7 @@ public class LoadingBarManager : MonoBehaviour
 
     void UpdateUnitsT1Text()
     {
-        UnitsT1Text.text = "UnitsT1 : " + UnitsT1;
+        UnitsT1Text.text = "UnitsT1: " + UnitsT1;
     }
 
     void IncreaseUnitsT2()
@@ -195,7 +213,7 @@ public class LoadingBarManager : MonoBehaviour
 
     void UpdateUnitsT2Text()
     {
-        UnitsT2Text.text = "UnitsT2 : " + UnitsT2;
+        UnitsT2Text.text = "UnitsT2: " + UnitsT2;
     }
 
     void IncreaseUnitsT3()
@@ -207,7 +225,7 @@ public class LoadingBarManager : MonoBehaviour
 
     void UpdateUnitsT3Text()
     {
-        UnitsT3Text.text = "UnitsT3 : " + UnitsT3;
+        UnitsT3Text.text = "UnitsT3: " + UnitsT3;
     }
 
     // Réinitialiser la largeur de la barre de chargement

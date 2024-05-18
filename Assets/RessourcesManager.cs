@@ -46,9 +46,9 @@ public class ResourcesManager : MonoBehaviour
     // Méthode pour mettre à jour les textes UI
     void UpdateResourceTexts()
     {
-        resource1Text.text = "Wood: " + resource1;
+        resource3Text.text = "Food: " + resource1;
         resource2Text.text = "Stone: " + resource2;
-        resource3Text.text = "Food: " + resource3;
+        resource1Text.text = "Wood: " + resource3;
         resource4Text.text = "Gemme: " + resource4;
     }
 }
