@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 
 public class UnitsManager : MonoBehaviour
 {
@@ -50,7 +51,9 @@ public class UnitsManager : MonoBehaviour
         UpdateUnitsT1Text();
         UpdateUnitsT2Text();
         UpdateUnitsT3Text();
+
         multiplicatorButton.GetComponentInChildren<TextMeshProUGUI>().text = "x" + multiplicators[currentMultiplicatorIndex];
+
         UpdateButtonCosts();
         UnitsT1CooldownText.text = "";
         UnitsT2CooldownText.text = "";
@@ -202,7 +205,15 @@ public class UnitsManager : MonoBehaviour
 
     string CalculateTotalCooldown(int queueCount, float currentLoadingTime)
     {
-        float totalCooldown = queueCount * loadingTime + currentLoadingTime;
+        float totalCooldown = queueCount * loadingTime;
+        if (queueCount > 0)
+        {
+            totalCooldown -= (loadingTime - currentLoadingTime);
+        }
+        else 
+        { 
+            totalCooldown = 0;
+        }
         return totalCooldown > 0 ? "Temps formation: " + totalCooldown.ToString("F2") + "s" : "";
     }
 
