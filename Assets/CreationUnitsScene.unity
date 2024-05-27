@@ -2806,6 +2806,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1296061803}
+  - component: {fileID: 1296061804}
   m_Layer: 0
   m_Name: UIGlobal
   m_TagString: Untagged
@@ -2838,6 +2839,18 @@ Transform:
   - {fileID: 1506223870}
   m_Father: {fileID: 1983153331}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1296061804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1296061802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51f0e7e8a553b084fa1c372d1b95cea7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1312048837
 GameObject:
   m_ObjectHideFlags: 0
@@ -3228,7 +3241,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f053bf757d2bab94c95df8486cb04fed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneNameToLoad: SettingScene
 --- !u!1 &1528166360
 GameObject:
   m_ObjectHideFlags: 0
@@ -3756,7 +3768,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1863197716}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3812,9 +3824,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1506223871}
-        m_TargetAssemblyTypeName: ChangeScene, Assembly-CSharp
-        m_MethodName: changeScene
+      - m_Target: {fileID: 1296061804}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: ReturnSetting
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
