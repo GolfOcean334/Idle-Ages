@@ -43,6 +43,9 @@ public class UnitsManager : MonoBehaviour
 
     void Start()
     {
+        //Charger le nombre de Units
+        LoadUnits();
+
         buttonT1.onClick.AddListener(() => OnStartButtonClick("T1"));
         buttonT2.onClick.AddListener(() => OnStartButtonClick("T2"));
         buttonT3.onClick.AddListener(() => OnStartButtonClick("T3"));
@@ -60,6 +63,19 @@ public class UnitsManager : MonoBehaviour
         UnitsT3CooldownText.text = "";
     }
 
+    // Méthode appelée quand le jeu est fermé ou la scène est changée
+    void OnApplicationQuit()
+    {
+        SaveUnits();
+    }
+
+    void OnApplicationPause(bool pauseStatus)
+    {
+        if (pauseStatus)
+        {
+            SaveUnits();
+        }
+    }
     void ChangeMultiplicator()
     {
         currentMultiplicatorIndex = (currentMultiplicatorIndex + 1) % multiplicators.Length;
@@ -256,5 +272,25 @@ public class UnitsManager : MonoBehaviour
     void ResetLoadingBar(RectTransform loadingBar)
     {
         loadingBar.sizeDelta = new Vector2(0f, loadingBar.sizeDelta.y);
+    }
+
+    // Méthode pour sauvegarder les Units
+    public void SaveUnits()
+    {
+        PlayerPrefs.SetInt("Units1", UnitsT1);
+        PlayerPrefs.SetInt("Units2", UnitsT2);
+        PlayerPrefs.SetInt("Units3", UnitsT3);
+        PlayerPrefs.Save();
+    }
+
+    // Méthode pour charger les Units
+    void LoadUnits()
+    {
+        UnitsT1 = PlayerPrefs.GetInt("Units1", 0);
+        UnitsT2 = PlayerPrefs.GetInt("Units2", 0);
+        UnitsT3 = PlayerPrefs.GetInt("Units3", 0);
+        UpdateUnitsT1Text();
+        UpdateUnitsT2Text();
+        UpdateUnitsT3Text();
     }
 }

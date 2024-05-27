@@ -18,12 +18,14 @@ public class MainMenu : MonoBehaviour
     {
         // Stocker le nom de la scène actuelle avant de charger la scène des paramètres
         previousScene = SceneManager.GetActiveScene().name;
+        SaveUnits();
         SaveResources();
         SceneManager.LoadScene("SettingScene");
     }
 
     public void QuitGame()
     {
+        SaveUnits();
         SaveResources();
         Application.Quit();
     }
@@ -37,6 +39,19 @@ public class MainMenu : MonoBehaviour
             if (resourcesManagerObject.TryGetComponent<ResourcesManager>(out var resourcesManager))
             {
                 resourcesManager.SaveResources();
+            }
+        }
+    }
+
+    // Méthode privée pour sauvegarder les Units
+    private void SaveUnits()
+    {
+        GameObject UnitsManagerObject = GameObject.Find("UnitsManager");
+        if (UnitsManagerObject != null)
+        {
+            if (UnitsManagerObject.TryGetComponent<UnitsManager>(out var UnitsManager))
+            {
+                UnitsManager.SaveUnits();
             }
         }
     }
