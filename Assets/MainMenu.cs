@@ -5,18 +5,40 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    // Variable statique pour stocker le nom de la scène précédente
+    private static string previousScene;
+
     public void ReturnGame()
     {
-        SceneManager.LoadScene("CreationUnitsScene");
+        SaveResources();
+        SceneManager.LoadScene(previousScene);
     }
 
     public void ReturnSetting()
     {
+        // Stocker le nom de la scène actuelle avant de charger la scène des paramètres
+        previousScene = SceneManager.GetActiveScene().name;
+        SaveResources();
         SceneManager.LoadScene("SettingScene");
     }
 
     public void QuitGame()
     {
+        SaveResources();
         Application.Quit();
+    }
+
+    // Méthode privée pour sauvegarder les ressources
+    private void SaveResources()
+    {
+        GameObject resourcesManagerObject = GameObject.Find("ResourcesManager");
+        if (resourcesManagerObject != null)
+        {
+            ResourcesManager resourcesManager = resourcesManagerObject.GetComponent<ResourcesManager>();
+            if (resourcesManager != null)
+            {
+                resourcesManager.SaveResources();
+            }
+        }
     }
 }
