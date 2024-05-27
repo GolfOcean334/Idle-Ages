@@ -34,8 +34,7 @@ public class MainMenu : MonoBehaviour
         GameObject resourcesManagerObject = GameObject.Find("ResourcesManager");
         if (resourcesManagerObject != null)
         {
-            ResourcesManager resourcesManager = resourcesManagerObject.GetComponent<ResourcesManager>();
-            if (resourcesManager != null)
+            if (resourcesManagerObject.TryGetComponent<ResourcesManager>(out var resourcesManager))
             {
                 resourcesManager.SaveResources();
             }
