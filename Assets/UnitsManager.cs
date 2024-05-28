@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
+using System;
 
 public class UnitsManager : MonoBehaviour
 {
@@ -43,7 +43,7 @@ public class UnitsManager : MonoBehaviour
 
     void Start()
     {
-        //Charger le nombre de Units
+        // Charger les unités sauvegardées et calculer les ressources en fonction du temps écoulé
         LoadUnits();
 
         buttonT1.onClick.AddListener(() => OnStartButtonClick("T1"));
@@ -76,6 +76,7 @@ public class UnitsManager : MonoBehaviour
             SaveUnits();
         }
     }
+
     void ChangeMultiplicator()
     {
         currentMultiplicatorIndex = (currentMultiplicatorIndex + 1) % multiplicators.Length;
@@ -226,8 +227,8 @@ public class UnitsManager : MonoBehaviour
         {
             totalCooldown -= (loadingTime - currentLoadingTime);
         }
-        else 
-        { 
+        else
+        {
             totalCooldown = 0;
         }
         return totalCooldown > 0 ? "Temps formation: " + totalCooldown.ToString("F2") + "s" : "";
@@ -274,23 +275,104 @@ public class UnitsManager : MonoBehaviour
         loadingBar.sizeDelta = new Vector2(0f, loadingBar.sizeDelta.y);
     }
 
-    // Méthode pour sauvegarder les Units
+    // Méthode pour sauvegarder les unités et les files d'attente
     public void SaveUnits()
     {
         PlayerPrefs.SetInt("Units1", UnitsT1);
         PlayerPrefs.SetInt("Units2", UnitsT2);
         PlayerPrefs.SetInt("Units3", UnitsT3);
+
+        PlayerPrefs.SetString("unitT1Queue", string.Join(",", unitT1Queue.ToArray()));
+        PlayerPrefs.SetString("unitT2Queue", string.Join(",", unitT2Queue.ToArray()));
+        PlayerPrefs.SetString("unitT3Queue", string.Join(",", unitT3Queue.ToArray()));
+
+        // Enregistrer l'heure de la sauvegarde
+        PlayerPrefs.SetString("LastSaveTime", DateTime.Now.ToBinary().ToString());
+
         PlayerPrefs.Save();
     }
 
-    // Méthode pour charger les Units
+    // Méthode pour charger les unités et les files d'attente
     void LoadUnits()
     {
         UnitsT1 = PlayerPrefs.GetInt("Units1", 0);
         UnitsT2 = PlayerPrefs.GetInt("Units2", 0);
         UnitsT3 = PlayerPrefs.GetInt("Units3", 0);
+
+        LoadQueue("unitT1Queue", unitT1Queue);
+        LoadQueue("unitT2Queue", unitT2Queue);
+        LoadQueue("unitT3Queue", unitT3Queue);
+
+        // Calculer le temps écoulé depuis la dernière sauvegarde
+        string lastSaveTimeString = PlayerPrefs.GetString("LastSaveTime", DateTime.Now.ToBinary().ToString());
+        DateTime lastSaveTime = DateTime.FromBinary(Convert.ToInt64(lastSaveTimeString));
+        TimeSpan timeSinceLastSave = DateTime.Now - lastSaveTime;
+
+        // Mettre à jour les ressources et les améliorations en cours en fonction du temps écoulé
+        ProcessElapsedTime(timeSinceLastSave);
+
         UpdateUnitsT1Text();
         UpdateUnitsT2Text();
         UpdateUnitsT3Text();
+
+        UpdateCooldownTexts();
+
+        // Redémarrer les coroutines si nécessaire
+        if (unitT1Queue.Count > 0 && !isLoadingT1)
+        {
+            StartCoroutine(ProcessQueue("T1"));
+        }
+        if (unitT2Queue.Count > 0 && !isLoadingT2)
+        {
+            StartCoroutine(ProcessQueue("T2"));
+        }
+        if (unitT3Queue.Count > 0 && !isLoadingT3)
+        {
+            StartCoroutine(ProcessQueue("T3"));
+        }
+    }
+
+    void LoadQueue(string key, Queue<string> queue)
+    {
+        queue.Clear();
+        string savedQueue = PlayerPrefs.GetString(key, "");
+        if (!string.IsNullOrEmpty(savedQueue))
+        {
+            string[] items = savedQueue.Split(',');
+            foreach (var item in items)
+            {
+                queue.Enqueue(item);
+            }
+        }
+    }
+
+    void ProcessElapsedTime(TimeSpan elapsedTime)
+    {
+        // Calculer combien de cycles de chargement peuvent être complétés
+        int completedT1Cycles = Mathf.FloorToInt((float)elapsedTime.TotalSeconds / loadingTime);
+        int completedT2Cycles = Mathf.FloorToInt((float)elapsedTime.TotalSeconds / loadingTime);
+        int completedT3Cycles = Mathf.FloorToInt((float)elapsedTime.TotalSeconds / loadingTime);
+
+        // Mettre à jour les unités en fonction des cycles complétés
+        for (int i = 0; i < completedT1Cycles && unitT1Queue.Count > 0; i++)
+        {
+            unitT1Queue.Dequeue();
+            IncreaseUnitsT1();
+        }
+        for (int i = 0; i < completedT2Cycles && unitT2Queue.Count > 0; i++)
+        {
+            unitT2Queue.Dequeue();
+            IncreaseUnitsT2();
+        }
+        for (int i = 0; i < completedT3Cycles && unitT3Queue.Count > 0; i++)
+        {
+            unitT3Queue.Dequeue();
+            IncreaseUnitsT3();
+        }
+
+        // Mettre à jour les ressources en fonction du temps écoulé (vous pouvez ajuster cela selon votre logique)
+        resourcesManager.resource1 += Mathf.FloorToInt((float)elapsedTime.TotalSeconds); // Exemple : 1 ressource par seconde
+        resourcesManager.resource2 += Mathf.FloorToInt((float)elapsedTime.TotalSeconds);
+        resourcesManager.resource3 += Mathf.FloorToInt((float)elapsedTime.TotalSeconds);
     }
 }
