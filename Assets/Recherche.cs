@@ -31,7 +31,7 @@ public class Recherche : MonoBehaviour
             }
 
             // Assurez-vous que l'index est dans les limites de Connectionlist
-            if (connectedResearchId >= 0 && connectedResearchId < ReseachTree.reseachTree.Connectionlist.Count)
+            if (connectedResearchId > 0 && connectedResearchId < ReseachTree.reseachTree.Connectionlist.Count)
             {
                 ReseachTree.reseachTree.Connectionlist[connectedResearchId].SetActive(isUnlocked);
             }

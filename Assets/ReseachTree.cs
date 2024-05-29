@@ -63,6 +63,11 @@ public class ReseachTree : MonoBehaviour
         ResearchList = new List<Recherche>();
         Connectionlist = new List<GameObject>();
 
+        // Créer un GameObject "DummyConnection"
+        GameObject dummyConnection = new GameObject("DummyConnection");
+        dummyConnection.transform.SetParent(ConnectionHolder.transform, false);
+        Connectionlist.Add(dummyConnection);
+
         // Ajoutez les composants Recherche des enfants de ResearchHolder
         foreach (var recherche in ResearchHolder.GetComponentsInChildren<Recherche>())
         {
@@ -89,7 +94,6 @@ public class ReseachTree : MonoBehaviour
         ResearchList[5].connectedResearch = new[] { 9 };
         ResearchList[8].connectedResearch = new[] { 10 };
         ResearchList[9].connectedResearch = new[] { 11, 12 };
-
 
         UpdateAllResearchUI();
     }
