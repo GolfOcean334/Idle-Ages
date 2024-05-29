@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static ReseachTree;
 
 public class Recherche : MonoBehaviour
 {
@@ -16,25 +15,35 @@ public class Recherche : MonoBehaviour
 
     public void UpdateUI()
     {
-        TitleText.text = $"{reseachTree.ResearchName[id]}";
-        DescText.text = $"{reseachTree.ResearchDesc[id]}\nCost:{reseachTree.ResearchPoint}/1 RP";
+        TitleText.text = $"{ReseachTree.reseachTree.ResearchName[id]}";
+        DescText.text = $"{ReseachTree.reseachTree.ResearchDesc[id]}\nCost: 1 RP";
 
-        GetComponent<Image>().color = reseachTree.isbuyed[id] > 0 ? Color.white : reseachTree.ResearchPoint > 1 ? Color.green : Color.red ;
-    
-        foreach (var connectedResearch in connectedResearch)
+        GetComponent<Image>().color = ReseachTree.reseachTree.isbuyed[id] > 0 ? Color.white : ReseachTree.reseachTree.ResearchPoint > 0 ? Color.green : Color.red;
+
+        foreach (var connectedResearchId in connectedResearch)
         {
-            ReseachTree.reseachTree.ResearchList[connectedResearch].gameObject.SetActive(reseachTree.isbuyed[id] > 0);
-            ReseachTree.reseachTree.Connectionlist[connectedResearch].SetActive(reseachTree.isbuyed[id] > 0);
-        }
+            bool isUnlocked = ReseachTree.reseachTree.isbuyed[id] > 0;
 
+            // Vérifiez si l'index est valide avant de l'utiliser
+            if (connectedResearchId >= 0 && connectedResearchId < ReseachTree.reseachTree.ResearchList.Count)
+            {
+                ReseachTree.reseachTree.ResearchList[connectedResearchId].gameObject.SetActive(isUnlocked);
+            }
+
+            // Assurez-vous que l'index est dans les limites de Connectionlist
+            if (connectedResearchId >= 0 && connectedResearchId < ReseachTree.reseachTree.Connectionlist.Count)
+            {
+                ReseachTree.reseachTree.Connectionlist[connectedResearchId].SetActive(isUnlocked);
+            }
+        }
     }
 
     public void Buy()
     {
-        if (reseachTree.ResearchPoint < 1 || reseachTree.isbuyed[id] == 1) return;
-        reseachTree.ResearchPoint -= 1;
-        reseachTree.isbuyed[id] = 1;
-        reseachTree.UpdateAllResearchUI();
+        if (ReseachTree.reseachTree.ResearchPoint < 1 || ReseachTree.reseachTree.isbuyed[id] == 1) return;
 
+        ReseachTree.reseachTree.ResearchPoint -= 1;
+        ReseachTree.reseachTree.isbuyed[id] = 1;
+        ReseachTree.reseachTree.UpdateAllResearchUI();
     }
 }
