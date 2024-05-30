@@ -17,15 +17,19 @@ public class ResourcesManager : MonoBehaviour
     public int resource4 = 0;
 
     private readonly int resourcesPerSecond = 5;
-    private readonly int maxResource = 500;
+    private readonly int maxResource = 500000000;
 
     void Start()
     {
         LoadResources();
         CalculateOfflineEarnings();
-                
         StartCoroutine(GenerateResources());
         SceneManager.activeSceneChanged += OnSceneChanged;
+    }
+
+    void Update()
+    {
+        UpdateResourceTexts();
     }
 
     void OnApplicationQuit()
@@ -52,18 +56,31 @@ public class ResourcesManager : MonoBehaviour
             resource2 = Mathf.Min(resource2 + resourcesPerSecond, maxResource);
             resource3 = Mathf.Min(resource3 + resourcesPerSecond, maxResource);
             resource4 = Mathf.Min(resource4 + resourcesPerSecond, maxResource);
-
-            // Mettre à jour les textes UI
-            UpdateResourceTexts();
         }
     }
 
     void UpdateResourceTexts()
     {
-        resource1Text.text = "Wood: " + resource1;
-        resource2Text.text = "Stone: " + resource2;
-        resource3Text.text = "Food: " + resource3;
-        resource4Text.text = "Gemme: " + resource4;
+        resource1Text.text = "Wood: " + FormatResource(resource1);
+        resource2Text.text = "Stone: " + FormatResource(resource2);
+        resource3Text.text = "Food: " + FormatResource(resource3);
+        resource4Text.text = "Gemme: " + FormatResource(resource4);
+    }
+
+    string FormatResource(int resource)
+    {
+        if (resource >= 1000000)
+        {
+            return (resource / 1000000f).ToString("F1") + "M";
+        }
+        else if (resource >= 1000)
+        {
+            return (resource / 1000f).ToString("F1") + "k";
+        }
+        else
+        {
+            return resource.ToString();
+        }
     }
 
     public void SaveResources()
@@ -83,7 +100,6 @@ public class ResourcesManager : MonoBehaviour
         resource2 = PlayerPrefs.GetInt("Resource2", 0);
         resource3 = PlayerPrefs.GetInt("Resource3", 0);
         resource4 = PlayerPrefs.GetInt("Resource4", 0);
-        UpdateResourceTexts();
     }
 
     void CalculateOfflineEarnings()
@@ -99,8 +115,6 @@ public class ResourcesManager : MonoBehaviour
         resource2 = Mathf.Min(resource2 + earnedResources, maxResource);
         resource3 = Mathf.Min(resource3 + earnedResources, maxResource);
         resource4 = Mathf.Min(resource4 + earnedResources, maxResource);
-
-        UpdateResourceTexts();
     }
 
     void OnSceneChanged(Scene current, Scene next)

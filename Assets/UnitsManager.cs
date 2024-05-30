@@ -231,7 +231,28 @@ public class UnitsManager : MonoBehaviour
         {
             totalCooldown = 0;
         }
-        return totalCooldown > 0 ? "Temps formation: " + totalCooldown.ToString("F2") + "s" : "";
+
+        return totalCooldown > 0 ? "Temps formation: " + FormatTime(totalCooldown) : "";
+    }
+
+    string FormatTime(float totalSeconds)
+    {
+        int hours = Mathf.FloorToInt(totalSeconds / 3600);
+        int minutes = Mathf.FloorToInt((totalSeconds % 3600) / 60);
+        int seconds = Mathf.FloorToInt(totalSeconds % 60);
+
+        if (hours > 0)
+        {
+            return $"{hours:D2}:{minutes:D2}:{seconds:D2}";
+        }
+        else if (minutes > 0)
+        {
+            return $"{minutes:D2}:{seconds:D2}";
+        }
+        else
+        {
+            return $"{seconds:D2} s";
+        }
     }
 
     void IncreaseUnitsT1()
@@ -243,7 +264,7 @@ public class UnitsManager : MonoBehaviour
 
     void UpdateUnitsT1Text()
     {
-        UnitsT1Text.text = "UnitsT1: " + UnitsT1;
+        UnitsT1Text.text = "UnitsT1: " + FormatUnits(UnitsT1);
     }
 
     void IncreaseUnitsT2()
@@ -255,7 +276,7 @@ public class UnitsManager : MonoBehaviour
 
     void UpdateUnitsT2Text()
     {
-        UnitsT2Text.text = "UnitsT2: " + UnitsT2;
+        UnitsT2Text.text = "UnitsT2: " + FormatUnits(UnitsT2);
     }
 
     void IncreaseUnitsT3()
@@ -267,7 +288,7 @@ public class UnitsManager : MonoBehaviour
 
     void UpdateUnitsT3Text()
     {
-        UnitsT3Text.text = "UnitsT3: " + UnitsT3;
+        UnitsT3Text.text = "UnitsT3: " + FormatUnits(UnitsT3);
     }
 
     void ResetLoadingBar(RectTransform loadingBar)
@@ -370,9 +391,25 @@ public class UnitsManager : MonoBehaviour
             IncreaseUnitsT3();
         }
 
-        // Mettre à jour les ressources en fonction du temps écoulé (vous pouvez ajuster cela selon votre logique)
-        resourcesManager.resource1 += Mathf.FloorToInt((float)elapsedTime.TotalSeconds); // Exemple : 1 ressource par seconde
+        // Mettre à jour les ressources en fonction du temps écoulé
+        resourcesManager.resource1 += Mathf.FloorToInt((float)elapsedTime.TotalSeconds);
         resourcesManager.resource2 += Mathf.FloorToInt((float)elapsedTime.TotalSeconds);
         resourcesManager.resource3 += Mathf.FloorToInt((float)elapsedTime.TotalSeconds);
+    }
+
+    string FormatUnits(int units)
+    {
+        if (units >= 1000000)
+        {
+            return (units / 1000000f).ToString("F1") + "M";
+        }
+        else if (units >= 1000)
+        {
+            return (units / 1000f).ToString("F1") + "k";
+        }
+        else
+        {
+            return units.ToString();
+        }
     }
 }
