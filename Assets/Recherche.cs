@@ -7,10 +7,8 @@ using UnityEngine.UI;
 public class Recherche : MonoBehaviour
 {
     public int id;
-
     public TMP_Text TitleText;
     public TMP_Text DescText;
-
     public int[] connectedResearch;
 
     public void UpdateUI()
@@ -23,17 +21,38 @@ public class Recherche : MonoBehaviour
         foreach (var connectedResearchId in connectedResearch)
         {
             bool isUnlocked = ReseachTree.reseachTree.isbuyed[id] > 0;
+            bool canBePurchased = ReseachTree.reseachTree.ResearchPoint > 0 && ReseachTree.reseachTree.isbuyed[connectedResearchId] == 0;
 
-            // Vérifiez si l'index est valide avant de l'utiliser
             if (connectedResearchId >= 0 && connectedResearchId < ReseachTree.reseachTree.ResearchList.Count)
             {
                 ReseachTree.reseachTree.ResearchList[connectedResearchId].gameObject.SetActive(isUnlocked);
             }
 
-            // Assurez-vous que l'index est dans les limites de Connectionlist
-            if (connectedResearchId > 0 && connectedResearchId < ReseachTree.reseachTree.Connectionlist.Count)
+            if (connectedResearchId >= 0 && connectedResearchId < ReseachTree.reseachTree.Connectionlist.Count)
             {
-                ReseachTree.reseachTree.Connectionlist[connectedResearchId].SetActive(isUnlocked);
+                GameObject connection = ReseachTree.reseachTree.Connectionlist[connectedResearchId];
+                Image connectionImage = connection.GetComponent<Image>();
+
+                if (isUnlocked)
+                {
+                    connection.SetActive(true); // Activer la connexion
+                    if (ReseachTree.reseachTree.isbuyed[connectedResearchId] > 0)
+                    {
+                        connectionImage.color = Color.black; // Liaison entre deux technologies acquises
+                    }
+                    else if (canBePurchased)
+                    {
+                        connectionImage.color = Color.green; // Liaison entre une technologie acquise et une technologie qui peut être achetée
+                    }
+                    else
+                    {
+                        connectionImage.color = Color.red; // Liaison entre une technologie acquise et une technologie qui ne peut pas être achetée
+                    }
+                }
+                else
+                {
+                    connection.SetActive(false); // Désactiver la liaison
+                }
             }
         }
     }

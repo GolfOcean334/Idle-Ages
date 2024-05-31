@@ -78,6 +78,7 @@ public class ReseachTree : MonoBehaviour
         foreach (Transform connection in ConnectionHolder.transform)
         {
             Connectionlist.Add(connection.gameObject);
+            connection.gameObject.SetActive(false); // Désactiver toutes les connexions au début
         }
 
         // Assigner les IDs de recherche
