@@ -11,6 +11,7 @@ public class MainMenu : MonoBehaviour
     public void ReturnGame()
     {
         SaveResources();
+        SaveUnits();
         SceneManager.LoadScene(previousScene);
     }
 
@@ -21,6 +22,20 @@ public class MainMenu : MonoBehaviour
         SaveUnits();
         SaveResources();
         SceneManager.LoadScene("SettingScene");
+    }
+
+    public void ReturnMap()
+    {
+        SaveResources();
+        SaveUnits();
+        SceneManager.LoadScene("MapScene");
+    }
+
+    public void ReturnUnitsCreation()
+    {
+        SaveResources();
+        SaveUnits();
+        SceneManager.LoadScene("CreationUnitsScene");
     }
 
     public void QuitGame()
