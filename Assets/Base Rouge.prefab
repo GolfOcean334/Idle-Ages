@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3154097037514525892}
   - component: {fileID: 3494491555024351813}
   m_Layer: 0
-  m_Name: Base ennemie rouge
+  m_Name: Base Rouge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

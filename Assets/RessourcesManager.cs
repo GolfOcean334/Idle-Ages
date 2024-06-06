@@ -63,7 +63,7 @@ public class ResourcesManager : MonoBehaviour
     {
         resource1Text.text = "Wood: " + FormatResource(resource1);
         resource2Text.text = "Stone: " + FormatResource(resource2);
-        resource3Text.text = "Food: " + FormatResource(resource3);
+        resource3Text.text = FormatResource(resource3);
         resource4Text.text = "Gemme: " + FormatResource(resource4);
     }
 

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using TMPro;
 
 public class EnemyBaseSpawner : MonoBehaviour
 {
@@ -7,6 +8,8 @@ public class EnemyBaseSpawner : MonoBehaviour
     public GameObject redEnemyBasePrefab;
     public GameObject whiteEnemyBasePrefab;
     public GameObject allBasesParent; // Référence au GameObject qui gère toutes les bases
+    public GameObject infoPanel; // Référence au panneau d'information
+    public TextMeshProUGUI infoText; // Référence au texte du panneau
     public int numberOfRedBases = 10;
     public int numberOfWhiteBases = 5;
     public float minDistanceBetweenBases = 250f;
@@ -19,11 +22,13 @@ public class EnemyBaseSpawner : MonoBehaviour
 
     void Start()
     {
-        SpawnEnemyBases(numberOfRedBases, redEnemyBasePrefab);
-        SpawnEnemyBases(numberOfWhiteBases, whiteEnemyBasePrefab);
+        infoPanel.SetActive(false); // Assurez-vous que le panneau est caché au début
+
+        SpawnEnemyBases(numberOfRedBases, redEnemyBasePrefab, 100); // Puissance de 100 pour les bases rouges
+        SpawnEnemyBases(numberOfWhiteBases, whiteEnemyBasePrefab, 50); // Puissance de 50 pour les bases blanches
     }
 
-    void SpawnEnemyBases(int numberOfBases, GameObject basePrefab)
+    void SpawnEnemyBases(int numberOfBases, GameObject basePrefab, int basePower)
     {
         int spawnedBases = 0;
         int maxAttempts = 10000; // pour éviter les boucles infinies
@@ -37,6 +42,8 @@ public class EnemyBaseSpawner : MonoBehaviour
             if (IsPositionValid(randomPosition))
             {
                 GameObject newBase = Instantiate(basePrefab, randomPosition, Quaternion.identity, allBasesParent.transform);
+                BaseButtonHandler baseButtonHandler = newBase.AddComponent<BaseButtonHandler>();
+                baseButtonHandler.Initialize(basePower, infoPanel, infoText);
                 basePositions.Add(randomPosition);
                 spawnedBases++;
             }
@@ -53,7 +60,7 @@ public class EnemyBaseSpawner : MonoBehaviour
         Vector2 randomDirection = Random.insideUnitCircle.normalized;
         float randomXDistance = Random.Range(minXDistance, maxXDistance);
         float randomYDistance = Random.Range(minYDistance, maxYDistance);
-        Vector3 randomPosition = playerBase.transform.position + new Vector3(randomDirection.x * randomXDistance, randomDirection.y * randomYDistance, 0);
+        Vector3 randomPosition = playerBase.transform.position + new Vector3(randomDirection.x * randomXDistance, randomDirection.y * randomYDistance);
         return randomPosition;
     }
 
