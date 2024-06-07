@@ -4,9 +4,9 @@ using TMPro;
 
 public class BaseButtonHandler : MonoBehaviour
 {
-    public int power;
-    public GameObject infoPanel;
-    public TextMeshProUGUI infoText;
+    [SerializeField] private int power;
+    [SerializeField] private GameObject infoPanel;
+    [SerializeField] private TextMeshProUGUI infoText;
     private static GameObject currentInfoPanel;
     private static TextMeshProUGUI currentInfoText;
     private static BaseButtonHandler currentBase;

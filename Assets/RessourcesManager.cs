@@ -17,7 +17,7 @@ public class ResourcesManager : MonoBehaviour
     public int resource4 = 0;
 
     private readonly int resourcesPerSecond = 5;
-    private readonly int maxResource = 500000000;
+    private readonly int maxResource = 500;
 
     void Start()
     {
@@ -61,10 +61,10 @@ public class ResourcesManager : MonoBehaviour
 
     void UpdateResourceTexts()
     {
-        resource1Text.text = "Wood: " + FormatResource(resource1);
-        resource2Text.text = "Stone: " + FormatResource(resource2);
+        resource1Text.text = FormatResource(resource1);
+        resource2Text.text = FormatResource(resource2);
         resource3Text.text = FormatResource(resource3);
-        resource4Text.text = "Gemme: " + FormatResource(resource4);
+        resource4Text.text = FormatResource(resource4);
     }
 
     string FormatResource(int resource)

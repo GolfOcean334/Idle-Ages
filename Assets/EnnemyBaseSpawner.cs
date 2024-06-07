@@ -4,25 +4,25 @@ using TMPro;
 
 public class EnemyBaseSpawner : MonoBehaviour
 {
-    public GameObject playerBase;
-    public GameObject redEnemyBasePrefab;
-    public GameObject whiteEnemyBasePrefab;
-    public GameObject allBasesParent; // Référence au GameObject qui gère toutes les bases
-    public GameObject infoPanel; // Référence au panneau d'information
-    public TextMeshProUGUI infoText; // Référence au texte du panneau
-    public int numberOfRedBases = 10;
-    public int numberOfWhiteBases = 5;
-    public float minDistanceBetweenBases = 250f;
-    public float minXDistance = 500f;
-    public float maxXDistance = 2000f;
-    public float minYDistance = 500f;
-    public float maxYDistance = 2000f;
+    [SerializeField] private GameObject playerBase;
+    [SerializeField] private GameObject redEnemyBasePrefab;
+    [SerializeField] private GameObject whiteEnemyBasePrefab;
+    [SerializeField] private GameObject allBasesParent;
+    [SerializeField] private GameObject infoPanel;
+    [SerializeField] private TextMeshProUGUI infoText;
+    [SerializeField] private int numberOfRedBases = 10;
+    [SerializeField] private int numberOfWhiteBases = 5;
+    [SerializeField] private float minDistanceBetweenBases = 250f;
+    [SerializeField] private float minXDistance = 500f;
+    [SerializeField] private float maxXDistance = 2000f;
+    [SerializeField] private float minYDistance = 500f;
+    [SerializeField] private float maxYDistance = 2000f;
 
     private readonly List<Vector3> basePositions = new();
 
     void Start()
     {
-        infoPanel.SetActive(false); // Assurez-vous que le panneau est caché au début
+        infoPanel.SetActive(false);
 
         SpawnEnemyBases(numberOfRedBases, redEnemyBasePrefab, 100); // Puissance de 100 pour les bases rouges
         SpawnEnemyBases(numberOfWhiteBases, whiteEnemyBasePrefab, 50); // Puissance de 50 pour les bases blanches
