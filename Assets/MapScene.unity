@@ -870,8 +870,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 13626847}
   - {fileID: 1630458355}
+  - {fileID: 13626847}
   m_Father: {fileID: 1045926080}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1403,7 +1403,7 @@ GameObject:
   - component: {fileID: 979534034}
   - component: {fileID: 979534033}
   m_Layer: 0
-  m_Name: InfoText
+  m_Name: PuissanceBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

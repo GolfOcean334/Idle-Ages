@@ -24,11 +24,11 @@ public class EnemyBaseSpawner : MonoBehaviour
     {
         infoPanel.SetActive(false);
 
-        SpawnEnemyBases(numberOfRedBases, redEnemyBasePrefab, 100); // Puissance de 100 pour les bases rouges
-        SpawnEnemyBases(numberOfWhiteBases, whiteEnemyBasePrefab, 50); // Puissance de 50 pour les bases blanches
+        SpawnEnemyBases(numberOfRedBases, redEnemyBasePrefab, false);
+        SpawnEnemyBases(numberOfWhiteBases, whiteEnemyBasePrefab, true);
     }
 
-    void SpawnEnemyBases(int numberOfBases, GameObject basePrefab, int basePower)
+    void SpawnEnemyBases(int numberOfBases, GameObject basePrefab, bool isWhite)
     {
         int spawnedBases = 0;
         int maxAttempts = 10000; // pour éviter les boucles infinies
@@ -42,8 +42,9 @@ public class EnemyBaseSpawner : MonoBehaviour
             if (IsPositionValid(randomPosition))
             {
                 GameObject newBase = Instantiate(basePrefab, randomPosition, Quaternion.identity, allBasesParent.transform);
+                int power = CalculatePower(randomPosition, isWhite);
                 BaseButtonHandler baseButtonHandler = newBase.AddComponent<BaseButtonHandler>();
-                baseButtonHandler.Initialize(basePower, infoPanel, infoText);
+                baseButtonHandler.Initialize(power, infoPanel, infoText);
                 basePositions.Add(randomPosition);
                 spawnedBases++;
             }
@@ -60,7 +61,7 @@ public class EnemyBaseSpawner : MonoBehaviour
         Vector2 randomDirection = Random.insideUnitCircle.normalized;
         float randomXDistance = Random.Range(minXDistance, maxXDistance);
         float randomYDistance = Random.Range(minYDistance, maxYDistance);
-        Vector3 randomPosition = playerBase.transform.position + new Vector3(randomDirection.x * randomXDistance, randomDirection.y * randomYDistance);
+        Vector3 randomPosition = playerBase.transform.position + new Vector3(randomDirection.x * randomXDistance, randomDirection.y * randomYDistance, 0);
         return randomPosition;
     }
 
@@ -74,5 +75,15 @@ public class EnemyBaseSpawner : MonoBehaviour
             }
         }
         return true;
+    }
+
+    int CalculatePower(Vector3 position, bool isWhite)
+    {
+        // Calculer la distance euclidienne en 2D entre la base du joueur et la base ennemie
+        float distance = Vector3.Distance(new Vector3(position.x, position.y, 0), new Vector3(playerBase.transform.position.x, playerBase.transform.position.y, 0));
+        int power = Mathf.RoundToInt(distance) * 2;
+        if (isWhite)
+            power *= 2;
+        return power;
     }
 }
