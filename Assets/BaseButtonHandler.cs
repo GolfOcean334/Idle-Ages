@@ -5,10 +5,13 @@ using TMPro;
 public class BaseButtonHandler : MonoBehaviour
 {
     [SerializeField] private int power;
+    [SerializeField] private ResourceType resource;
     [SerializeField] private GameObject infoPanel;
-    [SerializeField] private TextMeshProUGUI infoText;
+    [SerializeField] private TextMeshProUGUI powerEnnemiesText;
+    [SerializeField] private TextMeshProUGUI resourceEnnemiesText;
     private static GameObject currentInfoPanel;
-    private static TextMeshProUGUI currentInfoText;
+    private static TextMeshProUGUI currentpowerEnnemiesText; 
+    private static TextMeshProUGUI currentresourceEnnemiesText;
     private static BaseButtonHandler currentBase;
 
     void Start()
@@ -16,18 +19,21 @@ public class BaseButtonHandler : MonoBehaviour
         if (currentInfoPanel == null)
         {
             currentInfoPanel = infoPanel;
-            currentInfoText = infoText;
+            currentpowerEnnemiesText = powerEnnemiesText;
+            currentresourceEnnemiesText = resourceEnnemiesText;
         }
 
         // Assigner la méthode OnClick à l'événement du bouton
         GetComponent<Button>().onClick.AddListener(OnClick);
     }
 
-    public void Initialize(int power, GameObject infoPanel, TextMeshProUGUI infoText)
+    public void Initialize(int power, ResourceType resource, GameObject infoPanel, TextMeshProUGUI powerEnnemiesText, TextMeshProUGUI resourceEnnemiesText)
     {
         this.power = power;
+        this.resource = resource;
         this.infoPanel = infoPanel;
-        this.infoText = infoText;
+        this.powerEnnemiesText = powerEnnemiesText;
+        this.resourceEnnemiesText = resourceEnnemiesText;
     }
 
     void OnClick()
@@ -40,9 +46,10 @@ public class BaseButtonHandler : MonoBehaviour
         }
         else
         {
-            // Show the panel with the power information
+            // Show the panel with the power and resource information
             currentInfoPanel.SetActive(true);
-            currentInfoText.text = FormatPower(power);
+            currentpowerEnnemiesText.text = "Puissance: " + FormatPower(power);
+            currentresourceEnnemiesText.text = "Resource: " + resource.ToString();
             currentBase = this;
         }
     }
