@@ -42,8 +42,24 @@ public class BaseButtonHandler : MonoBehaviour
         {
             // Show the panel with the power information
             currentInfoPanel.SetActive(true);
-            currentInfoText.text = "Puissance de la base : " + power;
+            currentInfoText.text = FormatPower(power);
             currentBase = this;
+        }
+    }
+
+    string FormatPower(int power)
+    {
+        if (power >= 1000000)
+        {
+            return (power / 1000000f).ToString("F1") + "M";
+        }
+        else if (power >= 1000)
+        {
+            return (power / 1000f).ToString("F1") + "k";
+        }
+        else
+        {
+            return power.ToString();
         }
     }
 }
