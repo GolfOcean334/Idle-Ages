@@ -6,12 +6,13 @@ public class BaseButtonHandler : MonoBehaviour
 {
     [SerializeField] private int power;
     [SerializeField] private ResourceType resource;
+    [SerializeField] private int resourceAmount;
     [SerializeField] private GameObject infoPanel;
     [SerializeField] private TextMeshProUGUI powerEnnemiesText;
-    [SerializeField] private TextMeshProUGUI resourceEnnemiesText;
+    [SerializeField] private TextMeshProUGUI resourceEnemiesText;
     private static GameObject currentInfoPanel;
-    private static TextMeshProUGUI currentpowerEnnemiesText; 
-    private static TextMeshProUGUI currentresourceEnnemiesText;
+    private static TextMeshProUGUI currentPowerEnnemiesText;
+    private static TextMeshProUGUI currentResourceEnemiesText;
     private static BaseButtonHandler currentBase;
 
     void Start()
@@ -19,21 +20,22 @@ public class BaseButtonHandler : MonoBehaviour
         if (currentInfoPanel == null)
         {
             currentInfoPanel = infoPanel;
-            currentpowerEnnemiesText = powerEnnemiesText;
-            currentresourceEnnemiesText = resourceEnnemiesText;
+            currentPowerEnnemiesText = powerEnnemiesText;
+            currentResourceEnemiesText = resourceEnemiesText;
         }
 
         // Assigner la méthode OnClick à l'événement du bouton
         GetComponent<Button>().onClick.AddListener(OnClick);
     }
 
-    public void Initialize(int power, ResourceType resource, GameObject infoPanel, TextMeshProUGUI powerEnnemiesText, TextMeshProUGUI resourceEnnemiesText)
+    public void Initialize(int power, ResourceType resource, int resourceAmount, GameObject infoPanel, TextMeshProUGUI powerEnnemiesText, TextMeshProUGUI resourceEnemiesText)
     {
         this.power = power;
         this.resource = resource;
+        this.resourceAmount = resourceAmount;
         this.infoPanel = infoPanel;
         this.powerEnnemiesText = powerEnnemiesText;
-        this.resourceEnnemiesText = resourceEnnemiesText;
+        this.resourceEnemiesText = resourceEnemiesText;
     }
 
     void OnClick()
@@ -48,8 +50,8 @@ public class BaseButtonHandler : MonoBehaviour
         {
             // Show the panel with the power and resource information
             currentInfoPanel.SetActive(true);
-            currentpowerEnnemiesText.text = "Puissance: " + FormatPower(power);
-            currentresourceEnnemiesText.text = "Resource: " + resource.ToString();
+            currentPowerEnnemiesText.text = "Puissance: " + FormatPower(power);
+            currentResourceEnemiesText.text = "Resource: " + resource.ToString() + "\nQuantité: " + resourceAmount;
             currentBase = this;
         }
     }

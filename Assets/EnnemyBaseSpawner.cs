@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
+using System.ComponentModel;
 
 public class EnemyBaseSpawner : MonoBehaviour
 {
@@ -11,20 +12,28 @@ public class EnemyBaseSpawner : MonoBehaviour
     [SerializeField] private GameObject infoPanel;
     [SerializeField] private TextMeshProUGUI powerEnnemiesText;
     [SerializeField] private TextMeshProUGUI resourceEnemiesText;
-    [SerializeField] private int numberOfRedBases = 10;
-    [SerializeField] private int numberOfWhiteBases = 5;
-    [SerializeField] private float minDistanceBetweenBases = 250f;
-    [SerializeField] private float minXDistance = 500f;
-    [SerializeField] private float maxXDistance = 2000f;
-    [SerializeField] private float minYDistance = 500f;
-    [SerializeField] private float maxYDistance = 2000f;
+    public int numberOfRedBases = 100;
+    public int numberOfWhiteBases = 25;
+    public float minDistanceBetweenBases = 250f;
+    public float minXDistance = 500f;
+    public float maxXDistance = 10000f;
+    public float minYDistance = 500f;
+    public float maxYDistance = 10000f;
 
     private readonly List<Vector3> basePositions = new();
     private readonly List<ResourceType> resourcePool = new();
+    private readonly Dictionary<ResourceType, float> totalResources = new()
+    {
+        { ResourceType.Wood, 20000f },
+        { ResourceType.Stone, 15000f },
+        { ResourceType.Food, 25000f }
+    };
+    private Dictionary<ResourceType, float> remainingResources;
 
     void Start()
     {
         infoPanel.SetActive(false);
+        remainingResources = new Dictionary<ResourceType, float>(totalResources);
 
         // Préparer la liste des ressources
         PrepareResourcePool();
@@ -62,16 +71,14 @@ public class EnemyBaseSpawner : MonoBehaviour
         {
             n--;
             int k = Random.Range(0, n + 1);
-            T value = list[k];
-            list[k] = list[n];
-            list[n] = value;
+            (list[n], list[k]) = (list[k], list[n]);
         }
     }
 
     void SpawnEnemyBases(int numberOfBases, GameObject basePrefab, bool isWhite)
     {
         int spawnedBases = 0;
-        int maxAttempts = 10000; // pour éviter les boucles infinies
+        int maxAttempts = 50000; // augmenter le nombre de tentatives
         int attempts = 0;
 
         while (spawnedBases < numberOfBases && attempts < maxAttempts)
@@ -85,8 +92,9 @@ public class EnemyBaseSpawner : MonoBehaviour
                 int power = CalculatePower(randomPosition, isWhite);
                 ResourceType resource = resourcePool[0];
                 resourcePool.RemoveAt(0);
+                int resourceAmount = CalculateResourceAmount(resource, randomPosition, isWhite);
                 BaseButtonHandler baseButtonHandler = newBase.AddComponent<BaseButtonHandler>();
-                baseButtonHandler.Initialize(power, resource, infoPanel, powerEnnemiesText, resourceEnemiesText);
+                baseButtonHandler.Initialize(power, resource, resourceAmount, infoPanel, powerEnnemiesText, resourceEnemiesText);
                 basePositions.Add(randomPosition);
                 spawnedBases++;
             }
@@ -121,14 +129,25 @@ public class EnemyBaseSpawner : MonoBehaviour
 
     int CalculatePower(Vector3 position, bool isWhite)
     {
-        // Calculer la distance euclidienne en 2D entre la base du joueur et la base ennemie
         float distance = Vector3.Distance(new Vector3(position.x, position.y, 0), new Vector3(playerBase.transform.position.x, playerBase.transform.position.y, 0));
-        int power = Mathf.RoundToInt(distance);
+        int power = Mathf.RoundToInt(500 * Mathf.Exp((distance - 500) / 2000f)); // Calcule de la puissance de manière exponentielle
         if (isWhite)
         {
             power *= 2;
         }
         return power;
+    }
+
+    int CalculateResourceAmount(ResourceType resource, Vector3 position, bool isWhite)
+    {
+        float distance = Vector3.Distance(new Vector3(position.x, position.y, 0), new Vector3(playerBase.transform.position.x, playerBase.transform.position.y, 0));
+        int resourceAmount = Mathf.RoundToInt(500 * Mathf.Exp((distance - 500) / 2500f)); // Calcule des ressources de manière exponentielles
+        remainingResources[resource] -= resourceAmount;
+        if (isWhite)
+        {
+            resourceAmount *= 2;
+        }
+        return resourceAmount;
     }
 }
 
