@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using TMPro;
 using System.ComponentModel;
 
@@ -12,6 +13,9 @@ public class EnemyBaseSpawner : MonoBehaviour
     [SerializeField] private GameObject infoPanel;
     [SerializeField] private TextMeshProUGUI powerEnnemiesText;
     [SerializeField] private TextMeshProUGUI resourceEnemiesText;
+    [SerializeField] private Button fightButton;
+    [SerializeField] private TextMeshProUGUI fightButtonText;
+    [SerializeField] private Image fightButtonImage;
     public int numberOfRedBases = 100;
     public int numberOfWhiteBases = 25;
     public float minDistanceBetweenBases = 250f;
@@ -94,7 +98,7 @@ public class EnemyBaseSpawner : MonoBehaviour
                 resourcePool.RemoveAt(0);
                 int resourceAmount = CalculateResourceAmount(resource, randomPosition, isWhite);
                 BaseButtonHandler baseButtonHandler = newBase.AddComponent<BaseButtonHandler>();
-                baseButtonHandler.Initialize(power, resource, resourceAmount, infoPanel, powerEnnemiesText, resourceEnemiesText);
+                baseButtonHandler.Initialize(power, resource, resourceAmount, infoPanel, powerEnnemiesText, resourceEnemiesText, fightButton, fightButtonText, fightButtonImage);
                 basePositions.Add(randomPosition);
                 spawnedBases++;
             }
