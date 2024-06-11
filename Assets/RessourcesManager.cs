@@ -59,12 +59,12 @@ public class ResourcesManager : MonoBehaviour
         }
     }
 
-    void UpdateResourceTexts()
+    public void UpdateResourceTexts()
     {
-        resource1Text.text = "Wood: " + FormatResource(resource1);
-        resource2Text.text = "Stone: " + FormatResource(resource2);
-        resource3Text.text = "Food: " + FormatResource(resource3);
-        resource4Text.text = "Gemme: " + FormatResource(resource4);
+        resource1Text.text = FormatResource(resource1);
+        resource2Text.text = FormatResource(resource2);
+        resource3Text.text = FormatResource(resource3);
+        resource4Text.text = FormatResource(resource4);
     }
 
     string FormatResource(int resource)
