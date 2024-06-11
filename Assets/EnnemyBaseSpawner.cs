@@ -16,13 +16,14 @@ public class EnemyBaseSpawner : MonoBehaviour
     [SerializeField] private Button fightButton;
     [SerializeField] private TextMeshProUGUI fightButtonText;
     [SerializeField] private Image fightButtonImage;
-    public int numberOfRedBases = 100;
-    public int numberOfWhiteBases = 25;
-    public float minDistanceBetweenBases = 250f;
-    public float minXDistance = 500f;
-    public float maxXDistance = 10000f;
-    public float minYDistance = 500f;
-    public float maxYDistance = 10000f;
+    [SerializeField] private ResourcesManager resourcesManager;
+    [SerializeField] private int numberOfRedBases = 100;
+    [SerializeField] private int numberOfWhiteBases = 25;
+    [SerializeField] private float minDistanceBetweenBases = 200f;
+    [SerializeField] private float minXDistance = 500f;
+    [SerializeField] private float maxXDistance = 10000f;
+    [SerializeField] private float minYDistance = 500f;
+    [SerializeField] private float maxYDistance = 10000f;
 
     private readonly List<Vector3> basePositions = new();
     private readonly List<ResourceType> resourcePool = new();
@@ -98,7 +99,7 @@ public class EnemyBaseSpawner : MonoBehaviour
                 resourcePool.RemoveAt(0);
                 int resourceAmount = CalculateResourceAmount(resource, randomPosition, isWhite);
                 BaseButtonHandler baseButtonHandler = newBase.AddComponent<BaseButtonHandler>();
-                baseButtonHandler.Initialize(power, resource, resourceAmount, infoPanel, powerEnnemiesText, resourceEnemiesText, fightButton, fightButtonText, fightButtonImage);
+                baseButtonHandler.Initialize(power, resource, resourceAmount, infoPanel, powerEnnemiesText, resourceEnemiesText, fightButton, fightButtonText, fightButtonImage, resourcesManager);
                 basePositions.Add(randomPosition);
                 spawnedBases++;
             }

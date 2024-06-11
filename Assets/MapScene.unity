@@ -672,7 +672,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Resource Base
+  m_text: Ressource Base
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1118,7 +1118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.6179246, b: 0.6179246, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1976,9 +1976,10 @@ MonoBehaviour:
   fightButton: {fileID: 688600310}
   fightButtonText: {fileID: 707806368}
   fightButtonImage: {fileID: 542125370}
+  resourcesManager: {fileID: 923721807}
   numberOfRedBases: 100
   numberOfWhiteBases: 25
-  minDistanceBetweenBases: 10
+  minDistanceBetweenBases: 200
   minXDistance: 500
   maxXDistance: 10000
   minYDistance: 500

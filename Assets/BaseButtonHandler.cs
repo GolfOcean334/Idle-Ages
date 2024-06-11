@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.U2D;
 
 public class BaseButtonHandler : MonoBehaviour
 {
@@ -14,6 +13,7 @@ public class BaseButtonHandler : MonoBehaviour
     [SerializeField] private Button fightButton;
     [SerializeField] private TextMeshProUGUI fightButtonText;
     [SerializeField] private Image fightButtonImage;
+    [SerializeField] private ResourcesManager resourcesManager;
 
     private static GameObject currentInfoPanel;
     private static TextMeshProUGUI currentPowerEnemiesText;
@@ -35,11 +35,10 @@ public class BaseButtonHandler : MonoBehaviour
             currentFightButtonImage = fightButtonImage;
         }
 
-        // Assigner la méthode OnClick à l'événement du bouton
         GetComponent<Button>().onClick.AddListener(OnClick);
     }
 
-    public void Initialize(int power, ResourceType resource, int resourceAmount, GameObject infoPanel, TextMeshProUGUI powerEnemiesText, TextMeshProUGUI resourceEnemiesText, Button fightButton, TextMeshProUGUI fightButtonText, Image fightButtonImage)
+    public void Initialize(int power, ResourceType resource, int resourceAmount, GameObject infoPanel, TextMeshProUGUI powerEnemiesText, TextMeshProUGUI resourceEnemiesText, Button fightButton, TextMeshProUGUI fightButtonText, Image fightButtonImage, ResourcesManager resourcesManager)
     {
         this.power = power;
         this.resource = resource;
@@ -50,19 +49,18 @@ public class BaseButtonHandler : MonoBehaviour
         this.fightButton = fightButton;
         this.fightButtonText = fightButtonText;
         this.fightButtonImage = fightButtonImage;
+        this.resourcesManager = resourcesManager;
     }
 
     void OnClick()
     {
         if (currentBase == this)
         {
-            // Hide the panel if the same base is clicked again
             currentInfoPanel.SetActive(false);
             currentBase = null;
         }
         else
         {
-            // Show the panel with the power and resource information
             currentInfoPanel.SetActive(true);
             currentPowerEnemiesText.text = "Puissance: " + FormatPower(power);
             currentResourceEnemiesText.text = "Ressource: " + resource.ToString() + "\nQuantité: " + resourceAmount;
@@ -82,8 +80,40 @@ public class BaseButtonHandler : MonoBehaviour
 
     void LaunchFight(int fightCost)
     {
-        // Logique pour lancer le combat
-        Debug.Log("Combat lancé contre une base avec un coût de " + fightCost + " " + resource);
+        if (HasEnoughResources(fightCost))
+        {
+            // Logique pour lancer le combat et soustraire la ressource appropriée
+            Debug.Log("Combat lancé contre une base avec un coût de " + fightCost + " " + resource);
+
+            switch (resource)
+            {
+                case ResourceType.Wood:
+                    resourcesManager.resource3 = Mathf.Max(resourcesManager.resource3 - fightCost, 0);
+                    break;
+                case ResourceType.Stone:
+                    resourcesManager.resource2 = Mathf.Max(resourcesManager.resource2 - fightCost, 0);
+                    break;
+                case ResourceType.Food:
+                    resourcesManager.resource1 = Mathf.Max(resourcesManager.resource1 - fightCost, 0);
+                    break;
+            }
+            resourcesManager.UpdateResourceTexts();
+        }
+        else
+        {
+            Debug.Log("Pas assez de ressources pour lancer le combat.");
+        }
+    }
+
+    bool HasEnoughResources(int fightCost)
+    {
+        return resource switch
+        {
+            ResourceType.Wood => resourcesManager.resource3 >= fightCost,
+            ResourceType.Stone => resourcesManager.resource2 >= fightCost,
+            ResourceType.Food => resourcesManager.resource1 >= fightCost,
+            _ => false,
+        };
     }
 
     string FormatPower(int power)

@@ -59,7 +59,7 @@ public class ResourcesManager : MonoBehaviour
         }
     }
 
-    void UpdateResourceTexts()
+    public void UpdateResourceTexts()
     {
         resource1Text.text = FormatResource(resource1);
         resource2Text.text = FormatResource(resource2);
