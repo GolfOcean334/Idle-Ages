@@ -1,12 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class BaseButtonHandler : MonoBehaviour
 {
     [SerializeField] private int power;
     [SerializeField] private ResourceType resource;
     [SerializeField] private int resourceAmount;
+    [SerializeField] private List<UnitsEnemy> unitsEnemies;
     [SerializeField] private GameObject infoPanel;
     [SerializeField] private TextMeshProUGUI powerEnemiesText;
     [SerializeField] private TextMeshProUGUI resourceEnemiesText;
@@ -14,6 +16,7 @@ public class BaseButtonHandler : MonoBehaviour
     [SerializeField] private TextMeshProUGUI fightButtonText;
     [SerializeField] private Image fightButtonImage;
     [SerializeField] private ResourcesManager resourcesManager;
+    [SerializeField] private TextMeshProUGUI unitsEnemyText;
 
     private static GameObject currentInfoPanel;
     private static TextMeshProUGUI currentPowerEnemiesText;
@@ -22,6 +25,7 @@ public class BaseButtonHandler : MonoBehaviour
     private static TextMeshProUGUI currentFightButtonText;
     private static Image currentFightButtonImage;
     private static BaseButtonHandler currentBase;
+    private static TextMeshProUGUI currentUnitsEnemyText;
 
     void Start()
     {
@@ -33,12 +37,13 @@ public class BaseButtonHandler : MonoBehaviour
             currentFightButton = fightButton;
             currentFightButtonText = fightButtonText;
             currentFightButtonImage = fightButtonImage;
+            currentUnitsEnemyText = unitsEnemyText;
         }
 
         GetComponent<Button>().onClick.AddListener(OnClick);
     }
 
-    public void Initialize(int power, ResourceType resource, int resourceAmount, GameObject infoPanel, TextMeshProUGUI powerEnemiesText, TextMeshProUGUI resourceEnemiesText, Button fightButton, TextMeshProUGUI fightButtonText, Image fightButtonImage, ResourcesManager resourcesManager)
+    public void Initialize(int power, ResourceType resource, int resourceAmount, GameObject infoPanel, TextMeshProUGUI powerEnemiesText, TextMeshProUGUI resourceEnemiesText, Button fightButton, TextMeshProUGUI fightButtonText, Image fightButtonImage, ResourcesManager resourcesManager, List<UnitsEnemy> unitsEnemies, TextMeshProUGUI unitsEnemyText)
     {
         this.power = power;
         this.resource = resource;
@@ -50,6 +55,8 @@ public class BaseButtonHandler : MonoBehaviour
         this.fightButtonText = fightButtonText;
         this.fightButtonImage = fightButtonImage;
         this.resourcesManager = resourcesManager;
+        this.unitsEnemies = unitsEnemies;
+        this.unitsEnemyText = unitsEnemyText;
     }
 
     void OnClick()
@@ -63,7 +70,8 @@ public class BaseButtonHandler : MonoBehaviour
         {
             currentInfoPanel.SetActive(true);
             currentPowerEnemiesText.text = "Puissance: " + FormatPower(power);
-            currentResourceEnemiesText.text = "Ressource: " + resource.ToString() + "\nQuantité: " + resourceAmount;
+            currentResourceEnemiesText.text = "Ressource: " + resource.ToString() + "\nQuantité: " + resourceAmount; 
+            currentUnitsEnemyText.text = string.Join(", ", unitsEnemies);
             currentBase = this;
 
             // Calculer le prix pour lancer le combat

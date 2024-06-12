@@ -13,6 +13,7 @@ public class EnemyBaseSpawner : MonoBehaviour
     [SerializeField] private GameObject infoPanel;
     [SerializeField] private TextMeshProUGUI powerEnnemiesText;
     [SerializeField] private TextMeshProUGUI resourceEnemiesText;
+    [SerializeField] private TextMeshProUGUI unitsEnemyText;
     [SerializeField] private Button fightButton;
     [SerializeField] private TextMeshProUGUI fightButtonText;
     [SerializeField] private Image fightButtonImage;
@@ -99,7 +100,9 @@ public class EnemyBaseSpawner : MonoBehaviour
                 resourcePool.RemoveAt(0);
                 int resourceAmount = CalculateResourceAmount(resource, randomPosition, isWhite);
                 BaseButtonHandler baseButtonHandler = newBase.AddComponent<BaseButtonHandler>();
-                baseButtonHandler.Initialize(power, resource, resourceAmount, infoPanel, powerEnnemiesText, resourceEnemiesText, fightButton, fightButtonText, fightButtonImage, resourcesManager);
+                List<UnitsEnemy> baseUnitsEnemies = GenerateRandomUnitsEnemy(isWhite);
+
+                baseButtonHandler.Initialize(power, resource, resourceAmount, infoPanel, powerEnnemiesText, resourceEnemiesText, fightButton, fightButtonText, fightButtonImage, resourcesManager, baseUnitsEnemies, unitsEnemyText);
                 basePositions.Add(randomPosition);
                 spawnedBases++;
             }
@@ -154,6 +157,33 @@ public class EnemyBaseSpawner : MonoBehaviour
         }
         return resourceAmount;
     }
+
+    List<UnitsEnemy> GenerateRandomUnitsEnemy(bool isWhite)
+    {
+        List<UnitsEnemy> units = new();
+        UnitsEnemy[] unitsEnemies = (UnitsEnemy[])System.Enum.GetValues(typeof(UnitsEnemy));
+
+        float threshold = isWhite ? 0.4f : 0.8f;
+
+        if (Random.value <= threshold)
+        {
+            units.Add(unitsEnemies[Random.Range(0, unitsEnemies.Length)]);
+        }
+        else
+        {
+            while (units.Count < 2)
+            {
+                UnitsEnemy randomUnit = unitsEnemies[Random.Range(0, unitsEnemies.Length)];
+                if (!units.Contains(randomUnit))
+                {
+                    units.Add(randomUnit);
+                }
+            }
+        }
+
+        return units;
+    }
+
 }
 
 public enum ResourceType
@@ -161,4 +191,11 @@ public enum ResourceType
     Wood,
     Stone,
     Food
+}
+
+public enum UnitsEnemy
+{
+    Unit1,
+    Unit2,
+    Unit3
 }
