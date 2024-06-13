@@ -7,7 +7,7 @@ public class BaseButtonHandler : MonoBehaviour
 {
     [SerializeField] private int power;
     [SerializeField] private ResourceType resource;
-    [SerializeField] private int resourceAmount; 
+    [SerializeField] private int resourceAmount;
     [SerializeField] private int resourcesPerSecond;
     [SerializeField] private List<UnitsEnemy> unitsEnemies;
     [SerializeField] private GameObject infoPanel;
@@ -45,6 +45,7 @@ public class BaseButtonHandler : MonoBehaviour
         }
 
         GetComponent<Button>().onClick.AddListener(OnClick);
+        resourcesManager.AddPassiveResourceGeneration(resource, resourcesPerSecond); // Ajouter la gï¿½nï¿½ration passive de ressources
     }
 
     public void Initialize(int power, ResourceType resource, int resourceAmount, int resourcesPerSecond, GameObject infoPanel, TextMeshProUGUI powerEnemiesText, TextMeshProUGUI resourceEnemiesText, Button fightButton, TextMeshProUGUI fightButtonText, Image fightButtonImage, ResourcesManager resourcesManager, List<UnitsEnemy> unitsEnemies, TextMeshProUGUI unitsEnemyText, TextMeshProUGUI resourcesPerSecondText)
@@ -76,7 +77,7 @@ public class BaseButtonHandler : MonoBehaviour
         {
             currentInfoPanel.SetActive(true);
             currentPowerEnemiesText.text = "Puissance: " + FormatPower(power);
-            currentResourceEnemiesText.text = "Ressource: " + resource.ToString() + "\nQuantité: " + resourceAmount; 
+            currentResourceEnemiesText.text = "Ressource: " + resource.ToString() + "\nQuantitï¿½: " + resourceAmount;
             currentUnitsEnemyText.text = string.Join(", ", unitsEnemies);
             currentresourcesPerSecondText.text = "Ressource par seconde: " + resourcesPerSecond.ToString();
             currentBase = this;
@@ -85,7 +86,7 @@ public class BaseButtonHandler : MonoBehaviour
             int fightCost = Mathf.RoundToInt(power * 0.75f);
             currentFightButtonText.text = fightCost.ToString();
 
-            // Mettre à jour l'image de la ressource sur le bouton de combat
+            // Mettre ï¿½ jour l'image de la ressource sur le bouton de combat
             currentFightButtonImage.sprite = GetResourceSprite(resource);
 
             currentFightButton.onClick.RemoveAllListeners();
@@ -97,8 +98,8 @@ public class BaseButtonHandler : MonoBehaviour
     {
         if (HasEnoughResources(fightCost))
         {
-            // Logique pour lancer le combat et soustraire la ressource appropriée
-            Debug.Log("Combat lancé contre une base avec un coût de " + fightCost + " " + resource);
+            // Logique pour lancer le combat et soustraire la ressource appropriï¿½e
+            Debug.Log("Combat lancï¿½ contre une base avec un coï¿½t de " + fightCost + " " + resource);
 
             switch (resource)
             {

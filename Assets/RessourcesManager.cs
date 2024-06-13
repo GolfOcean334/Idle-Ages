@@ -16,10 +16,10 @@ public class ResourcesManager : MonoBehaviour
     public int resource3;
     public int resource4;
 
-    private readonly int resources1PerSecond = 5;
-    private readonly int resources2PerSecond = 5;
-    private readonly int resources3PerSecond = 5;
-    private readonly int resources4PerSecond = 5;
+    private int resources1PerSecond = 5;
+    private int resources2PerSecond = 5;
+    private int resources3PerSecond = 5;
+    private int resources4PerSecond = 5;
 
     private readonly int maxResource = 500000000;
 
@@ -91,21 +91,6 @@ public class ResourcesManager : MonoBehaviour
         }
     }
 
-    public void SaveResources()
-    {
-        PlayerPrefs.SetInt("resource1", resource1);
-        PlayerPrefs.SetInt("resource2", resource2);
-        PlayerPrefs.SetInt("resource3", resource3);
-        PlayerPrefs.SetInt("resource4", resource4);
-
-        PlayerPrefs.Save();
-    }
-
-    void SaveLogoutTime()
-    {
-        PlayerPrefs.SetString("LastLogoutTime", DateTime.Now.ToBinary().ToString());
-        PlayerPrefs.Save();
-    }
 
     void LoadResources()
     {
@@ -115,14 +100,19 @@ public class ResourcesManager : MonoBehaviour
         resource4 = PlayerPrefs.GetInt("resource4", 0);
     }
 
+    public void SaveResources()
+    {
+        PlayerPrefs.SetInt("resource1", resource1);
+        PlayerPrefs.SetInt("resource2", resource2);
+        PlayerPrefs.SetInt("resource3", resource3);
+        PlayerPrefs.SetInt("resource4", resource4);
+    }
+
     void CalculateOfflineEarnings()
     {
-        long lastLogoutTime = Convert.ToInt64(PlayerPrefs.GetString("LastLogoutTime", DateTime.Now.ToBinary().ToString()));
+        long lastLogoutTime = Convert.ToInt64(PlayerPrefs.GetString("lastLogoutTime", DateTime.Now.ToBinary().ToString()));
         DateTime previousDateTime = DateTime.FromBinary(lastLogoutTime);
         TimeSpan timeElapsed = DateTime.Now - previousDateTime;
-
-        Debug.Log("Last logout time: " + previousDateTime);
-        Debug.Log("Time elapsed since last logout: " + timeElapsed.TotalSeconds + " seconds");
 
         int resourcesEarned1 = Mathf.FloorToInt((float)timeElapsed.TotalSeconds * resources1PerSecond);
         int resourcesEarned2 = Mathf.FloorToInt((float)timeElapsed.TotalSeconds * resources2PerSecond);
@@ -139,5 +129,21 @@ public class ResourcesManager : MonoBehaviour
     {
         SaveResources();
         SaveLogoutTime();
+    }
+
+    public void AddPassiveResourceGeneration(ResourceType resourceType, int resourcesPerSecond)
+    {
+        switch (resourceType)
+        {
+            case ResourceType.Wood:
+                resources3PerSecond += resourcesPerSecond;
+                break;
+            case ResourceType.Stone:
+                resources2PerSecond += resourcesPerSecond;
+                break;
+            case ResourceType.Food:
+                resources1PerSecond += resourcesPerSecond;
+                break;
+        }
     }
 }
