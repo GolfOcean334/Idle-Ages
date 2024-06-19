@@ -21,7 +21,7 @@ public class ResourcesManager : MonoBehaviour
     private int resources3PerSecond = 5;
     private int resources4PerSecond = 5;
 
-    private readonly int maxResource = 500000000;
+    private readonly int maxResource = 500;
 
     void Start()
     {

@@ -46,3 +46,4 @@ public class PlayerStats : ScriptableObject
         return Mathf.RoundToInt(power);
     }
 }
+
