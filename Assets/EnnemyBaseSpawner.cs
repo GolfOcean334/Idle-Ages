@@ -18,6 +18,7 @@ public class EnemyBaseSpawner : MonoBehaviour
     [SerializeField] private TextMeshProUGUI fightButtonText;
     [SerializeField] private Image fightButtonImage;
     [SerializeField] private ResourcesManager resourcesManager;
+    [SerializeField] private TextMeshProUGUI resourcesPerSecondText;
     [SerializeField] private int numberOfRedBases = 100;
     [SerializeField] private int numberOfWhiteBases = 25;
     [SerializeField] private float minDistanceBetweenBases = 200f;
@@ -99,10 +100,11 @@ public class EnemyBaseSpawner : MonoBehaviour
                 ResourceType resource = resourcePool[0];
                 resourcePool.RemoveAt(0);
                 int resourceAmount = CalculateResourceAmount(resource, randomPosition, isWhite);
+                int resourcesPerSecond = Mathf.CeilToInt(power / 100.0f); // Calcul de la quantité de ressource par seconde
                 BaseButtonHandler baseButtonHandler = newBase.AddComponent<BaseButtonHandler>();
                 List<UnitsEnemy> baseUnitsEnemies = GenerateRandomUnitsEnemy(isWhite);
 
-                baseButtonHandler.Initialize(power, resource, resourceAmount, infoPanel, powerEnnemiesText, resourceEnemiesText, fightButton, fightButtonText, fightButtonImage, resourcesManager, baseUnitsEnemies, unitsEnemyText);
+                baseButtonHandler.Initialize(power, resource, resourceAmount, resourcesPerSecond, infoPanel, powerEnnemiesText, resourceEnemiesText, fightButton, fightButtonText, fightButtonImage, resourcesManager, baseUnitsEnemies, unitsEnemyText, resourcesPerSecondText);
                 basePositions.Add(randomPosition);
                 spawnedBases++;
             }
@@ -183,7 +185,6 @@ public class EnemyBaseSpawner : MonoBehaviour
 
         return units;
     }
-
 }
 
 public enum ResourceType

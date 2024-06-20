@@ -16,7 +16,11 @@ public class ResourcesManager : MonoBehaviour
     public int resource3 = 0;
     public int resource4 = 0;
 
-    private readonly int resourcesPerSecond = 5;
+    private readonly int resources1PerSecond = 5;
+    private readonly int resources2PerSecond = 5;
+    private readonly int resources3PerSecond = 5;
+    private readonly int resources4PerSecond = 5;
+
     private readonly int maxResource = 500000000;
 
     void Start()
@@ -35,6 +39,7 @@ public class ResourcesManager : MonoBehaviour
     void OnApplicationQuit()
     {
         SaveResources();
+        SaveLogoutTime();
     }
 
     void OnApplicationPause(bool pauseStatus)
@@ -42,6 +47,7 @@ public class ResourcesManager : MonoBehaviour
         if (pauseStatus)
         {
             SaveResources();
+            SaveLogoutTime();
         }
     }
 
@@ -52,10 +58,12 @@ public class ResourcesManager : MonoBehaviour
             yield return new WaitForSeconds(1);
 
             // Ajouter des ressources chaque seconde
-            resource1 = Mathf.Min(resource1 + resourcesPerSecond, maxResource);
-            resource2 = Mathf.Min(resource2 + resourcesPerSecond, maxResource);
-            resource3 = Mathf.Min(resource3 + resourcesPerSecond, maxResource);
-            resource4 = Mathf.Min(resource4 + resourcesPerSecond, maxResource);
+            resource1 = Mathf.Min(resource1 + resources1PerSecond, maxResource);
+            resource2 = Mathf.Min(resource2 + resources2PerSecond, maxResource);
+            resource3 = Mathf.Min(resource3 + resources3PerSecond, maxResource);
+            resource4 = Mathf.Min(resource4 + resources4PerSecond, maxResource);
+
+            UpdateResourceTexts();
         }
     }
 
@@ -85,40 +93,51 @@ public class ResourcesManager : MonoBehaviour
 
     public void SaveResources()
     {
-        PlayerPrefs.SetInt("Resource1", resource1);
-        PlayerPrefs.SetInt("Resource2", resource2);
-        PlayerPrefs.SetInt("Resource3", resource3);
-        PlayerPrefs.SetInt("Resource4", resource4);
+        PlayerPrefs.SetInt("resource1", resource1);
+        PlayerPrefs.SetInt("resource2", resource2);
+        PlayerPrefs.SetInt("resource3", resource3);
+        PlayerPrefs.SetInt("resource4", resource4);
 
-        PlayerPrefs.SetString("LastSaveTime", DateTime.Now.ToBinary().ToString());
+        PlayerPrefs.Save();
+    }
+
+    void SaveLogoutTime()
+    {
+        PlayerPrefs.SetString("LastLogoutTime", DateTime.Now.ToBinary().ToString());
         PlayerPrefs.Save();
     }
 
     void LoadResources()
     {
-        resource1 = PlayerPrefs.GetInt("Resource1", 0);
-        resource2 = PlayerPrefs.GetInt("Resource2", 0);
-        resource3 = PlayerPrefs.GetInt("Resource3", 0);
-        resource4 = PlayerPrefs.GetInt("Resource4", 0);
+        resource1 = PlayerPrefs.GetInt("resource1", 0);
+        resource2 = PlayerPrefs.GetInt("resource2", 0);
+        resource3 = PlayerPrefs.GetInt("resource3", 0);
+        resource4 = PlayerPrefs.GetInt("resource4", 0);
     }
 
     void CalculateOfflineEarnings()
     {
-        string lastSaveTimeString = PlayerPrefs.GetString("LastSaveTime", DateTime.Now.ToBinary().ToString());
-        DateTime lastSaveTime = DateTime.FromBinary(Convert.ToInt64(lastSaveTimeString));
-        TimeSpan timeSinceLastSave = DateTime.Now - lastSaveTime;
+        long lastLogoutTime = Convert.ToInt64(PlayerPrefs.GetString("LastLogoutTime", DateTime.Now.ToBinary().ToString()));
+        DateTime previousDateTime = DateTime.FromBinary(lastLogoutTime);
+        TimeSpan timeElapsed = DateTime.Now - previousDateTime;
 
-        int secondsSinceLastSave = (int)timeSinceLastSave.TotalSeconds;
-        int earnedResources = secondsSinceLastSave * resourcesPerSecond;
+        Debug.Log("Last logout time: " + previousDateTime);
+        Debug.Log("Time elapsed since last logout: " + timeElapsed.TotalSeconds + " seconds");
 
-        resource1 = Mathf.Min(resource1 + earnedResources, maxResource);
-        resource2 = Mathf.Min(resource2 + earnedResources, maxResource);
-        resource3 = Mathf.Min(resource3 + earnedResources, maxResource);
-        resource4 = Mathf.Min(resource4 + earnedResources, maxResource);
+        int resourcesEarned1 = Mathf.FloorToInt((float)timeElapsed.TotalSeconds * resources1PerSecond);
+        int resourcesEarned2 = Mathf.FloorToInt((float)timeElapsed.TotalSeconds * resources2PerSecond);
+        int resourcesEarned3 = Mathf.FloorToInt((float)timeElapsed.TotalSeconds * resources3PerSecond);
+        int resourcesEarned4 = Mathf.FloorToInt((float)timeElapsed.TotalSeconds * resources4PerSecond);
+
+        resource1 = Mathf.Min(resource1 + resourcesEarned1, maxResource);
+        resource2 = Mathf.Min(resource2 + resourcesEarned2, maxResource);
+        resource3 = Mathf.Min(resource3 + resourcesEarned3, maxResource);
+        resource4 = Mathf.Min(resource4 + resourcesEarned4, maxResource);
     }
 
     void OnSceneChanged(Scene current, Scene next)
     {
         SaveResources();
+        SaveLogoutTime();
     }
 }
