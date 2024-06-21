@@ -11,17 +11,17 @@ public class ResourcesManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI resource3Text;
     [SerializeField] private TextMeshProUGUI resource4Text;
 
-    public int resource1 = 0;
-    public int resource2 = 0;
-    public int resource3 = 0;
-    public int resource4 = 0;
+    public int resource1;
+    public int resource2;
+    public int resource3;
+    public int resource4;
 
     private readonly int resources1PerSecond = 5;
     private readonly int resources2PerSecond = 5;
     private readonly int resources3PerSecond = 5;
     private readonly int resources4PerSecond = 5;
 
-    private readonly int maxResource = 500000000;
+    private readonly int maxResource = 500;
 
     void Start()
     {
