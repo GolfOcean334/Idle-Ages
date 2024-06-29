@@ -130,20 +130,4 @@ public class ResourcesManager : MonoBehaviour
         SaveResources();
         SaveLogoutTime();
     }
-
-    public void AddPassiveResourceGeneration(ResourceType resourceType, int resourcesPerSecond)
-    {
-        switch (resourceType)
-        {
-            case ResourceType.Wood:
-                resources3PerSecond += resourcesPerSecond;
-                break;
-            case ResourceType.Stone:
-                resources2PerSecond += resourcesPerSecond;
-                break;
-            case ResourceType.Food:
-                resources1PerSecond += resourcesPerSecond;
-                break;
-        }
-    }
 }
