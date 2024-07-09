@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Recherche.cs.meta
-guid: 991a26391de8d4c498a85d020e5a5561
-========
-guid: ee0036f27f676fa41942271490070bb3
->>>>>>>> Correction-bug-de-synchro:Assets/BaseButtonHandler.cs.meta
+guid: 8620118cb39a98d4bbe6adbbdeac8a3b
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2

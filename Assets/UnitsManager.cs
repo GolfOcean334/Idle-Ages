@@ -3,106 +3,138 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
-public class LoadingBarManager : MonoBehaviour
+public class UnitsManager : MonoBehaviour
 {
-    // Références aux éléments UI pour les barres de chargement et les boutons
     [SerializeField] private RectTransform loadingBarT1;
     [SerializeField] private RectTransform loadingBarT2;
     [SerializeField] private RectTransform loadingBarT3;
     [SerializeField] private Button buttonT1;
     [SerializeField] private Button buttonT2;
     [SerializeField] private Button buttonT3;
-    [SerializeField] private Button multiplicatorButton; // Bouton pour le multiplicateur
+    [SerializeField] private Button multiplicatorButton;
     [SerializeField] private TextMeshProUGUI UnitsT1Text;
     [SerializeField] private TextMeshProUGUI UnitsT2Text;
     [SerializeField] private TextMeshProUGUI UnitsT3Text;
+    [SerializeField] private TextMeshProUGUI buttonT1Text;
+    [SerializeField] private TextMeshProUGUI buttonT2Text;
+    [SerializeField] private TextMeshProUGUI buttonT3Text;
+    [SerializeField] private TextMeshProUGUI UnitsT1CooldownText;
+    [SerializeField] private TextMeshProUGUI UnitsT2CooldownText;
+    [SerializeField] private TextMeshProUGUI UnitsT3CooldownText;
+    [SerializeField] private ResourcesManager resourcesManager;
+    [SerializeField] private PlayerStats playerStats;
 
-    // Compteurs pour les unités
-    public int UnitsT1 = 0;
-    public int UnitsT2 = 0;
-    public int UnitsT3 = 0;
-
-    // Indicateurs pour savoir si une barre de chargement est en cours
     private bool isLoadingT1 = false;
     private bool isLoadingT2 = false;
     private bool isLoadingT3 = false;
-
-    // Constantes pour le temps de chargement et la largeur maximale de la barre
     private readonly float loadingTime = 5f;
     private readonly float maxBarWidth = 300f;
 
-    // Files d'attente pour gérer les améliorations en attente
     private readonly Queue<string> unitT1Queue = new();
     private readonly Queue<string> unitT2Queue = new();
     private readonly Queue<string> unitT3Queue = new();
 
-    // Variable pour le multiplicateur
     private readonly int[] multiplicators = { 1, 5, 10, 50 };
     private int currentMultiplicatorIndex = 0;
 
     void Start()
     {
-        // Ajouter des listeners pour les boutons
+        // Charger les unités sauvegardées et calculer les ressources en fonction du temps écoulé
+        LoadUnits();
+
         buttonT1.onClick.AddListener(() => OnStartButtonClick("T1"));
         buttonT2.onClick.AddListener(() => OnStartButtonClick("T2"));
         buttonT3.onClick.AddListener(() => OnStartButtonClick("T3"));
-        multiplicatorButton.onClick.AddListener(ChangeMultiplicator); // Ajouter un listener pour le bouton multiplicateur
+        multiplicatorButton.onClick.AddListener(ChangeMultiplicator);
 
-        // Initialiser l'affichage des unités
         UpdateUnitsT1Text();
         UpdateUnitsT2Text();
         UpdateUnitsT3Text();
 
-        // Initialiser le texte du bouton multiplicateur
         multiplicatorButton.GetComponentInChildren<TextMeshProUGUI>().text = "x" + multiplicators[currentMultiplicatorIndex];
+
+        UpdateButtonCosts();
+        UnitsT1CooldownText.text = "";
+        UnitsT2CooldownText.text = "";
+        UnitsT3CooldownText.text = "";
     }
 
-    // Méthode pour changer le multiplicateur
+    // Méthode appelée quand le jeu est fermé ou la scène est changée
+    void OnApplicationQuit()
+    {
+        SaveUnits();
+    }
+
+    void OnApplicationPause(bool pauseStatus)
+    {
+        if (pauseStatus)
+        {
+            SaveUnits();
+        }
+    }
+
     void ChangeMultiplicator()
     {
         currentMultiplicatorIndex = (currentMultiplicatorIndex + 1) % multiplicators.Length;
         multiplicatorButton.GetComponentInChildren<TextMeshProUGUI>().text = "x" + multiplicators[currentMultiplicatorIndex];
+        UpdateButtonCosts();
     }
 
-    // Méthode appelée lorsque l'un des boutons est cliqué
+    void UpdateButtonCosts()
+    {
+        int resourceCost = 2 * multiplicators[currentMultiplicatorIndex];
+        buttonT1Text.text = "Buy T1\nCost: " + resourceCost + " Res1";
+        buttonT2Text.text = "Buy T2\nCost: " + resourceCost + " Res2";
+        buttonT3Text.text = "Buy T3\nCost: " + resourceCost + " Res3";
+    }
+
     void OnStartButtonClick(string unitType)
     {
         int multiplier = multiplicators[currentMultiplicatorIndex];
+        int resourceCost = 2 * multiplicators[currentMultiplicatorIndex];
 
-        for (int i = 0; i < multiplier; i++)
+        if (unitType == "T1" && resourcesManager.resource1 >= resourceCost)
         {
-            if (unitType == "T1")
+            resourcesManager.resource1 -= resourceCost;
+            for (int i = 0; i < multiplier; i++)
             {
-                unitT1Queue.Enqueue(unitType); // Ajouter une amélioration à la file d'attente pour T1
-                // Démarrer la coroutine si aucune amélioration n'est en cours
+                unitT1Queue.Enqueue(unitType);
                 if (!isLoadingT1)
                 {
-                    StartCoroutine(ProcessQueue(unitType));
-                }
-            }
-            else if (unitType == "T2")
-            {
-                unitT2Queue.Enqueue(unitType); // Ajouter une amélioration à la file d'attente pour T2
-                // Démarrer la coroutine si aucune amélioration n'est en cours
-                if (!isLoadingT2)
-                {
-                    StartCoroutine(ProcessQueue(unitType));
-                }
-            }
-            else if (unitType == "T3")
-            {
-                unitT3Queue.Enqueue(unitType); // Ajouter une amélioration à la file d'attente pour T3
-                // Démarrer la coroutine si aucune amélioration n'est en cours
-                if (!isLoadingT3)
-                {
-                    StartCoroutine(ProcessQueue(unitType));
+                    StartCoroutine(ProcessQueue("T1"));
                 }
             }
         }
+        else if (unitType == "T2" && resourcesManager.resource2 >= resourceCost)
+        {
+            resourcesManager.resource2 -= resourceCost;
+            for (int i = 0; i < multiplier; i++)
+            {
+                unitT2Queue.Enqueue(unitType);
+                if (!isLoadingT2)
+                {
+                    StartCoroutine(ProcessQueue("T2"));
+                }
+            }
+        }
+        else if (unitType == "T3" && resourcesManager.resource3 >= resourceCost)
+        {
+            resourcesManager.resource3 -= resourceCost;
+            for (int i = 0; i < multiplier; i++)
+            {
+                unitT3Queue.Enqueue(unitType);
+                if (!isLoadingT3)
+                {
+                    StartCoroutine(ProcessQueue("T3"));
+                }
+            }
+        }
+
+        UpdateCooldownTexts();
     }
 
-    // Coroutine pour traiter la file d'attente des améliorations
     IEnumerator ProcessQueue(string unitType)
     {
         if (unitType == "T1")
@@ -110,9 +142,10 @@ public class LoadingBarManager : MonoBehaviour
             while (unitT1Queue.Count > 0)
             {
                 isLoadingT1 = true;
-                unitT1Queue.Dequeue(); // Retirer une amélioration de la file d'attente
-                yield return StartCoroutine(LoadOverTime(loadingBarT1)); // Effectuer l'animation de la barre de chargement
+                yield return StartCoroutine(LoadOverTime(loadingBarT1, unitType));
+                unitT1Queue.Dequeue();
                 IncreaseUnitsT1();
+                UpdateCooldownTexts();
             }
             isLoadingT1 = false;
         }
@@ -121,9 +154,10 @@ public class LoadingBarManager : MonoBehaviour
             while (unitT2Queue.Count > 0)
             {
                 isLoadingT2 = true;
-                unitT2Queue.Dequeue(); // Retirer une amélioration de la file d'attente
-                yield return StartCoroutine(LoadOverTime(loadingBarT2)); // Effectuer l'animation de la barre de chargement
+                yield return StartCoroutine(LoadOverTime(loadingBarT2, unitType));
+                unitT2Queue.Dequeue();
                 IncreaseUnitsT2();
+                UpdateCooldownTexts();
             }
             isLoadingT2 = false;
         }
@@ -132,16 +166,16 @@ public class LoadingBarManager : MonoBehaviour
             while (unitT3Queue.Count > 0)
             {
                 isLoadingT3 = true;
-                unitT3Queue.Dequeue(); // Retirer une amélioration de la file d'attente
-                yield return StartCoroutine(LoadOverTime(loadingBarT3)); // Effectuer l'animation de la barre de chargement
+                yield return StartCoroutine(LoadOverTime(loadingBarT3, unitType));
+                unitT3Queue.Dequeue();
                 IncreaseUnitsT3();
+                UpdateCooldownTexts();
             }
             isLoadingT3 = false;
         }
     }
 
-    // Coroutine pour animer la barre de chargement
-    IEnumerator LoadOverTime(RectTransform loadingBar)
+    IEnumerator LoadOverTime(RectTransform loadingBar, string unitType)
     {
         float elapsedTime = 0f;
         float initialBarWidth = 0f;
@@ -150,55 +184,235 @@ public class LoadingBarManager : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
 
-            // Calculer la nouvelle largeur de la barre
             float newWidth = Mathf.Lerp(initialBarWidth, maxBarWidth, elapsedTime / loadingTime);
             loadingBar.sizeDelta = new Vector2(newWidth, loadingBar.sizeDelta.y);
-            yield return null; // Attendre la frame suivante
+
+            UpdateCooldownText(unitType, loadingTime - elapsedTime);
+
+            yield return null;
         }
 
-        // Assurer que la barre atteint la largeur maximale
         loadingBar.sizeDelta = new Vector2(maxBarWidth, loadingBar.sizeDelta.y);
+    }
+
+    void UpdateCooldownText(string unitType, float currentLoadingTime)
+    {
+        if (unitType == "T1")
+        {
+            UnitsT1CooldownText.text = CalculateTotalCooldown(unitT1Queue.Count, currentLoadingTime);
+        }
+        else if (unitType == "T2")
+        {
+            UnitsT2CooldownText.text = CalculateTotalCooldown(unitT2Queue.Count, currentLoadingTime);
+        }
+        else if (unitType == "T3")
+        {
+            UnitsT3CooldownText.text = CalculateTotalCooldown(unitT3Queue.Count, currentLoadingTime);
+        }
+    }
+
+    void UpdateCooldownTexts()
+    {
+        UnitsT1CooldownText.text = CalculateTotalCooldown(unitT1Queue.Count, isLoadingT1 ? loadingTime : 0);
+        UnitsT2CooldownText.text = CalculateTotalCooldown(unitT2Queue.Count, isLoadingT2 ? loadingTime : 0);
+        UnitsT3CooldownText.text = CalculateTotalCooldown(unitT3Queue.Count, isLoadingT3 ? loadingTime : 0);
+    }
+
+    string CalculateTotalCooldown(int queueCount, float currentLoadingTime)
+    {
+        float totalCooldown = queueCount * loadingTime;
+        if (queueCount > 0)
+        {
+            totalCooldown -= (loadingTime - currentLoadingTime);
+        }
+        else
+        {
+            totalCooldown = 0;
+        }
+
+        return totalCooldown > 0 ? "Temps formation: " + FormatTime(totalCooldown) : "";
+    }
+
+    string FormatTime(float totalSeconds)
+    {
+        int hours = Mathf.FloorToInt(totalSeconds / 3600);
+        int minutes = Mathf.FloorToInt((totalSeconds % 3600) / 60);
+        int seconds = Mathf.FloorToInt(totalSeconds % 60);
+
+        if (hours > 0)
+        {
+            return $"{hours:D2}:{minutes:D2}:{seconds:D2}";
+        }
+        else if (minutes > 0)
+        {
+            return $"{minutes:D2}:{seconds:D2}";
+        }
+        else
+        {
+            return $"{seconds:D2} s";
+        }
     }
 
     void IncreaseUnitsT1()
     {
-        UnitsT1 += 1;
+        playerStats.UnitsT1 += 1;
         UpdateUnitsT1Text();
         ResetLoadingBar(loadingBarT1);
     }
 
     void UpdateUnitsT1Text()
     {
-        UnitsT1Text.text = "UnitsT1 : " + UnitsT1;
+        UnitsT1Text.text = "UnitsT1: " + FormatUnits(playerStats.UnitsT1);
     }
 
     void IncreaseUnitsT2()
     {
-        UnitsT2 += 1;
+        playerStats.UnitsT2 += 1;
         UpdateUnitsT2Text();
         ResetLoadingBar(loadingBarT2);
     }
 
     void UpdateUnitsT2Text()
     {
-        UnitsT2Text.text = "UnitsT2 : " + UnitsT2;
+        UnitsT2Text.text = "UnitsT2: " + FormatUnits(playerStats.UnitsT2);
     }
 
     void IncreaseUnitsT3()
     {
-        UnitsT3 += 1;
+        playerStats.UnitsT3 += 1;
         UpdateUnitsT3Text();
         ResetLoadingBar(loadingBarT3);
     }
 
     void UpdateUnitsT3Text()
     {
-        UnitsT3Text.text = "UnitsT3 : " + UnitsT3;
+        UnitsT3Text.text = "UnitsT3: " + FormatUnits(playerStats.UnitsT3);
     }
 
-    // Réinitialiser la largeur de la barre de chargement
     void ResetLoadingBar(RectTransform loadingBar)
     {
         loadingBar.sizeDelta = new Vector2(0f, loadingBar.sizeDelta.y);
+    }
+
+    // Méthode pour sauvegarder les unités et les files d'attente
+    public void SaveUnits()
+    {
+        PlayerPrefs.SetInt("Units1", playerStats.UnitsT1);
+        PlayerPrefs.SetInt("Units2", playerStats.UnitsT2);
+        PlayerPrefs.SetInt("Units3", playerStats.UnitsT3);
+
+        PlayerPrefs.SetString("unitT1Queue", string.Join(",", unitT1Queue.ToArray()));
+        PlayerPrefs.SetString("unitT2Queue", string.Join(",", unitT2Queue.ToArray()));
+        PlayerPrefs.SetString("unitT3Queue", string.Join(",", unitT3Queue.ToArray()));
+
+        // Enregistrer l'heure de la sauvegarde
+        PlayerPrefs.SetString("LastSaveTime", DateTime.Now.ToBinary().ToString());
+
+        PlayerPrefs.Save();
+    }
+
+    // Méthode pour charger les unités et les files d'attente
+    void LoadUnits()
+    {
+        playerStats.UnitsT1 = PlayerPrefs.GetInt("Units1", 0);
+        playerStats.UnitsT2 = PlayerPrefs.GetInt("Units2", 0);
+        playerStats.UnitsT3 = PlayerPrefs.GetInt("Units3", 0);
+
+        LoadQueue("unitT1Queue", unitT1Queue);
+        LoadQueue("unitT2Queue", unitT2Queue);
+        LoadQueue("unitT3Queue", unitT3Queue);
+
+        // Calculer le temps écoulé depuis la dernière sauvegarde
+        string lastSaveTimeString = PlayerPrefs.GetString("LastSaveTime", DateTime.Now.ToBinary().ToString());
+        DateTime lastSaveTime = DateTime.FromBinary(Convert.ToInt64(lastSaveTimeString));
+        TimeSpan timeSinceLastSave = DateTime.Now - lastSaveTime;
+
+        // Mettre à jour les ressources et les améliorations en cours en fonction du temps écoulé
+        ProcessElapsedTime(timeSinceLastSave);
+
+        UpdateUnitsT1Text();
+        UpdateUnitsT2Text();
+        UpdateUnitsT3Text();
+
+        UpdateCooldownTexts();
+
+        // Redémarrer les coroutines si nécessaire
+        if (unitT1Queue.Count > 0 && !isLoadingT1)
+        {
+            StartCoroutine(ProcessQueue("T1"));
+        }
+        if (unitT2Queue.Count > 0 && !isLoadingT2)
+        {
+            StartCoroutine(ProcessQueue("T2"));
+        }
+        if (unitT3Queue.Count > 0 && !isLoadingT3)
+        {
+            StartCoroutine(ProcessQueue("T3"));
+        }
+    }
+
+    void LoadQueue(string key, Queue<string> queue)
+    {
+        queue.Clear();
+        string savedQueue = PlayerPrefs.GetString(key, "");
+        if (!string.IsNullOrEmpty(savedQueue))
+        {
+            string[] items = savedQueue.Split(',');
+            foreach (var item in items)
+            {
+                queue.Enqueue(item);
+            }
+        }
+    }
+
+    void ProcessElapsedTime(TimeSpan elapsedTime)
+    {
+        // Calculer combien de cycles de chargement peuvent être complétés
+        int completedT1Cycles = Mathf.FloorToInt((float)elapsedTime.TotalSeconds / loadingTime);
+        int completedT2Cycles = Mathf.FloorToInt((float)elapsedTime.TotalSeconds / loadingTime);
+        int completedT3Cycles = Mathf.FloorToInt((float)elapsedTime.TotalSeconds / loadingTime);
+
+        // Mettre à jour les unités en fonction des cycles complétés
+        for (int i = 0; i < completedT1Cycles && unitT1Queue.Count > 0; i++)
+        {
+            unitT1Queue.Dequeue();
+            IncreaseUnitsT1();
+        }
+        for (int i = 0; i < completedT2Cycles && unitT2Queue.Count > 0; i++)
+        {
+            unitT2Queue.Dequeue();
+            IncreaseUnitsT2();
+        }
+        for (int i = 0; i < completedT3Cycles && unitT3Queue.Count > 0; i++)
+        {
+            unitT3Queue.Dequeue();
+            IncreaseUnitsT3();
+        }
+
+        // Mettre à jour les ressources en fonction du temps écoulé
+        resourcesManager.resource1 += Mathf.FloorToInt((float)elapsedTime.TotalSeconds);
+        resourcesManager.resource2 += Mathf.FloorToInt((float)elapsedTime.TotalSeconds);
+        resourcesManager.resource3 += Mathf.FloorToInt((float)elapsedTime.TotalSeconds);
+    }
+
+    public int CalculatePlayerPower()
+    {
+        return playerStats.CalculatePlayerPower();
+    }
+
+    string FormatUnits(int units)
+    {
+        if (units >= 1000000)
+        {
+            return (units / 1000000f).ToString("F1") + "M";
+        }
+        else if (units >= 1000)
+        {
+            return (units / 1000f).ToString("F1") + "k";
+        }
+        else
+        {
+            return units.ToString();
+        }
     }
 }
