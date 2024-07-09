@@ -3054,7 +3054,7 @@ Transform:
   - {fileID: 401917993}
   - {fileID: 1434920441}
   - {fileID: 1572718924}
-  - {fileID: 492968049}
+  - {fileID: 612441563}
   m_Father: {fileID: 1983153331}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1296061804
@@ -3081,7 +3081,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a09afb31014fe544b9e9dda0e6ce3d3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PowerPlayerText: {fileID: 492968050}
+  PowerPlayerText: {fileID: 612441564}
   playerStats: {fileID: 11400000, guid: 0406183f2d2a2c84f8a612c43c46b64d, type: 2}
 --- !u!1 &1312048837
 GameObject:

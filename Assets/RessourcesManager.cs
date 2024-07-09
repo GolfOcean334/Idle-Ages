@@ -39,7 +39,6 @@ public class ResourcesManager : MonoBehaviour
     void OnApplicationQuit()
     {
         SaveResources();
-        SaveLogoutTime();
     }
 
     void OnApplicationPause(bool pauseStatus)
@@ -47,7 +46,6 @@ public class ResourcesManager : MonoBehaviour
         if (pauseStatus)
         {
             SaveResources();
-            SaveLogoutTime();
         }
     }
 
@@ -128,6 +126,5 @@ public class ResourcesManager : MonoBehaviour
     void OnSceneChanged(Scene current, Scene next)
     {
         SaveResources();
-        SaveLogoutTime();
     }
 }

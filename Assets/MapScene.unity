@@ -2132,7 +2132,7 @@ MonoBehaviour:
   fightButtonText: {fileID: 707806368}
   fightButtonImage: {fileID: 542125370}
   resourcesManager: {fileID: 923721807}
-  resourcesPerSecondText: {fileID: 577501021}
+  resourcesPerSecondText: {fileID: 0}
   numberOfRedBases: 100
   numberOfWhiteBases: 25
   minDistanceBetweenBases: 200
@@ -3574,7 +3574,7 @@ Transform:
   - {fileID: 703868189}
   - {fileID: 216836519}
   - {fileID: 176235923}
-  - {fileID: 629887804}
+  - {fileID: 132044706}
   m_Father: {fileID: 1807339667}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2045612932
@@ -3601,7 +3601,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a09afb31014fe544b9e9dda0e6ce3d3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PowerPlayerText: {fileID: 629887805}
+  PowerPlayerText: {fileID: 132044707}
   playerStats: {fileID: 11400000, guid: 0406183f2d2a2c84f8a612c43c46b64d, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
