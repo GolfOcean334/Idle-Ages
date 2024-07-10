@@ -37,6 +37,13 @@ public class MainMenu : MonoBehaviour
         SaveUnits();
         SceneManager.LoadScene("CreationUnitsScene");
     }
+    
+    public void ReturnTechnoTree()
+    {
+        SaveResources();
+        SaveUnits();
+        SceneManager.LoadScene("ResearchTreeMenu");
+    }
 
     public void QuitGame()
     {

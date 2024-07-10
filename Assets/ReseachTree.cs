@@ -25,9 +25,8 @@ public class ReseachTree : MonoBehaviour
 
     private void Start()
     {
-        ResearchPoint = 20;
+        LoadGameState();
 
-        isbuyed = new int[13];
         ResearchName = new[] {
             "Maitrise du feu",
             "Fabrication d'outil en pierre",
@@ -104,6 +103,26 @@ public class ReseachTree : MonoBehaviour
         foreach (var recherche in ResearchList)
         {
             recherche.UpdateUI();
+        }
+    }
+
+    public void SaveGameState()
+    {
+        PlayerPrefs.SetInt("ResearchPoint", ResearchPoint);
+        for (int i = 0; i < isbuyed.Length; i++)
+        {
+            PlayerPrefs.SetInt("isbuyed_" + i, isbuyed[i]);
+        }
+        PlayerPrefs.Save();
+    }
+
+    public void LoadGameState()
+    {
+        ResearchPoint = PlayerPrefs.GetInt("ResearchPoint", 20);
+        isbuyed = new int[13];
+        for (int i = 0; i < isbuyed.Length; i++)
+        {
+            isbuyed[i] = PlayerPrefs.GetInt("isbuyed_" + i, 0);
         }
     }
 }
