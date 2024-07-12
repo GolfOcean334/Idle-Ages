@@ -28,34 +28,70 @@ public class ReseachTree : MonoBehaviour
         LoadGameState();
 
         ResearchName = new[] {
-            "Maitrise du feu",
-            "Fabrication d'outil en pierre",
-            "Outils de taille de pierre spécialisés",
-            "Techniques d'extraction minière",
-            "zdz",
-            "zdz",
-            "zdz",
-            "zdz",
-            "zdz",
-            "zdz",
-            "zdz",
-            "zdz",
-            "zdz"
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "19",
+            "20",
+            "21",
+            "22",
+            "23",
+            "24",
+            "25",
+            "26",
+            "27",
+            "28",
+            "29",
+            "30"
         };
         ResearchDesc = new[] {
-            "Là où tout commence",
-            "Outil rudimentaire",
-            "10% production de minerais",
-            "10% production de minerais",
-            "zdz",
-            "zdz",
-            "zdz",
-            "zdz",
-            "zdz",
-            "zdz",
-            "zdz",
-            "zdz",
-            "zdz"
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "19",
+            "20",
+            "21",
+            "22",
+            "23",
+            "24",
+            "25",
+            "26",
+            "27",
+            "28",
+            "29",
+            "30"
         };
 
         // Initialiser les listes
@@ -88,8 +124,9 @@ public class ReseachTree : MonoBehaviour
 
         // Définir connectedResearch correctement
         ResearchList[0].connectedResearch = new[] { 1 };
-        ResearchList[1].connectedResearch = new[] { 2, 3, 4, 5 };
-        ResearchList[3].connectedResearch = new[] { 6, 7 };
+        ResearchList[1].connectedResearch = new[] { 2, 3, 4, 5, 7};
+        ResearchList[2].connectedResearch = new[] { 8, 9 };
+        ResearchList[3].connectedResearch = new[] { 6 };
         ResearchList[4].connectedResearch = new[] { 8 };
         ResearchList[5].connectedResearch = new[] { 9 };
         ResearchList[8].connectedResearch = new[] { 10 };
@@ -118,8 +155,8 @@ public class ReseachTree : MonoBehaviour
 
     public void LoadGameState()
     {
-        ResearchPoint = PlayerPrefs.GetInt("ResearchPoint", 20);
-        isbuyed = new int[13];
+        ResearchPoint = PlayerPrefs.GetInt("ResearchPoint", 100);
+        isbuyed = new int[31];
         for (int i = 0; i < isbuyed.Length; i++)
         {
             isbuyed[i] = PlayerPrefs.GetInt("isbuyed_" + i, 0);
