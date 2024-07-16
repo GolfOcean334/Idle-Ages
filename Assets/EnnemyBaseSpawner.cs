@@ -42,7 +42,7 @@ public class EnemyBaseSpawner : MonoBehaviour
         infoPanel.SetActive(false);
         remainingResources = new Dictionary<ResourceType, float>(totalResources);
 
-        // Préparer la liste des ressources
+        // Prï¿½parer la liste des ressources
         PrepareResourcePool();
 
         SpawnEnemyBases(numberOfRedBases, redEnemyBasePrefab, false);
@@ -61,13 +61,13 @@ public class EnemyBaseSpawner : MonoBehaviour
             resourcePool.Add(ResourceType.Food);
         }
 
-        // Si le total des bases n'est pas divisible par 3, ajouter des ressources supplémentaires
+        // Si le total des bases n'est pas divisible par 3, ajouter des ressources supplï¿½mentaires
         while (resourcePool.Count < totalBases)
         {
             resourcePool.Add((ResourceType)Random.Range(0, 3));
         }
 
-        // Mélanger la liste pour une distribution aléatoire
+        // Mï¿½langer la liste pour une distribution alï¿½atoire
         Shuffle(resourcePool);
     }
 
@@ -100,8 +100,7 @@ public class EnemyBaseSpawner : MonoBehaviour
                 ResourceType resource = resourcePool[0];
                 resourcePool.RemoveAt(0);
                 int resourceAmount = CalculateResourceAmount(resource, randomPosition, isWhite);
-                int resourcesPerSecond = Mathf.CeilToInt(power / 100.0f); // Calcul de la quantité de ressource par seconde
-
+                int resourcesPerSecond = Mathf.CeilToInt(power / 100.0f); // Calcul de la quantitï¿½ de ressource par seconde
                 BaseButtonHandler baseButtonHandler = newBase.AddComponent<BaseButtonHandler>();
                 List<UnitsEnemy> baseUnitsEnemies = GenerateRandomUnitsEnemy(isWhite);
 
@@ -113,7 +112,7 @@ public class EnemyBaseSpawner : MonoBehaviour
 
         if (attempts >= maxAttempts)
         {
-            Debug.LogWarning("Nombre maximum de tentatives atteint. Certaines bases peuvent ne pas avoir été créées.");
+            Debug.LogWarning("Nombre maximum de tentatives atteint. Certaines bases peuvent ne pas avoir ï¿½tï¿½ crï¿½ï¿½es.");
         }
     }
 
@@ -142,7 +141,7 @@ public class EnemyBaseSpawner : MonoBehaviour
     int CalculatePower(Vector3 position, bool isWhite)
     {
         float distance = Vector3.Distance(new Vector3(position.x, position.y, 0), new Vector3(playerBase.transform.position.x, playerBase.transform.position.y, 0));
-        int power = Mathf.RoundToInt(500 * Mathf.Exp((distance - 500) / 2000f)); // Calcule de la puissance de manière exponentielle
+        int power = Mathf.RoundToInt(500 * Mathf.Exp((distance - 500) / 2000f)); // Calcule de la puissance de maniï¿½re exponentielle
         if (isWhite)
         {
             power *= 2;
@@ -153,7 +152,7 @@ public class EnemyBaseSpawner : MonoBehaviour
     int CalculateResourceAmount(ResourceType resource, Vector3 position, bool isWhite)
     {
         float distance = Vector3.Distance(new Vector3(position.x, position.y, 0), new Vector3(playerBase.transform.position.x, playerBase.transform.position.y, 0));
-        int resourceAmount = Mathf.RoundToInt(500 * Mathf.Exp((distance - 500) / 2500f)); // Calcule des ressources de manière exponentielles
+        int resourceAmount = Mathf.RoundToInt(500 * Mathf.Exp((distance - 500) / 2500f)); // Calcule des ressources de maniï¿½re exponentielles
         remainingResources[resource] -= resourceAmount;
         if (isWhite)
         {
@@ -187,7 +186,6 @@ public class EnemyBaseSpawner : MonoBehaviour
 
         return units;
     }
-
 }
 
 public enum ResourceType

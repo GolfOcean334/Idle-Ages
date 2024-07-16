@@ -24,10 +24,8 @@ public class UnitsManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI UnitsT2CooldownText;
     [SerializeField] private TextMeshProUGUI UnitsT3CooldownText;
     [SerializeField] private ResourcesManager resourcesManager;
-
-    private int UnitsT1 = 0;
-    private int UnitsT2 = 0;
-    private int UnitsT3 = 0;
+    [SerializeField] private PlayerStats playerStats;
+    
     private bool isLoadingT1 = false;
     private bool isLoadingT2 = false;
     private bool isLoadingT3 = false;
@@ -43,7 +41,6 @@ public class UnitsManager : MonoBehaviour
 
     void Start()
     {
-        // Charger les unités sauvegardées et calculer les ressources en fonction du temps écoulé
         LoadUnits();
 
         buttonT1.onClick.AddListener(() => OnStartButtonClick("T1"));
@@ -63,7 +60,6 @@ public class UnitsManager : MonoBehaviour
         UnitsT3CooldownText.text = "";
     }
 
-    // Méthode appelée quand le jeu est fermé ou la scène est changée
     void OnApplicationQuit()
     {
         SaveUnits();
@@ -257,38 +253,38 @@ public class UnitsManager : MonoBehaviour
 
     void IncreaseUnitsT1()
     {
-        UnitsT1 += 1;
+        playerStats.UnitsT1 += 1;
         UpdateUnitsT1Text();
         ResetLoadingBar(loadingBarT1);
     }
 
     void UpdateUnitsT1Text()
     {
-        UnitsT1Text.text = "UnitsT1: " + FormatUnits(UnitsT1);
+        UnitsT1Text.text = "UnitsT1: " + FormatUnits(playerStats.UnitsT1);
     }
 
     void IncreaseUnitsT2()
     {
-        UnitsT2 += 1;
+        playerStats.UnitsT2 += 1;
         UpdateUnitsT2Text();
         ResetLoadingBar(loadingBarT2);
     }
 
     void UpdateUnitsT2Text()
     {
-        UnitsT2Text.text = "UnitsT2: " + FormatUnits(UnitsT2);
+        UnitsT2Text.text = "UnitsT2: " + FormatUnits(playerStats.UnitsT2);
     }
 
     void IncreaseUnitsT3()
     {
-        UnitsT3 += 1;
+        playerStats.UnitsT3 += 1;
         UpdateUnitsT3Text();
         ResetLoadingBar(loadingBarT3);
     }
 
     void UpdateUnitsT3Text()
     {
-        UnitsT3Text.text = "UnitsT3: " + FormatUnits(UnitsT3);
+        UnitsT3Text.text = "UnitsT3: " + FormatUnits(playerStats.UnitsT3);
     }
 
     void ResetLoadingBar(RectTransform loadingBar)
@@ -296,49 +292,42 @@ public class UnitsManager : MonoBehaviour
         loadingBar.sizeDelta = new Vector2(0f, loadingBar.sizeDelta.y);
     }
 
-    // Méthode pour sauvegarder les unités et les files d'attente
     public void SaveUnits()
     {
-        PlayerPrefs.SetInt("Units1", UnitsT1);
-        PlayerPrefs.SetInt("Units2", UnitsT2);
-        PlayerPrefs.SetInt("Units3", UnitsT3);
+        PlayerPrefs.SetInt("Units1", playerStats.UnitsT1);
+        PlayerPrefs.SetInt("Units2", playerStats.UnitsT2);
+        PlayerPrefs.SetInt("Units3", playerStats.UnitsT3);
 
         PlayerPrefs.SetString("unitT1Queue", string.Join(",", unitT1Queue.ToArray()));
         PlayerPrefs.SetString("unitT2Queue", string.Join(",", unitT2Queue.ToArray()));
         PlayerPrefs.SetString("unitT3Queue", string.Join(",", unitT3Queue.ToArray()));
 
-        // Enregistrer l'heure de la sauvegarde
         PlayerPrefs.SetString("LastSaveTime", DateTime.Now.ToBinary().ToString());
 
         PlayerPrefs.Save();
     }
 
-    // Méthode pour charger les unités et les files d'attente
     void LoadUnits()
     {
-        UnitsT1 = PlayerPrefs.GetInt("Units1", 0);
-        UnitsT2 = PlayerPrefs.GetInt("Units2", 0);
-        UnitsT3 = PlayerPrefs.GetInt("Units3", 0);
+        playerStats.UnitsT1 = PlayerPrefs.GetInt("Units1", 0);
+        playerStats.UnitsT2 = PlayerPrefs.GetInt("Units2", 0);
+        playerStats.UnitsT3 = PlayerPrefs.GetInt("Units3", 0);
 
         LoadQueue("unitT1Queue", unitT1Queue);
         LoadQueue("unitT2Queue", unitT2Queue);
         LoadQueue("unitT3Queue", unitT3Queue);
 
-        // Calculer le temps écoulé depuis la dernière sauvegarde
         string lastSaveTimeString = PlayerPrefs.GetString("LastSaveTime", DateTime.Now.ToBinary().ToString());
         DateTime lastSaveTime = DateTime.FromBinary(Convert.ToInt64(lastSaveTimeString));
         TimeSpan timeSinceLastSave = DateTime.Now - lastSaveTime;
 
-        // Mettre à jour les ressources et les améliorations en cours en fonction du temps écoulé
         ProcessElapsedTime(timeSinceLastSave);
 
         UpdateUnitsT1Text();
         UpdateUnitsT2Text();
         UpdateUnitsT3Text();
-
         UpdateCooldownTexts();
 
-        // Redémarrer les coroutines si nécessaire
         if (unitT1Queue.Count > 0 && !isLoadingT1)
         {
             StartCoroutine(ProcessQueue("T1"));
@@ -369,12 +358,10 @@ public class UnitsManager : MonoBehaviour
 
     void ProcessElapsedTime(TimeSpan elapsedTime)
     {
-        // Calculer combien de cycles de chargement peuvent être complétés
         int completedT1Cycles = Mathf.FloorToInt((float)elapsedTime.TotalSeconds / loadingTime);
         int completedT2Cycles = Mathf.FloorToInt((float)elapsedTime.TotalSeconds / loadingTime);
         int completedT3Cycles = Mathf.FloorToInt((float)elapsedTime.TotalSeconds / loadingTime);
 
-        // Mettre à jour les unités en fonction des cycles complétés
         for (int i = 0; i < completedT1Cycles && unitT1Queue.Count > 0; i++)
         {
             unitT1Queue.Dequeue();
@@ -391,10 +378,14 @@ public class UnitsManager : MonoBehaviour
             IncreaseUnitsT3();
         }
 
-        // Mettre à jour les ressources en fonction du temps écoulé
         resourcesManager.resource1 += Mathf.FloorToInt((float)elapsedTime.TotalSeconds);
         resourcesManager.resource2 += Mathf.FloorToInt((float)elapsedTime.TotalSeconds);
         resourcesManager.resource3 += Mathf.FloorToInt((float)elapsedTime.TotalSeconds);
+    }
+
+    public int CalculatePlayerPower()
+    {
+        return playerStats.CalculatePlayerPower();
     }
 
     string FormatUnits(int units)
