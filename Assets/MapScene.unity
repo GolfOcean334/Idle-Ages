@@ -2144,7 +2144,7 @@ MonoBehaviour:
   fightButtonText: {fileID: 707806368}
   fightButtonImage: {fileID: 542125370}
   resourcesManager: {fileID: 923721807}
-  resourcesPerSecondText: {fileID: 0}
+  resourcesPerSecondText: {fileID: 1072915356}
   numberOfRedBases: 100
   numberOfWhiteBases: 25
   minDistanceBetweenBases: 200
