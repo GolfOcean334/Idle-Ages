@@ -63,7 +63,6 @@ public class Recherche : MonoBehaviour
 
         ReseachTree.reseachTree.ResearchPoint -= 1;
         ReseachTree.reseachTree.isbuyed[id] = 1;
-        ReseachTree.reseachTree.SaveGameState();
         ReseachTree.reseachTree.UpdateAllResearchUI();
     }
 }
