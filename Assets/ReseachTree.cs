@@ -127,10 +127,35 @@ public class ReseachTree : MonoBehaviour
         ResearchList[1].connectedResearch = new[] { 2, 3, 4, 5, 7};
         ResearchList[2].connectedResearch = new[] { 8, 9 };
         ResearchList[3].connectedResearch = new[] { 6 };
-        ResearchList[4].connectedResearch = new[] { 8 };
-        ResearchList[5].connectedResearch = new[] { 9 };
+        ResearchList[4].connectedResearch = new[] { 25 };
+        ResearchList[5].connectedResearch = new[] { 27 };
+        ResearchList[6].connectedResearch = new[] { 17,18,20 };
+        ResearchList[7].connectedResearch = new[] { 21,19,22,23};
         ResearchList[8].connectedResearch = new[] { 10 };
-        ResearchList[9].connectedResearch = new[] { 11, 12 };
+        ResearchList[9].connectedResearch = new[] { 11, 12,13, 14 };
+        //ResearchList[10].connectedResearch = new[] { };
+        //ResearchList[11].connectedResearch = new[] { };
+        ResearchList[12].connectedResearch = new[] {15};
+        //ResearchList[13].connectedResearch = new[] { };
+        //ResearchList[14].connectedResearch = new[] { };
+        //ResearchList[15].connectedResearch = new[] { };
+        //ResearchList[16].connectedResearch = new[] { };
+        //ResearchList[17].connectedResearch = new[] { };
+        ResearchList[18].connectedResearch = new[] { 16 };
+        //ResearchList[19].connectedResearch = new[] {}
+        //ResearchList[20].connectedResearch = new[] { };
+        //ResearchList[21].connectedResearch = new[] {};
+        ResearchList[22].connectedResearch = new[] { 30 };
+        ResearchList[23].connectedResearch = new[] { 24 };
+        //ResearchList[24].connectedResearch = new[] { };
+        ResearchList[25].connectedResearch = new[] { 26 };
+        //ResearchList[26].connectedResearch = new[] { };
+        ResearchList[27].connectedResearch = new[] { 28,29 };
+        //ResearchList[28].connectedResearch = new[] { };
+        //ResearchList[29].connectedResearch = new[] { };
+        //ResearchList[30].connectedResearch = new[] { };
+
+
 
         UpdateAllResearchUI();
     }
