@@ -21,11 +21,6 @@ public class ResourcesManager : MonoBehaviour
     private readonly int resources3PerSecond = 5;
     private readonly int resources4PerSecond = 5;
 
-    private int resources1PerSecond = 5;
-    private int resources2PerSecond = 5;
-    private int resources3PerSecond = 5;
-    private int resources4PerSecond = 5;
-
     private readonly int maxResource = 500000000;
 
     void Start()
@@ -130,21 +125,5 @@ public class ResourcesManager : MonoBehaviour
     void OnSceneChanged(Scene current, Scene next)
     {
         SaveResources();
-    }
-
-    public void AddPassiveResourceGeneration(ResourceType resourceType, int resourcesPerSecond)
-    {
-        switch (resourceType)
-        {
-            case ResourceType.Wood:
-                resources3PerSecond += resourcesPerSecond;
-                break;
-            case ResourceType.Stone:
-                resources2PerSecond += resourcesPerSecond;
-                break;
-            case ResourceType.Food:
-                resources1PerSecond += resourcesPerSecond;
-                break;
-        }
     }
 }

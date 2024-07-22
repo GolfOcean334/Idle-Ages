@@ -45,7 +45,6 @@ public class BaseButtonHandler : MonoBehaviour
         }
 
         GetComponent<Button>().onClick.AddListener(OnClick);
-        resourcesManager.AddPassiveResourceGeneration(resource, resourcesPerSecond); // Ajouter la g�n�ration passive de ressources
     }
 
     public void Initialize(int power, ResourceType resource, int resourceAmount, int resourcesPerSecond, GameObject infoPanel, TextMeshProUGUI powerEnemiesText, TextMeshProUGUI resourceEnemiesText, Button fightButton, TextMeshProUGUI fightButtonText, Image fightButtonImage, ResourcesManager resourcesManager, List<UnitsEnemy> unitsEnemies, TextMeshProUGUI unitsEnemyText, TextMeshProUGUI resourcesPerSecondText)
