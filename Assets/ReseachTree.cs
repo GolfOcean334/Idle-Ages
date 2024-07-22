@@ -10,6 +10,7 @@ public class ReseachTree : MonoBehaviour
     public string[] ResearchName;
     public string[] ResearchDesc;
 
+
     public List<GameObject> Connectionlist;
     public GameObject ConnectionHolder;
 
@@ -25,7 +26,9 @@ public class ReseachTree : MonoBehaviour
 
     private void Start()
     {
-        LoadGameState();
+        isbuyed = new int[37];
+        //LoadGameState();
+        ResearchPoint = 1000000;
 
         ResearchName = new[] {
             "0",
@@ -59,7 +62,8 @@ public class ReseachTree : MonoBehaviour
             "28",
             "29",
             "30"
-        };
+            
+    };
         ResearchDesc = new[] {
             "0",
             "1",
@@ -125,7 +129,7 @@ public class ReseachTree : MonoBehaviour
         // Définir connectedResearch correctement
         ResearchList[0].connectedResearch = new[] { 1 };
         ResearchList[1].connectedResearch = new[] { 2, 3, 4, 5, 7};
-        ResearchList[2].connectedResearch = new[] { 8, 9 };
+        ResearchList[2].connectedResearch = new[] { 8, 9 , 35};
         ResearchList[3].connectedResearch = new[] { 6 };
         ResearchList[4].connectedResearch = new[] { 25 };
         ResearchList[5].connectedResearch = new[] { 27 };
@@ -133,16 +137,16 @@ public class ReseachTree : MonoBehaviour
         ResearchList[7].connectedResearch = new[] { 21,19,22,23};
         ResearchList[8].connectedResearch = new[] { 10 };
         ResearchList[9].connectedResearch = new[] { 11, 12,13, 14 };
-        //ResearchList[10].connectedResearch = new[] { };
-        //ResearchList[11].connectedResearch = new[] { };
+        ResearchList[10].connectedResearch = new[] { 36 };
+        ResearchList[11].connectedResearch = new[] { 33 };
         ResearchList[12].connectedResearch = new[] {15};
-        //ResearchList[13].connectedResearch = new[] { };
-        //ResearchList[14].connectedResearch = new[] { };
+        ResearchList[13].connectedResearch = new[] { 32};
+        ResearchList[14].connectedResearch = new[] { 31 };
         //ResearchList[15].connectedResearch = new[] { };
         //ResearchList[16].connectedResearch = new[] { };
         //ResearchList[17].connectedResearch = new[] { };
         ResearchList[18].connectedResearch = new[] { 16 };
-        //ResearchList[19].connectedResearch = new[] {}
+        ResearchList[19].connectedResearch = new[] { 34 };
         //ResearchList[20].connectedResearch = new[] { };
         //ResearchList[21].connectedResearch = new[] {};
         ResearchList[22].connectedResearch = new[] { 30 };
@@ -168,23 +172,22 @@ public class ReseachTree : MonoBehaviour
         }
     }
 
-    public void SaveGameState()
-    {
-        PlayerPrefs.SetInt("ResearchPoint", ResearchPoint);
-        for (int i = 0; i < isbuyed.Length; i++)
-        {
-            PlayerPrefs.SetInt("isbuyed_" + i, isbuyed[i]);
-        }
-        PlayerPrefs.Save();
-    }
+    //public void SaveGameState()
+    //{
+    //    PlayerPrefs.SetInt("ResearchPoint", ResearchPoint);
+    //    for (int i = 0; i < isbuyed.Length; i++)
+    //    {
+    //        PlayerPrefs.SetInt("isbuyed_" + i, isbuyed[i]);
+    //    }
+    //    PlayerPrefs.Save();
+    //}
 
-    public void LoadGameState()
-    {
-        ResearchPoint = PlayerPrefs.GetInt("ResearchPoint", 100);
-        isbuyed = new int[31];
-        for (int i = 0; i < isbuyed.Length; i++)
-        {
-            isbuyed[i] = PlayerPrefs.GetInt("isbuyed_" + i, 0);
-        }
-    }
+    //public void LoadGameState()
+    //{
+    //    ResearchPoint = PlayerPrefs.GetInt("ResearchPoint", 100);
+    //    for (int i = 0; i < isbuyed.Length; i++)
+    //    {
+    //        isbuyed[i] = PlayerPrefs.GetInt("isbuyed_" + i, 0);
+    //    }
+    //}
 }
