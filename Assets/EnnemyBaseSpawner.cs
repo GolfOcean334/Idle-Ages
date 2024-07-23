@@ -19,6 +19,8 @@ public class EnemyBaseSpawner : MonoBehaviour
     [SerializeField] private Image fightButtonImage;
     [SerializeField] private ResourcesManager resourcesManager;
     [SerializeField] private TextMeshProUGUI resourcesPerSecondText;
+    [SerializeField] private PlayerStats playerStats;
+    [SerializeField] private TextMeshProUGUI chanceOfVictoryText;
     [SerializeField] private int numberOfRedBases = 100;
     [SerializeField] private int numberOfWhiteBases = 25;
     [SerializeField] private float minDistanceBetweenBases = 200f;
@@ -104,7 +106,7 @@ public class EnemyBaseSpawner : MonoBehaviour
                 BaseButtonHandler baseButtonHandler = newBase.AddComponent<BaseButtonHandler>();
                 List<UnitsEnemy> baseUnitsEnemies = GenerateRandomUnitsEnemy(isWhite);
 
-                baseButtonHandler.Initialize(power, resource, resourceAmount, resourcesPerSecond, infoPanel, powerEnnemiesText, resourceEnemiesText, fightButton, fightButtonText, fightButtonImage, resourcesManager, baseUnitsEnemies, unitsEnemyText, resourcesPerSecondText);
+                baseButtonHandler.Initialize(power, resource, resourceAmount, resourcesPerSecond, infoPanel, powerEnnemiesText, resourceEnemiesText, fightButton, fightButtonText, fightButtonImage, resourcesManager, baseUnitsEnemies, unitsEnemyText, resourcesPerSecondText, playerStats, chanceOfVictoryText);
                 basePositions.Add(randomPosition);
                 spawnedBases++;
             }

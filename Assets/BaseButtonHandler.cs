@@ -10,6 +10,7 @@ public class BaseButtonHandler : MonoBehaviour
     [SerializeField] private int resourceAmount;
     [SerializeField] private int resourcesPerSecond;
     [SerializeField] private List<UnitsEnemy> unitsEnemies;
+
     [SerializeField] private GameObject infoPanel;
     [SerializeField] private TextMeshProUGUI powerEnemiesText;
     [SerializeField] private TextMeshProUGUI resourceEnemiesText;
@@ -19,6 +20,8 @@ public class BaseButtonHandler : MonoBehaviour
     [SerializeField] private ResourcesManager resourcesManager;
     [SerializeField] private TextMeshProUGUI unitsEnemyText;
     [SerializeField] private TextMeshProUGUI resourcesPerSecondText;
+    [SerializeField] private PlayerStats playerStats;  // Assurez-vous que ce champ est assigné dans l'inspecteur Unity
+    [SerializeField] private TextMeshProUGUI chanceOfVictoryText;
 
     private static GameObject currentInfoPanel;
     private static TextMeshProUGUI currentPowerEnemiesText;
@@ -29,6 +32,8 @@ public class BaseButtonHandler : MonoBehaviour
     private static BaseButtonHandler currentBase;
     private static TextMeshProUGUI currentUnitsEnemyText;
     private static TextMeshProUGUI currentresourcesPerSecondText;
+    private static PlayerStats currentplayerStats;
+    private static TextMeshProUGUI currentChanceOfVictoryText;
 
     void Start()
     {
@@ -42,12 +47,14 @@ public class BaseButtonHandler : MonoBehaviour
             currentFightButtonImage = fightButtonImage;
             currentUnitsEnemyText = unitsEnemyText;
             currentresourcesPerSecondText = resourcesPerSecondText;
+            currentplayerStats = playerStats;
+            currentChanceOfVictoryText = chanceOfVictoryText;
         }
 
         GetComponent<Button>().onClick.AddListener(OnClick);
     }
 
-    public void Initialize(int power, ResourceType resource, int resourceAmount, int resourcesPerSecond, GameObject infoPanel, TextMeshProUGUI powerEnemiesText, TextMeshProUGUI resourceEnemiesText, Button fightButton, TextMeshProUGUI fightButtonText, Image fightButtonImage, ResourcesManager resourcesManager, List<UnitsEnemy> unitsEnemies, TextMeshProUGUI unitsEnemyText, TextMeshProUGUI resourcesPerSecondText)
+    public void Initialize(int power, ResourceType resource, int resourceAmount, int resourcesPerSecond, GameObject infoPanel, TextMeshProUGUI powerEnemiesText, TextMeshProUGUI resourceEnemiesText, Button fightButton, TextMeshProUGUI fightButtonText, Image fightButtonImage, ResourcesManager resourcesManager, List<UnitsEnemy> unitsEnemies, TextMeshProUGUI unitsEnemyText, TextMeshProUGUI resourcesPerSecondText, PlayerStats playerStats, TextMeshProUGUI chanceOfVictoryText)
     {
         this.power = power;
         this.resource = resource;
@@ -63,6 +70,8 @@ public class BaseButtonHandler : MonoBehaviour
         this.unitsEnemies = unitsEnemies;
         this.unitsEnemyText = unitsEnemyText;
         this.resourcesPerSecondText = resourcesPerSecondText;
+        this.playerStats = playerStats;
+        this.chanceOfVictoryText = chanceOfVictoryText;
     }
 
     void OnClick()
@@ -85,8 +94,12 @@ public class BaseButtonHandler : MonoBehaviour
             int fightCost = Mathf.RoundToInt(power * 0.75f);
             currentFightButtonText.text = fightCost.ToString();
 
-            // Mettre � jour l'image de la ressource sur le bouton de combat
+            // Mettre à jour l'image de la ressource sur le bouton de combat
             currentFightButtonImage.sprite = GetResourceSprite(resource);
+
+            // Calculer la chance de victoire
+            float chanceOfVictory = CalculateChanceOfVictory(playerStats.CalculatePlayerPower(), power);
+            currentChanceOfVictoryText.text = "Chance de victoire: " + (chanceOfVictory * 100).ToString("F1") + "%";
 
             currentFightButton.onClick.RemoveAllListeners();
             currentFightButton.onClick.AddListener(() => LaunchFight(fightCost));
@@ -97,8 +110,8 @@ public class BaseButtonHandler : MonoBehaviour
     {
         if (HasEnoughResources(fightCost))
         {
-            // Logique pour lancer le combat et soustraire la ressource appropri�e
-            Debug.Log("Combat lanc� contre une base avec un co�t de " + fightCost + " " + resource);
+            // Logique pour lancer le combat et soustraire la ressource appropriée
+            Debug.Log("Combat lancé contre une base avec un coût de " + fightCost + " " + resource);
 
             switch (resource)
             {
@@ -156,5 +169,11 @@ public class BaseButtonHandler : MonoBehaviour
             ResourceType.Food => Resources.Load<Sprite>("Icons/Meat"),
             _ => null,
         };
+    }
+
+    float CalculateChanceOfVictory(int playerPower, int basePower)
+    {
+        float difference = playerPower / basePower;
+        return 1 / (1 + Mathf.Exp(-25 * (difference / 100f)));
     }
 }
