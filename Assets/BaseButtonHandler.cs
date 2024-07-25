@@ -32,7 +32,6 @@ public class BaseButtonHandler : MonoBehaviour
     private static BaseButtonHandler currentBase;
     private static TextMeshProUGUI currentUnitsEnemyText;
     private static TextMeshProUGUI currentresourcesPerSecondText;
-    private static PlayerStats currentplayerStats;
     private static TextMeshProUGUI currentChanceOfVictoryText;
 
     void Start()
@@ -47,7 +46,6 @@ public class BaseButtonHandler : MonoBehaviour
             currentFightButtonImage = fightButtonImage;
             currentUnitsEnemyText = unitsEnemyText;
             currentresourcesPerSecondText = resourcesPerSecondText;
-            currentplayerStats = playerStats;
             currentChanceOfVictoryText = chanceOfVictoryText;
         }
 
@@ -171,9 +169,16 @@ public class BaseButtonHandler : MonoBehaviour
         };
     }
 
-    float CalculateChanceOfVictory(int playerPower, int basePower)
+    float CalculateChanceOfVictory(float playerPower, float basePower)
     {
         float difference = playerPower / basePower;
-        return 1 / (1 + Mathf.Exp(-25 * (difference / 100f)));
+        Debug.Log("Difference (Player Power / Base Power): " + difference);
+        Debug.Log("Player Power: " + playerPower);
+        Debug.Log("Base Power: " + basePower);
+
+        // Calculer la chance de victoire avec la fonction sigmoïde ajustée
+        float chanceOfVictory = 1 / (1 + Mathf.Exp(-5 *(difference - 1.025f)));
+
+        return chanceOfVictory;
     }
 }
