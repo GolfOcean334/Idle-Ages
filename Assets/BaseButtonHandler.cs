@@ -20,7 +20,8 @@ public class BaseButtonHandler : MonoBehaviour
     [SerializeField] private ResourcesManager resourcesManager;
     [SerializeField] private TextMeshProUGUI unitsEnemyText;
     [SerializeField] private TextMeshProUGUI resourcesPerSecondText;
-    [SerializeField] private PlayerStats playerStats;  // Assurez-vous que ce champ est assigné dans l'inspecteur Unity
+    [SerializeField] private PlayerStats playerStats;
+    [SerializeField] private UnitsManager unitsManager;
     [SerializeField] private TextMeshProUGUI chanceOfVictoryText;
 
     private static GameObject currentInfoPanel;
@@ -108,7 +109,6 @@ public class BaseButtonHandler : MonoBehaviour
     {
         if (HasEnoughResources(fightCost))
         {
-            // Logique pour lancer le combat et soustraire la ressource appropriée
             Debug.Log("Combat lancé contre une base avec un coût de " + fightCost + " " + resource);
 
             switch (resource)
@@ -124,6 +124,9 @@ public class BaseButtonHandler : MonoBehaviour
                     break;
             }
             resourcesManager.UpdateResourceTexts();
+
+            playerStats.SaveAllUnits();
+            playerStats.ResetUnits();
         }
         else
         {
@@ -172,11 +175,6 @@ public class BaseButtonHandler : MonoBehaviour
     float CalculateChanceOfVictory(float playerPower, float basePower)
     {
         float difference = playerPower / basePower;
-        Debug.Log("Difference (Player Power / Base Power): " + difference);
-        Debug.Log("Player Power: " + playerPower);
-        Debug.Log("Base Power: " + basePower);
-
-        // Calculer la chance de victoire avec la fonction sigmoïde ajustée
         float chanceOfVictory = 1 / (1 + Mathf.Exp(-5 *(difference - 1.025f)));
 
         return chanceOfVictory;

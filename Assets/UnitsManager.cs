@@ -259,7 +259,7 @@ public class UnitsManager : MonoBehaviour
         ResetLoadingBar(loadingBarT1);
     }
 
-    void UpdateUnitsT1Text()
+    public void UpdateUnitsT1Text()
     {
         UnitsT1Text.text = "UnitsT1: " + FormatUnits(playerStats.UnitsT1);
     }
@@ -272,7 +272,7 @@ public class UnitsManager : MonoBehaviour
         ResetLoadingBar(loadingBarT2);
     }
 
-    void UpdateUnitsT2Text()
+    public void UpdateUnitsT2Text()
     {
         UnitsT2Text.text = "UnitsT2: " + FormatUnits(playerStats.UnitsT2);
     }
@@ -285,7 +285,7 @@ public class UnitsManager : MonoBehaviour
         ResetLoadingBar(loadingBarT3);
     }
 
-    void UpdateUnitsT3Text()
+    public void UpdateUnitsT3Text()
     {
         UnitsT3Text.text = "UnitsT3: " + FormatUnits(playerStats.UnitsT3);
     }
@@ -297,9 +297,7 @@ public class UnitsManager : MonoBehaviour
 
     public void SaveUnits()
     {
-        PlayerPrefs.SetInt("Units1", playerStats.UnitsT1);
-        PlayerPrefs.SetInt("Units2", playerStats.UnitsT2);
-        PlayerPrefs.SetInt("Units3", playerStats.UnitsT3);
+        playerStats.SaveAllUnits();
 
         PlayerPrefs.SetString("unitT1Queue", string.Join(",", unitT1Queue.ToArray()));
         PlayerPrefs.SetString("unitT2Queue", string.Join(",", unitT2Queue.ToArray()));
@@ -312,9 +310,7 @@ public class UnitsManager : MonoBehaviour
 
     void LoadUnits()
     {
-        playerStats.UnitsT1 = PlayerPrefs.GetInt("Units1", 0);
-        playerStats.UnitsT2 = PlayerPrefs.GetInt("Units2", 0);
-        playerStats.UnitsT3 = PlayerPrefs.GetInt("Units3", 0);
+        playerStats.LoadSaveUnits();
 
         LoadQueue("unitT1Queue", unitT1Queue);
         LoadQueue("unitT2Queue", unitT2Queue);

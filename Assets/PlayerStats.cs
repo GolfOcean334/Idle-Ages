@@ -45,5 +45,29 @@ public class PlayerStats : ScriptableObject
 
         return Mathf.RoundToInt(power);
     }
+
+    public void SaveAllUnits()
+    {
+        PlayerPrefs.SetInt("Units1", UnitsT1);
+        PlayerPrefs.SetInt("Units2", UnitsT2);
+        PlayerPrefs.SetInt("Units3", UnitsT3);
+    }
+
+    public void LoadSaveUnits()
+    {
+        UnitsT1 = PlayerPrefs.GetInt("Units1", 0);
+        UnitsT2 = PlayerPrefs.GetInt("Units2", 0);
+        UnitsT3 = PlayerPrefs.GetInt("Units3", 0);
+    }
+
+    public void ResetUnits()
+    {
+        UnitsT1 = 0;
+        UnitsT2 = 0;
+        UnitsT3 = 0;
+
+        SaveAllUnits();
+        PlayerPrefs.Save();
+    }
 }
 
