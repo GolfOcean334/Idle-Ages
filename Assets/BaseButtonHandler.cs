@@ -175,7 +175,7 @@ public class BaseButtonHandler : MonoBehaviour
     float CalculateChanceOfVictory(float playerPower, float basePower)
     {
         float difference = playerPower / basePower;
-        float chanceOfVictory = 1 / (1 + Mathf.Exp(-5 *(difference - 1.025f)));
+        float chanceOfVictory = 1 / (1 + Mathf.Exp(-10 *(difference - 1.025f)));
 
         return chanceOfVictory;
     }

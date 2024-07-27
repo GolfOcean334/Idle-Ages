@@ -254,7 +254,6 @@ public class UnitsManager : MonoBehaviour
     void IncreaseUnitsT1()
     {
         playerStats.UnitsT1 += 1;
-        //playerStats.UnitsT1 = 0;
         UpdateUnitsT1Text();
         ResetLoadingBar(loadingBarT1);
     }
@@ -267,7 +266,6 @@ public class UnitsManager : MonoBehaviour
     void IncreaseUnitsT2()
     {
         playerStats.UnitsT2 += 1;
-        //playerStats.UnitsT2 = 0;
         UpdateUnitsT2Text();
         ResetLoadingBar(loadingBarT2);
     }
@@ -280,7 +278,6 @@ public class UnitsManager : MonoBehaviour
     void IncreaseUnitsT3()
     {
         playerStats.UnitsT3 += 1;
-        //playerStats.UnitsT3 = 0;
         UpdateUnitsT3Text();
         ResetLoadingBar(loadingBarT3);
     }
