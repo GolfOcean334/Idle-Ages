@@ -34,6 +34,7 @@ public class BaseButtonHandler : MonoBehaviour
     private static TextMeshProUGUI currentUnitsEnemyText;
     private static TextMeshProUGUI currentresourcesPerSecondText;
     private static TextMeshProUGUI currentChanceOfVictoryText;
+    private CaptureBaseHandler captureBaseHandler;
 
     void Start()
     {
@@ -51,6 +52,8 @@ public class BaseButtonHandler : MonoBehaviour
         }
 
         GetComponent<Button>().onClick.AddListener(OnClick);
+
+        captureBaseHandler = FindObjectOfType<CaptureBaseHandler>();
     }
 
     public void Initialize(int power, ResourceType resource, int resourceAmount, int resourcesPerSecond, GameObject infoPanel, TextMeshProUGUI powerEnemiesText, TextMeshProUGUI resourceEnemiesText, Button fightButton, TextMeshProUGUI fightButtonText, Image fightButtonImage, ResourcesManager resourcesManager, List<UnitsEnemy> unitsEnemies, TextMeshProUGUI unitsEnemyText, TextMeshProUGUI resourcesPerSecondText, PlayerStats playerStats, TextMeshProUGUI chanceOfVictoryText)
@@ -101,37 +104,39 @@ public class BaseButtonHandler : MonoBehaviour
             currentChanceOfVictoryText.text = "Chance de victoire: " + (chanceOfVictory * 100).ToString("F1") + "%";
 
             currentFightButton.onClick.RemoveAllListeners();
-            currentFightButton.onClick.AddListener(() => LaunchFight(fightCost));
+            currentFightButton.onClick.AddListener(() => LaunchFight(fightCost, chanceOfVictory));
         }
     }
 
-    void LaunchFight(int fightCost)
+    void LaunchFight(int fightCost, float chanceOfVictory)
     {
         if (HasEnoughResources(fightCost))
         {
             Debug.Log("Combat lancé contre une base avec un coût de " + fightCost + " " + resource);
 
-            switch (resource)
-            {
-                case ResourceType.Wood:
-                    resourcesManager.resource3 = Mathf.Max(resourcesManager.resource3 - fightCost, 0);
-                    break;
-                case ResourceType.Stone:
-                    resourcesManager.resource2 = Mathf.Max(resourcesManager.resource2 - fightCost, 0);
-                    break;
-                case ResourceType.Food:
-                    resourcesManager.resource1 = Mathf.Max(resourcesManager.resource1 - fightCost, 0);
-                    break;
-            }
-            resourcesManager.UpdateResourceTexts();
-
             playerStats.SaveAllUnits();
             playerStats.ResetUnits();
+
+            if (Random.value <= chanceOfVictory)
+            {
+                captureBaseHandler.CaptureBase(gameObject, resourcesManager, resource, resourceAmount);
+                Debug.Log("Le joueur a réussi à capturer la base.");
+            }
+            else
+            {
+                Debug.Log("Le joueur n'a pas réussi à capturer la base.");
+            }
         }
         else
         {
             Debug.Log("Pas assez de ressources pour lancer le combat.");
         }
+    }
+
+    public void HideInfoPanel()
+    {
+        currentInfoPanel.SetActive(false);
+        currentBase = null;
     }
 
     bool HasEnoughResources(int fightCost)

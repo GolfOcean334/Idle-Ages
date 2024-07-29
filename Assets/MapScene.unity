@@ -2228,6 +2228,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1045926080}
   - component: {fileID: 1045926081}
+  - component: {fileID: 1045926082}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged
@@ -2289,6 +2290,19 @@ MonoBehaviour:
   maxXDistance: 10000
   minYDistance: 500
   maxYDistance: 10000
+--- !u!114 &1045926082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1045926079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36032caf2d60fc14bac0876a4f9f0002, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  capturedBasePrefab: {fileID: 2848228737237606631, guid: 1fedc7dffdbd6364d9c3210515c0f815, type: 3}
 --- !u!1 &1072915354
 GameObject:
   m_ObjectHideFlags: 0
