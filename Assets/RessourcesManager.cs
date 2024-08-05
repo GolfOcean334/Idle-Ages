@@ -16,17 +16,17 @@ public class ResourcesManager : MonoBehaviour
     public int resource3;
     public int resource4;
 
-    private readonly int resources1PerSecond = 5;
-    private readonly int resources2PerSecond = 5;
-    private readonly int resources3PerSecond = 5;
-    private readonly int resources4PerSecond = 5;
+    private int resources1PerSecond = 0;
+    private int resources2PerSecond = 0;
+    private int resources3PerSecond = 0;
+    private int resources4PerSecond = 0;
 
-    private readonly int maxResource = 500000000;
+    private readonly int maxResource = 500000;
 
     void Start()
     {
         LoadResources();
-        CalculateOfflineEarnings();
+        //CalculateOfflineEarnings();
         StartCoroutine(GenerateResources());
         SceneManager.activeSceneChanged += OnSceneChanged;
     }
@@ -39,6 +39,7 @@ public class ResourcesManager : MonoBehaviour
     void OnApplicationQuit()
     {
         SaveResources();
+        SaveLogoutTime();
     }
 
     void OnApplicationPause(bool pauseStatus)
@@ -46,6 +47,7 @@ public class ResourcesManager : MonoBehaviour
         if (pauseStatus)
         {
             SaveResources();
+            SaveLogoutTime();
         }
     }
 
@@ -60,6 +62,8 @@ public class ResourcesManager : MonoBehaviour
             resource2 = Mathf.Min(resource2 + resources2PerSecond, maxResource);
             resource3 = Mathf.Min(resource3 + resources3PerSecond, maxResource);
             resource4 = Mathf.Min(resource4 + resources4PerSecond, maxResource);
+
+            Debug.Log("Ressources générées: \n Ressource1 : " + resource1 + " Ressource2 : " + resource2 + " Ressource3 : " + resource3 + " Ressource4 : " + resource4);
 
             UpdateResourceTexts();
         }
@@ -89,6 +93,42 @@ public class ResourcesManager : MonoBehaviour
         }
     }
 
+    public void AddResources(ResourceType resource, int resourceAmount)
+    {
+        switch (resource)
+        {
+            case ResourceType.Wood:
+                resource3 = Mathf.Min(resource3 + resourceAmount, maxResource);
+                break;
+            case ResourceType.Stone:
+                resource2 = Mathf.Min(resource2 + resourceAmount, maxResource);
+                break;
+            case ResourceType.Food:
+                resource1 = Mathf.Min(resource1 + resourceAmount, maxResource);
+                break;
+        }
+        UpdateResourceTexts();
+    }
+
+    public void AddResourcesPerSecond(ResourceType resource, int resourcesPerSecond)
+    {
+        switch (resource)
+        {
+            case ResourceType.Wood:
+                resources3PerSecond += resourcesPerSecond;
+                Debug.Log("Ressources par seconde pour Wood: " + resources3PerSecond);
+                break;
+            case ResourceType.Stone:
+                resources2PerSecond += resourcesPerSecond;
+                Debug.Log("Ressources par seconde pour Stone: " + resources2PerSecond);
+                break;
+            case ResourceType.Food:
+                resources1PerSecond += resourcesPerSecond;
+                Debug.Log("Ressources par seconde pour Food: " + resources1PerSecond);
+                break;
+        }
+    }
+
     void LoadResources()
     {
         resource1 = PlayerPrefs.GetInt("resource1", 0);
@@ -105,11 +145,16 @@ public class ResourcesManager : MonoBehaviour
         PlayerPrefs.SetInt("resource4", resource4);
     }
 
+    void SaveLogoutTime()
+    {
+        PlayerPrefs.SetString("lastLogoutTime", DateTime.Now.ToBinary().ToString());
+    }
+
     void CalculateOfflineEarnings()
     {
-        long lastLogoutTime = Convert.ToInt64(PlayerPrefs.GetString("lastLogoutTime", DateTime.Now.ToBinary().ToString()));
-        DateTime previousDateTime = DateTime.FromBinary(lastLogoutTime);
-        TimeSpan timeElapsed = DateTime.Now - previousDateTime;
+        long lastLogoutTimeBinary = Convert.ToInt64(PlayerPrefs.GetString("lastLogoutTime", DateTime.Now.ToBinary().ToString()));
+        DateTime lastLogoutTime = DateTime.FromBinary(lastLogoutTimeBinary);
+        TimeSpan timeElapsed = DateTime.Now - lastLogoutTime;
 
         int resourcesEarned1 = Mathf.FloorToInt((float)timeElapsed.TotalSeconds * resources1PerSecond);
         int resourcesEarned2 = Mathf.FloorToInt((float)timeElapsed.TotalSeconds * resources2PerSecond);
@@ -120,6 +165,9 @@ public class ResourcesManager : MonoBehaviour
         resource2 = Mathf.Min(resource2 + resourcesEarned2, maxResource);
         resource3 = Mathf.Min(resource3 + resourcesEarned3, maxResource);
         resource4 = Mathf.Min(resource4 + resourcesEarned4, maxResource);
+
+        // Save resources after calculating offline earnings
+        SaveResources();
     }
 
     void OnSceneChanged(Scene current, Scene next)
