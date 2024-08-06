@@ -30,9 +30,9 @@ public class PlayerStats : ScriptableObject
     private Coroutine productionCoroutineT2;
     private Coroutine productionCoroutineT3;
 
-    public readonly Queue<string> unitT1Queue = new Queue<string>();
-    public readonly Queue<string> unitT2Queue = new Queue<string>();
-    public readonly Queue<string> unitT3Queue = new Queue<string>();
+    public readonly Queue<string> unitT1Queue = new();
+    public readonly Queue<string> unitT2Queue = new();
+    public readonly Queue<string> unitT3Queue = new();
 
     public int CalculatePlayerPower()
     {
@@ -51,18 +51,9 @@ public class PlayerStats : ScriptableObject
 
     public void StartProduction()
     {
-        if (productionCoroutineT1 == null)
-        {
-            productionCoroutineT1 = MonoBehaviourSingleton.Instance.StartCoroutine(ProduceUnits("T1", unitT1Queue));
-        }
-        if (productionCoroutineT2 == null)
-        {
-            productionCoroutineT2 = MonoBehaviourSingleton.Instance.StartCoroutine(ProduceUnits("T2", unitT2Queue));
-        }
-        if (productionCoroutineT3 == null)
-        {
-            productionCoroutineT3 = MonoBehaviourSingleton.Instance.StartCoroutine(ProduceUnits("T3", unitT3Queue));
-        }
+        productionCoroutineT1 ??= MonoBehaviourSingleton.Instance.StartCoroutine(ProduceUnits("T1", unitT1Queue));
+        productionCoroutineT2 ??= MonoBehaviourSingleton.Instance.StartCoroutine(ProduceUnits("T2", unitT2Queue));
+        productionCoroutineT3 ??= MonoBehaviourSingleton.Instance.StartCoroutine(ProduceUnits("T3", unitT3Queue));
     }
 
     public void StopProduction()
@@ -197,8 +188,7 @@ public class PlayerStats : ScriptableObject
             }
         }
 
-        long lastSaveTimeBinary;
-        if (long.TryParse(PlayerPrefs.GetString("LastSaveTime", ""), out lastSaveTimeBinary))
+        if (long.TryParse(PlayerPrefs.GetString("LastSaveTime", ""), out long lastSaveTimeBinary))
         {
             DateTime lastSaveTime = DateTime.FromBinary(lastSaveTimeBinary);
             ProcessOfflineProduction(lastSaveTime);

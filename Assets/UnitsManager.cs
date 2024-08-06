@@ -25,9 +25,6 @@ public class UnitsManager : MonoBehaviour
     [SerializeField] private ResourcesManager resourcesManager;
     [SerializeField] private PlayerStats playerStats;
 
-    private bool isLoadingT1 = false;
-    private bool isLoadingT2 = false;
-    private bool isLoadingT3 = false;
     private readonly int[] multiplicators = { 1, 5, 10, 50 };
     private int currentMultiplicatorIndex = 0;
 
@@ -182,7 +179,15 @@ public class UnitsManager : MonoBehaviour
         {
             // Formater le temps restant
             string formattedTime = FormatTime(totalTimeInSeconds);
-            cooldownText.text = unitType + "" + formattedTime;
+            if (totalTimeInSeconds > 0)
+            {
+                cooldownText.text = formattedTime;
+            }
+            else
+            {
+                cooldownText.text = string.Empty;
+            }
+            
         }
 
         if (loadingBar != null)
@@ -191,6 +196,7 @@ public class UnitsManager : MonoBehaviour
         }
     }
 
+    // Fonction de formatage du temps
     private string FormatTime(float seconds)
     {
         if (seconds >= 3600)
@@ -211,5 +217,6 @@ public class UnitsManager : MonoBehaviour
             return $"{Mathf.FloorToInt(seconds)}s";
         }
     }
+
 
 }

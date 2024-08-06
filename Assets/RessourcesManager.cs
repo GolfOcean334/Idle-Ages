@@ -150,26 +150,6 @@ public class ResourcesManager : MonoBehaviour
         PlayerPrefs.SetString("lastLogoutTime", DateTime.Now.ToBinary().ToString());
     }
 
-    void CalculateOfflineEarnings()
-    {
-        long lastLogoutTimeBinary = Convert.ToInt64(PlayerPrefs.GetString("lastLogoutTime", DateTime.Now.ToBinary().ToString()));
-        DateTime lastLogoutTime = DateTime.FromBinary(lastLogoutTimeBinary);
-        TimeSpan timeElapsed = DateTime.Now - lastLogoutTime;
-
-        int resourcesEarned1 = Mathf.FloorToInt((float)timeElapsed.TotalSeconds * resources1PerSecond);
-        int resourcesEarned2 = Mathf.FloorToInt((float)timeElapsed.TotalSeconds * resources2PerSecond);
-        int resourcesEarned3 = Mathf.FloorToInt((float)timeElapsed.TotalSeconds * resources3PerSecond);
-        int resourcesEarned4 = Mathf.FloorToInt((float)timeElapsed.TotalSeconds * resources4PerSecond);
-
-        resource1 = Mathf.Min(resource1 + resourcesEarned1, maxResource);
-        resource2 = Mathf.Min(resource2 + resourcesEarned2, maxResource);
-        resource3 = Mathf.Min(resource3 + resourcesEarned3, maxResource);
-        resource4 = Mathf.Min(resource4 + resourcesEarned4, maxResource);
-
-        // Save resources after calculating offline earnings
-        SaveResources();
-    }
-
     void OnSceneChanged(Scene current, Scene next)
     {
         SaveResources();
