@@ -45,6 +45,13 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("ResearchTreeMenu");
     }
 
+    public void ReturnInventory()
+    {
+        SaveResources();
+        SaveUnits();
+        SceneManager.LoadScene("InventoryScene");
+    }
+
     public void QuitGame()
     {
         SaveUnits();

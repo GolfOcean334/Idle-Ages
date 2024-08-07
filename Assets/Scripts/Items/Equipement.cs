@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Items/Tool Item Data", fileName = "Item")]
-public class Tools : ItemData, IDurable, IEquipable, IUsable
+public class Equipement : ItemData, IDurable, IEquipable
 {
     [SerializeField] private int durability;
 
@@ -18,11 +18,6 @@ public class Tools : ItemData, IDurable, IEquipable, IUsable
     void IDurable.OnRepair(InventoryContext _ctx)
     {
         Debug.Log("Repaired");
-    }
-
-    void IUsable.OnUsed(InventoryContext _ctx)
-    {
-        Debug.Log("Attack");
     }
 
     int IDurable.MaxDurability => durability;
