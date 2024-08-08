@@ -21,6 +21,15 @@ public class EnemyBaseSpawner : MonoBehaviour
     [SerializeField] private TextMeshProUGUI resourcesPerSecondText;
     [SerializeField] private PlayerStats playerStats;
     [SerializeField] private TextMeshProUGUI chanceOfVictoryText;
+
+    [SerializeField] private GameObject battlePanel;
+    [SerializeField] private Slider unitT1Slider;
+    [SerializeField] private Slider unitT2Slider;
+    [SerializeField] private Slider unitT3Slider;
+    [SerializeField] private TextMeshProUGUI unitT1CountText;
+    [SerializeField] private TextMeshProUGUI unitT2CountText;
+    [SerializeField] private TextMeshProUGUI unitT3CountText;
+
     [SerializeField] private int numberOfRedBases = 100;
     [SerializeField] private int numberOfWhiteBases = 25;
     [SerializeField] private float minDistanceBetweenBases = 200f;
@@ -106,7 +115,7 @@ public class EnemyBaseSpawner : MonoBehaviour
                 BaseButtonHandler baseButtonHandler = newBase.AddComponent<BaseButtonHandler>();
                 List<UnitsEnemy> baseUnitsEnemies = GenerateRandomUnitsEnemy(isWhite);
 
-                baseButtonHandler.Initialize(power, resource, resourceAmount, resourcesPerSecond, infoPanel, powerEnnemiesText, resourceEnemiesText, fightButton, fightButtonText, fightButtonImage, resourcesManager, baseUnitsEnemies, unitsEnemyText, resourcesPerSecondText, playerStats, chanceOfVictoryText);
+                baseButtonHandler.Initialize(power, resource, resourceAmount, resourcesPerSecond, infoPanel, powerEnnemiesText, resourceEnemiesText, fightButton, fightButtonText, fightButtonImage, resourcesManager, baseUnitsEnemies, unitsEnemyText, resourcesPerSecondText, playerStats, chanceOfVictoryText, battlePanel, unitT1Slider, unitT2Slider, unitT3Slider, unitT1CountText, unitT2CountText, unitT3CountText);
                 basePositions.Add(randomPosition);
                 spawnedBases++;
             }
@@ -114,7 +123,7 @@ public class EnemyBaseSpawner : MonoBehaviour
 
         if (attempts >= maxAttempts)
         {
-            Debug.LogWarning("Nombre maximum de tentatives atteint. Certaines bases peuvent ne pas avoir �t� cr��es.");
+            Debug.LogWarning("Nombre maximum de tentatives atteint. Certaines bases peuvent ne pas avoir été créées.");
         }
     }
 

@@ -26,7 +26,6 @@ public class ResourcesManager : MonoBehaviour
     void Start()
     {
         LoadResources();
-        //CalculateOfflineEarnings();
         StartCoroutine(GenerateResources());
         SceneManager.activeSceneChanged += OnSceneChanged;
     }

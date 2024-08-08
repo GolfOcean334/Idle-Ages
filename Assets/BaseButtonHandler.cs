@@ -24,7 +24,16 @@ public class BaseButtonHandler : MonoBehaviour
     [SerializeField] private UnitsManager unitsManager;
     [SerializeField] private TextMeshProUGUI chanceOfVictoryText;
 
-    private static GameObject currentInfoPanel;
+    [SerializeField] private GameObject battlePanel;
+    [SerializeField] private Slider unitT1Slider;
+    [SerializeField] private Slider unitT2Slider;
+    [SerializeField] private Slider unitT3Slider;
+    [SerializeField] private TextMeshProUGUI unitT1CountText;
+    [SerializeField] private TextMeshProUGUI unitT2CountText;
+    [SerializeField] private TextMeshProUGUI unitT3CountText;
+    private bool isBattlePanelActive = false;
+
+    private static GameObject currentInfoPanel; 
     private static TextMeshProUGUI currentPowerEnemiesText;
     private static TextMeshProUGUI currentResourceEnemiesText;
     private static Button currentFightButton;
@@ -35,6 +44,13 @@ public class BaseButtonHandler : MonoBehaviour
     private static TextMeshProUGUI currentresourcesPerSecondText;
     private static TextMeshProUGUI currentChanceOfVictoryText;
     private CaptureBaseHandler captureBaseHandler;
+    private static GameObject currentBattlePanel;
+    private Slider currentUnitT1Slider;
+    private Slider currentUnitT2Slider;
+    private Slider currentUnitT3Slider;
+    private TextMeshProUGUI currentUnitT1CountText;
+    private TextMeshProUGUI currentUnitT2Counttext;
+    private TextMeshProUGUI currentUnitT3Counttext;
 
     void Start()
     {
@@ -49,14 +65,25 @@ public class BaseButtonHandler : MonoBehaviour
             currentUnitsEnemyText = unitsEnemyText;
             currentresourcesPerSecondText = resourcesPerSecondText;
             currentChanceOfVictoryText = chanceOfVictoryText;
+            currentBattlePanel = battlePanel;
+            currentUnitT1Slider = unitT1Slider;
+            currentUnitT2Slider = unitT2Slider;
+            currentUnitT3Slider = unitT3Slider;
+            currentUnitT1CountText = unitT1CountText;
+            currentUnitT2Counttext = unitT2CountText;
+            currentUnitT3Counttext = unitT3CountText;
         }
+
+        battlePanel.SetActive(false);
+        fightButton.onClick.AddListener(ToggleBattlePanel);
+        InitializeSliders();
 
         GetComponent<Button>().onClick.AddListener(OnClick);
 
         captureBaseHandler = FindObjectOfType<CaptureBaseHandler>();
     }
 
-    public void Initialize(int power, ResourceType resource, int resourceAmount, int resourcesPerSecond, GameObject infoPanel, TextMeshProUGUI powerEnemiesText, TextMeshProUGUI resourceEnemiesText, Button fightButton, TextMeshProUGUI fightButtonText, Image fightButtonImage, ResourcesManager resourcesManager, List<UnitsEnemy> unitsEnemies, TextMeshProUGUI unitsEnemyText, TextMeshProUGUI resourcesPerSecondText, PlayerStats playerStats, TextMeshProUGUI chanceOfVictoryText)
+    public void Initialize(int power, ResourceType resource, int resourceAmount, int resourcesPerSecond, GameObject infoPanel, TextMeshProUGUI powerEnemiesText, TextMeshProUGUI resourceEnemiesText, Button fightButton, TextMeshProUGUI fightButtonText, Image fightButtonImage, ResourcesManager resourcesManager, List<UnitsEnemy> unitsEnemies, TextMeshProUGUI unitsEnemyText, TextMeshProUGUI resourcesPerSecondText, PlayerStats playerStats, TextMeshProUGUI chanceOfVictoryText, GameObject battlePanel, Slider unitT1Slider, Slider unitT2Slider, Slider unitT3Slider, TextMeshProUGUI unitT1CountText, TextMeshProUGUI unitT2CountText, TextMeshProUGUI unitT3CountText)
     {
         this.power = power;
         this.resource = resource;
@@ -74,6 +101,13 @@ public class BaseButtonHandler : MonoBehaviour
         this.resourcesPerSecondText = resourcesPerSecondText;
         this.playerStats = playerStats;
         this.chanceOfVictoryText = chanceOfVictoryText;
+        this.battlePanel = battlePanel;
+        this.unitT1Slider = unitT1Slider;
+        this.unitT2Slider = unitT2Slider;
+        this.unitT3Slider = unitT3Slider;
+        this.unitT1CountText = unitT1CountText;
+        this.unitT2CountText = unitT2CountText;
+        this.unitT3CountText = unitT3CountText;
     }
 
     void OnClick()
@@ -104,6 +138,7 @@ public class BaseButtonHandler : MonoBehaviour
             currentChanceOfVictoryText.text = "Chance de victoire: " + (chanceOfVictory * 100).ToString("F1") + "%";
 
             currentFightButton.onClick.RemoveAllListeners();
+            currentFightButton.onClick.AddListener(ToggleBattlePanel);
             currentFightButton.onClick.AddListener(() => LaunchFight(fightCost, chanceOfVictory));
         }
     }
@@ -133,9 +168,62 @@ public class BaseButtonHandler : MonoBehaviour
         }
     }
 
+    void ToggleBattlePanel()
+    {
+        isBattlePanelActive = !isBattlePanelActive;
+        currentBattlePanel.SetActive(isBattlePanelActive);
+
+        if (isBattlePanelActive)
+        {
+            UpdateSliders();
+        }
+    }
+
+    void InitializeSliders()
+    {
+        unitT1Slider.onValueChanged.AddListener(delegate { UpdateUnitCountText("T1"); });
+        unitT2Slider.onValueChanged.AddListener(delegate { UpdateUnitCountText("T2"); });
+        unitT3Slider.onValueChanged.AddListener(delegate { UpdateUnitCountText("T3"); });
+    }
+
+    void UpdateSliders()
+    {
+        unitT1Slider.maxValue = playerStats.UnitsT1;
+        unitT2Slider.maxValue = playerStats.UnitsT2;
+        unitT3Slider.maxValue = playerStats.UnitsT3;
+
+        unitT1Slider.value = 0;
+        unitT2Slider.value = 0;
+        unitT3Slider.value = 0;
+
+        UpdateUnitCountText("T1");
+        UpdateUnitCountText("T2");
+        UpdateUnitCountText("T3");
+    }
+
+    void UpdateUnitCountText(string unitType)
+    {
+        int count = 0;
+        if (unitType == "T1")
+        {
+            count = Mathf.RoundToInt(unitT1Slider.value);
+            unitT1CountText.text = "Units T1: " + count;
+        }
+        else if (unitType == "T2")
+        {
+            count = Mathf.RoundToInt(unitT2Slider.value);
+            unitT2CountText.text = "Units T2: " + count;
+        }
+        else if (unitType == "T3")
+        {
+            count = Mathf.RoundToInt(unitT3Slider.value);
+            unitT3CountText.text = "Units T3: " + count;
+        }
+    }
+
     public void HideInfoPanel()
     {
-        currentInfoPanel.SetActive(false);
+        currentInfoPanel.SetActive(true);
         currentBase = null;
     }
 
