@@ -43,6 +43,27 @@ public class PlayerStats : ScriptableObject
         return Mathf.RoundToInt(power);
     }
 
+    public int CalculatePowerPerUnits1()
+    {
+        float PowerPerUnitT1 = (AttUnit1 * MainMultiplicator) + (DefUnit1 * SecondaryMultiplicator) + (PvUnit1 * SecondaryMultiplicator);
+
+        return Mathf.RoundToInt(PowerPerUnitT1);
+    }
+
+    public int CalculatePowerPerUnits2()
+    {
+        float PowerPerUnitT1 = (AttUnit2 * MainMultiplicator) + (DefUnit2 * SecondaryMultiplicator) + (PvUnit2 * SecondaryMultiplicator);
+
+        return Mathf.RoundToInt(PowerPerUnitT1);
+    }
+
+    public int CalculatePowerPerUnits3()
+    {
+        float PowerPerUnitT1 = (AttUnit3 * MainMultiplicator) + (DefUnit3 * SecondaryMultiplicator) + (PvUnit3 * SecondaryMultiplicator);
+
+        return Mathf.RoundToInt(PowerPerUnitT1);
+    }
+
     public void Initialize()
     {
         LoadSaveUnits();

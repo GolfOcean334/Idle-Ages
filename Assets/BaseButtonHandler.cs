@@ -149,8 +149,20 @@ public class BaseButtonHandler : MonoBehaviour
         {
             Debug.Log("Combat lancé contre une base avec un coût de " + fightCost + " " + resource);
 
+            // Sauvegarde les unités actuelles avant le combat
             playerStats.SaveAllUnits();
-            playerStats.ResetUnits();
+
+            // Obtenir le nombre de Units à envoyer du joueur selon les sliders
+            int unitsT1ToSend = Mathf.RoundToInt(unitT1Slider.value);
+            int unitsT2ToSend = Mathf.RoundToInt(unitT2Slider.value);
+            int unitsT3ToSend = Mathf.RoundToInt(unitT3Slider.value);
+
+            // Réduire les unités envoyées du pool du joueur
+            playerStats.RemoveUnits(unitsT1ToSend, unitsT2ToSend, unitsT3ToSend);
+
+            // Calculer la chance de victoire avec les unités sélectionnées
+            float playerPower = playerStats.CalculatePlayerPowerWithSelectedUnits(unitsT1ToSend, unitsT2ToSend, unitsT3ToSend);
+            float chanceOfVictory = CalculateChanceOfVictory(playerPower, power);
 
             if (Random.value <= chanceOfVictory)
             {
@@ -167,6 +179,7 @@ public class BaseButtonHandler : MonoBehaviour
             Debug.Log("Pas assez de ressources pour lancer le combat.");
         }
     }
+
 
     void ToggleBattlePanel()
     {
@@ -200,6 +213,25 @@ public class BaseButtonHandler : MonoBehaviour
         UpdateUnitCountText("T2");
         UpdateUnitCountText("T3");
     }
+
+    public float CalculatePlayerPowerWithSelectedUnits(int unitsT1, int unitsT2, int unitsT3)
+    {
+        float totalPower = unitsT1 * PowerPerUnitT1 + unitsT2 * PowerPerUnitT2 + unitsT3 * PowerPerUnitT3;
+        return totalPower;
+    }
+
+    public void RemoveUnits(int unitsT1, int unitsT2, int unitsT3)
+    {
+        playerStats.UnitsT1 -= unitsT1;
+        playerStats.UnitsT2 -= unitsT2;
+        playerStats.UnitsT3 -= unitsT3;
+
+        // Assurez-vous que les valeurs ne deviennent pas négatives
+        playerStats.UnitsT1 = Mathf.Max(playerStats.UnitsT1, 0);
+        playerStats.UnitsT2 = Mathf.Max(playerStats.UnitsT2, 0);
+        playerStats.UnitsT3 = Mathf.Max(playerStats.UnitsT3, 0);
+    }
+
 
     void UpdateUnitCountText(string unitType)
     {
