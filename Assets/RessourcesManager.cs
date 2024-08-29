@@ -116,22 +116,22 @@ public class ResourcesManager : MonoBehaviour
     }
     public void IncreaseResource1Production()
     {
-        resources1PerSecond = Mathf.FloorToInt(resources1PerSecond + 1f);
+        playerStats.resources1PerSecond = Mathf.FloorToInt(playerStats.resources1PerSecond + 1f);
     }
 
     public void IncreaseResource2Production()
     {
-        resources2PerSecond = Mathf.FloorToInt(resources2PerSecond + 1f);
+        playerStats.resources2PerSecond = Mathf.FloorToInt(playerStats.resources2PerSecond + 1f);
     }
 
     public void IncreaseResource3Production()
     {
-        resources3PerSecond = Mathf.FloorToInt(resources4PerSecond + 1f);
+        playerStats.resources3PerSecond = Mathf.FloorToInt(playerStats.resources4PerSecond + 1f);
     }
 
     public void IncreaseResource4Production()
     {
-        resources4PerSecond = Mathf.FloorToInt(resources4PerSecond + 1f);
+        playerStats.resources4PerSecond = Mathf.FloorToInt(playerStats.resources4PerSecond + 1f);
     }
 
 
