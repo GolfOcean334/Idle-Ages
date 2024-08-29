@@ -43,25 +43,23 @@ public class PlayerStats : ScriptableObject
         return Mathf.RoundToInt(power);
     }
 
-    public int CalculatePowerPerUnits1()
+    public void RemoveUnits(int unitsT1, int unitsT2, int unitsT3)
     {
-        float PowerPerUnitT1 = (AttUnit1 * MainMultiplicator) + (DefUnit1 * SecondaryMultiplicator) + (PvUnit1 * SecondaryMultiplicator);
-
-        return Mathf.RoundToInt(PowerPerUnitT1);
+        UnitsT1 = Mathf.Max(UnitsT1 - unitsT1, 0);
+        UnitsT2 = Mathf.Max(UnitsT2 - unitsT2, 0);
+        UnitsT3 = Mathf.Max(UnitsT3 - unitsT3, 0);
+        SaveAllUnits();
     }
 
-    public int CalculatePowerPerUnits2()
+
+    // Méthode pour calculer la puissance du joueur avec un nombre sélectionné d'unités
+    public int CalculatePlayerPowerWithSelectedUnits(int selectedUnitsT1, int selectedUnitsT2, int selectedUnitsT3)
     {
-        float PowerPerUnitT1 = (AttUnit2 * MainMultiplicator) + (DefUnit2 * SecondaryMultiplicator) + (PvUnit2 * SecondaryMultiplicator);
+        float power = selectedUnitsT1 * ((AttUnit1 * MainMultiplicator) + (DefUnit1 * SecondaryMultiplicator) + (PvUnit1 * SecondaryMultiplicator))
+                    + selectedUnitsT2 * ((AttUnit2 * MainMultiplicator) + (DefUnit2 * SecondaryMultiplicator) + (PvUnit2 * SecondaryMultiplicator))
+                    + selectedUnitsT3 * ((AttUnit3 * MainMultiplicator) + (DefUnit3 * SecondaryMultiplicator) + (PvUnit3 * SecondaryMultiplicator));
 
-        return Mathf.RoundToInt(PowerPerUnitT1);
-    }
-
-    public int CalculatePowerPerUnits3()
-    {
-        float PowerPerUnitT1 = (AttUnit3 * MainMultiplicator) + (DefUnit3 * SecondaryMultiplicator) + (PvUnit3 * SecondaryMultiplicator);
-
-        return Mathf.RoundToInt(PowerPerUnitT1);
+        return Mathf.RoundToInt(power);
     }
 
     public void Initialize()

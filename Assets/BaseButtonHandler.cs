@@ -14,6 +14,7 @@ public class BaseButtonHandler : MonoBehaviour
     [SerializeField] private GameObject infoPanel;
     [SerializeField] private TextMeshProUGUI powerEnemiesText;
     [SerializeField] private TextMeshProUGUI resourceEnemiesText;
+    [SerializeField] private Button openFightPanelButton;
     [SerializeField] private Button fightButton;
     [SerializeField] private TextMeshProUGUI fightButtonText;
     [SerializeField] private Image fightButtonImage;
@@ -36,6 +37,7 @@ public class BaseButtonHandler : MonoBehaviour
     private static GameObject currentInfoPanel; 
     private static TextMeshProUGUI currentPowerEnemiesText;
     private static TextMeshProUGUI currentResourceEnemiesText;
+    private static Button currentOpenFightPanelButton;
     private static Button currentFightButton;
     private static TextMeshProUGUI currentFightButtonText;
     private static Image currentFightButtonImage;
@@ -45,12 +47,6 @@ public class BaseButtonHandler : MonoBehaviour
     private static TextMeshProUGUI currentChanceOfVictoryText;
     private CaptureBaseHandler captureBaseHandler;
     private static GameObject currentBattlePanel;
-    private Slider currentUnitT1Slider;
-    private Slider currentUnitT2Slider;
-    private Slider currentUnitT3Slider;
-    private TextMeshProUGUI currentUnitT1CountText;
-    private TextMeshProUGUI currentUnitT2Counttext;
-    private TextMeshProUGUI currentUnitT3Counttext;
 
     void Start()
     {
@@ -59,6 +55,7 @@ public class BaseButtonHandler : MonoBehaviour
             currentInfoPanel = infoPanel;
             currentPowerEnemiesText = powerEnemiesText;
             currentResourceEnemiesText = resourceEnemiesText;
+            currentOpenFightPanelButton = openFightPanelButton;
             currentFightButton = fightButton;
             currentFightButtonText = fightButtonText;
             currentFightButtonImage = fightButtonImage;
@@ -66,24 +63,17 @@ public class BaseButtonHandler : MonoBehaviour
             currentresourcesPerSecondText = resourcesPerSecondText;
             currentChanceOfVictoryText = chanceOfVictoryText;
             currentBattlePanel = battlePanel;
-            currentUnitT1Slider = unitT1Slider;
-            currentUnitT2Slider = unitT2Slider;
-            currentUnitT3Slider = unitT3Slider;
-            currentUnitT1CountText = unitT1CountText;
-            currentUnitT2Counttext = unitT2CountText;
-            currentUnitT3Counttext = unitT3CountText;
         }
 
         battlePanel.SetActive(false);
-        fightButton.onClick.AddListener(ToggleBattlePanel);
-        InitializeSliders();
+        openFightPanelButton.onClick.AddListener(ToggleBattlePanel);
 
         GetComponent<Button>().onClick.AddListener(OnClick);
 
         captureBaseHandler = FindObjectOfType<CaptureBaseHandler>();
     }
 
-    public void Initialize(int power, ResourceType resource, int resourceAmount, int resourcesPerSecond, GameObject infoPanel, TextMeshProUGUI powerEnemiesText, TextMeshProUGUI resourceEnemiesText, Button fightButton, TextMeshProUGUI fightButtonText, Image fightButtonImage, ResourcesManager resourcesManager, List<UnitsEnemy> unitsEnemies, TextMeshProUGUI unitsEnemyText, TextMeshProUGUI resourcesPerSecondText, PlayerStats playerStats, TextMeshProUGUI chanceOfVictoryText, GameObject battlePanel, Slider unitT1Slider, Slider unitT2Slider, Slider unitT3Slider, TextMeshProUGUI unitT1CountText, TextMeshProUGUI unitT2CountText, TextMeshProUGUI unitT3CountText)
+    public void Initialize(int power, ResourceType resource, int resourceAmount, int resourcesPerSecond, GameObject infoPanel, TextMeshProUGUI powerEnemiesText, TextMeshProUGUI resourceEnemiesText, Button openFightPanelButton, Button fightButton, TextMeshProUGUI fightButtonText, Image fightButtonImage, ResourcesManager resourcesManager, List<UnitsEnemy> unitsEnemies, TextMeshProUGUI unitsEnemyText, TextMeshProUGUI resourcesPerSecondText, PlayerStats playerStats, TextMeshProUGUI chanceOfVictoryText, GameObject battlePanel, Slider unitT1Slider, Slider unitT2Slider, Slider unitT3Slider)
     {
         this.power = power;
         this.resource = resource;
@@ -92,6 +82,7 @@ public class BaseButtonHandler : MonoBehaviour
         this.infoPanel = infoPanel;
         this.powerEnemiesText = powerEnemiesText;
         this.resourceEnemiesText = resourceEnemiesText;
+        this.openFightPanelButton = openFightPanelButton;
         this.fightButton = fightButton;
         this.fightButtonText = fightButtonText;
         this.fightButtonImage = fightButtonImage;
@@ -105,9 +96,6 @@ public class BaseButtonHandler : MonoBehaviour
         this.unitT1Slider = unitT1Slider;
         this.unitT2Slider = unitT2Slider;
         this.unitT3Slider = unitT3Slider;
-        this.unitT1CountText = unitT1CountText;
-        this.unitT2CountText = unitT2CountText;
-        this.unitT3CountText = unitT3CountText;
     }
 
     void OnClick()
@@ -133,15 +121,47 @@ public class BaseButtonHandler : MonoBehaviour
             // Mettre à jour l'image de la ressource sur le bouton de combat
             currentFightButtonImage.sprite = GetResourceSprite(resource);
 
-            // Calculer la chance de victoire
-            float chanceOfVictory = CalculateChanceOfVictory(playerStats.CalculatePlayerPower(), power);
-            currentChanceOfVictoryText.text = "Chance de victoire: " + (chanceOfVictory * 100).ToString("F1") + "%";
+            currentOpenFightPanelButton.onClick.RemoveAllListeners();
+            currentOpenFightPanelButton.onClick.AddListener(ToggleBattlePanel); // Ouvre le panel
 
             currentFightButton.onClick.RemoveAllListeners();
-            currentFightButton.onClick.AddListener(ToggleBattlePanel);
-            currentFightButton.onClick.AddListener(() => LaunchFight(fightCost, chanceOfVictory));
+            currentFightButton.onClick.AddListener(() => LaunchFight(fightCost, CalculateChanceOfVictory(playerStats.CalculatePlayerPower(), power))); // Lance le combat
         }
     }
+    void Update()
+    {
+        if (isBattlePanelActive)
+        {
+            UpdateChanceOfVictoryDisplay();
+        }
+    }
+
+    void UpdateChanceOfVictoryDisplay()
+    {
+        // Récupérer les unités sélectionnées des sliders
+        int selectedUnitsT1 = (int)unitT1Slider.value;
+        int selectedUnitsT2 = (int)unitT2Slider.value;
+        int selectedUnitsT3 = (int)unitT3Slider.value;
+
+        // Calculer la puissance du joueur pour le combat avec les unités sélectionnées
+        float playerPower = playerStats.CalculatePlayerPowerWithSelectedUnits(selectedUnitsT1, selectedUnitsT2, selectedUnitsT3);
+
+        // Calculer la chance de victoire
+        float chanceOfVictory = CalculateChanceOfVictory(playerPower, power);
+
+        // Assurez-vous que le texte est bien affiché et mis à jour
+        if (currentChanceOfVictoryText != null)
+        {
+            currentChanceOfVictoryText.gameObject.SetActive(true);
+            currentChanceOfVictoryText.text = "Chance de victoire: " + (chanceOfVictory * 100).ToString("F1") + "%";
+        }
+        else
+        {
+            Debug.LogWarning("currentChanceOfVictoryText n'est pas assigné ou n'est pas trouvé.");
+        }
+    }
+
+
 
     void LaunchFight(int fightCost, float chanceOfVictory)
     {
@@ -149,20 +169,14 @@ public class BaseButtonHandler : MonoBehaviour
         {
             Debug.Log("Combat lancé contre une base avec un coût de " + fightCost + " " + resource);
 
-            // Sauvegarde les unités actuelles avant le combat
-            playerStats.SaveAllUnits();
+            // Récupérer les unités sélectionnées des sliders
+            int selectedUnitsT1 = (int)unitT1Slider.value;
+            int selectedUnitsT2 = (int)unitT2Slider.value;
+            int selectedUnitsT3 = (int)unitT3Slider.value;
 
-            // Obtenir le nombre de Units à envoyer du joueur selon les sliders
-            int unitsT1ToSend = Mathf.RoundToInt(unitT1Slider.value);
-            int unitsT2ToSend = Mathf.RoundToInt(unitT2Slider.value);
-            int unitsT3ToSend = Mathf.RoundToInt(unitT3Slider.value);
-
-            // Réduire les unités envoyées du pool du joueur
-            playerStats.RemoveUnits(unitsT1ToSend, unitsT2ToSend, unitsT3ToSend);
-
-            // Calculer la chance de victoire avec les unités sélectionnées
-            float playerPower = playerStats.CalculatePlayerPowerWithSelectedUnits(unitsT1ToSend, unitsT2ToSend, unitsT3ToSend);
-            float chanceOfVictory = CalculateChanceOfVictory(playerPower, power);
+            // Retirer les unités sélectionnées pour le combat
+            playerStats.RemoveUnits(selectedUnitsT1, selectedUnitsT2, selectedUnitsT3);
+            UpdateSliders();
 
             if (Random.value <= chanceOfVictory)
             {
@@ -181,6 +195,7 @@ public class BaseButtonHandler : MonoBehaviour
     }
 
 
+
     void ToggleBattlePanel()
     {
         isBattlePanelActive = !isBattlePanelActive;
@@ -192,65 +207,16 @@ public class BaseButtonHandler : MonoBehaviour
         }
     }
 
-    void InitializeSliders()
-    {
-        unitT1Slider.onValueChanged.AddListener(delegate { UpdateUnitCountText("T1"); });
-        unitT2Slider.onValueChanged.AddListener(delegate { UpdateUnitCountText("T2"); });
-        unitT3Slider.onValueChanged.AddListener(delegate { UpdateUnitCountText("T3"); });
-    }
-
     void UpdateSliders()
     {
+        // Synchroniser les sliders avec le nombre d'unités disponibles
         unitT1Slider.maxValue = playerStats.UnitsT1;
         unitT2Slider.maxValue = playerStats.UnitsT2;
         unitT3Slider.maxValue = playerStats.UnitsT3;
 
-        unitT1Slider.value = 0;
-        unitT2Slider.value = 0;
-        unitT3Slider.value = 0;
-
-        UpdateUnitCountText("T1");
-        UpdateUnitCountText("T2");
-        UpdateUnitCountText("T3");
-    }
-
-    public float CalculatePlayerPowerWithSelectedUnits(int unitsT1, int unitsT2, int unitsT3)
-    {
-        float totalPower = unitsT1 * PowerPerUnitT1 + unitsT2 * PowerPerUnitT2 + unitsT3 * PowerPerUnitT3;
-        return totalPower;
-    }
-
-    public void RemoveUnits(int unitsT1, int unitsT2, int unitsT3)
-    {
-        playerStats.UnitsT1 -= unitsT1;
-        playerStats.UnitsT2 -= unitsT2;
-        playerStats.UnitsT3 -= unitsT3;
-
-        // Assurez-vous que les valeurs ne deviennent pas négatives
-        playerStats.UnitsT1 = Mathf.Max(playerStats.UnitsT1, 0);
-        playerStats.UnitsT2 = Mathf.Max(playerStats.UnitsT2, 0);
-        playerStats.UnitsT3 = Mathf.Max(playerStats.UnitsT3, 0);
-    }
-
-
-    void UpdateUnitCountText(string unitType)
-    {
-        int count = 0;
-        if (unitType == "T1")
-        {
-            count = Mathf.RoundToInt(unitT1Slider.value);
-            unitT1CountText.text = "Units T1: " + count;
-        }
-        else if (unitType == "T2")
-        {
-            count = Mathf.RoundToInt(unitT2Slider.value);
-            unitT2CountText.text = "Units T2: " + count;
-        }
-        else if (unitType == "T3")
-        {
-            count = Mathf.RoundToInt(unitT3Slider.value);
-            unitT3CountText.text = "Units T3: " + count;
-        }
+        unitT1CountText.text = unitT1Slider.value + "/" + playerStats.UnitsT1;
+        unitT2CountText.text = unitT2Slider.value + "/" + playerStats.UnitsT2;
+        unitT3CountText.text = unitT3Slider.value + "/" + playerStats.UnitsT3;
     }
 
     public void HideInfoPanel()
