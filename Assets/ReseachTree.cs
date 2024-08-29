@@ -10,6 +10,7 @@ public class ReseachTree : MonoBehaviour
     public string[] ResearchName;
     public string[] ResearchDesc;
 
+
     public List<GameObject> Connectionlist;
     public GameObject ConnectionHolder;
 
@@ -25,51 +26,53 @@ public class ReseachTree : MonoBehaviour
 
     private void Start()
     {
-        ResearchPoint = 200;
+        isbuyed = new int[37];
+        //LoadGameState();
+        ResearchPoint = 1000000;
 
-        isbuyed = new int[32];
         ResearchName = new[] {
-            "Feu maîtrisé",
+            "Feu maï¿½trisï¿½",
             "Fabrication d'outils en pierre",
             "Fabrication d'armes",
             "Navigation rudimentaire",
-            "Technologie d'abattage d'arbres améliorée",
-            "Outils de taille de pierre spécialisés",
+            "Technologie d'abattage d'arbres amï¿½liorï¿½e",
+            "Outils de taille de pierre spï¿½cialisï¿½s",
             "Techniques de chasse",
             "Construction de structure simples",
             "Guerrier",
             "Lancier",
             "Construction de boucliers rudimentaires",
             "Formation de groupes de chasseurs-guerriers",
-            "Développement de signaux de communication",
+            "Dï¿½veloppement de signaux de communication",
             "Techniques de camouflage",
-            "Fabrication de pointes de flèches améliorées",
-            "Armée préhistorique",
+            "Fabrication de pointes de flï¿½ches amï¿½liorï¿½es",
+            "Armï¿½e prï¿½historique",
             "Cavalier",
-            "Techniques de pêche",
+            "Techniques de pï¿½che",
             "Domestication des animaux",
             "Poterie rudimentaire",
             "Techniques de conservation des aliments",
-            "Élevage de plantes comestibles",
-            "Réseaux de routes",
+            "ï¿½levage de plantes comestibles",
+            "Rï¿½seaux de routes",
             "Technique de collecte de l'eau",
             "Agriculture primitive",
-            "Système de poulies pour le transport du bois",
+            "Systï¿½me de poulies pour le transport du bois",
             "Technologie de coupe du bois sous l'eau",
-            "Techniques d'extraction minière",
-            "Systèmes de grappins pour l'extraction de pierre",
+            "Techniques d'extraction miniï¿½re",
+            "Systï¿½mes de grappins pour l'extraction de pierre",
             "Mines de silex",
-            "Antiquité",
-            "Médecine précoce"
+            "Antiquitï¿½",
+            "Mï¿½decine prï¿½coce"
         };
+
         ResearchDesc = new[] {
-            "0",
-            "1",
-            "2",
+            "+1 production nourriture",
+            "+1 production nourriture \n +1 production pierre",
+            "+1 production nourriture",
             "3",
-            "4",
+            "+1 production de bois",
             "5",
-            "6",
+            "+1 production nourriture",
             "7",
             "8",
             "9",
@@ -80,19 +83,19 @@ public class ReseachTree : MonoBehaviour
             "14",
             "15",
             "16",
-            "17",
-            "18",
+            "+1 production nourriture",
+            "+1 production nourriture",
             "19",
-            "20",
-            "21",
+            "+1 production nourriture",
+            "+1 production nourriture",
             "22",
             "23",
-            "24",
-            "25",
-            "26",
-            "27",
-            "28",
-            "29",
+            "+1 production nourriture",
+            "+1 production de bois",
+            "+1 production de bois",
+            "+1 production pierre",
+            "+1 production pierre",
+            "+1 production pierre",
             "30",
             "31"
         };
@@ -101,7 +104,7 @@ public class ReseachTree : MonoBehaviour
         ResearchList = new List<Recherche>();
         Connectionlist = new List<GameObject>();
 
-        // Créer un GameObject "DummyConnection"
+        // Crï¿½er un GameObject "DummyConnection"
         GameObject dummyConnection = new GameObject("DummyConnection");
         dummyConnection.transform.SetParent(ConnectionHolder.transform, false);
         Connectionlist.Add(dummyConnection);
@@ -116,7 +119,7 @@ public class ReseachTree : MonoBehaviour
         foreach (Transform connection in ConnectionHolder.transform)
         {
             Connectionlist.Add(connection.gameObject);
-            connection.gameObject.SetActive(false); // Désactiver toutes les connexions au début
+            connection.gameObject.SetActive(false); // Dï¿½sactiver toutes les connexions au dï¿½but
         }
 
         // Assigner les IDs de recherche
@@ -125,24 +128,38 @@ public class ReseachTree : MonoBehaviour
             ResearchList[i].id = i;
         }
 
-        // Définir connectedResearch correctement
+        // Dï¿½finir connectedResearch correctement
         ResearchList[0].connectedResearch = new[] { 1 };
-        ResearchList[1].connectedResearch = new[] { 2, 3, 4, 5, 7 };
-        ResearchList[2].connectedResearch = new[] { 8, 9 };
+        ResearchList[1].connectedResearch = new[] { 2, 3, 4, 5, 7};
+        ResearchList[2].connectedResearch = new[] { 8, 9 , 35};
         ResearchList[3].connectedResearch = new[] { 6 };
         ResearchList[4].connectedResearch = new[] { 25 };
         ResearchList[5].connectedResearch = new[] { 27 };
-        ResearchList[6].connectedResearch = new[] { 17, 18, 20 };
-        ResearchList[7].connectedResearch = new[] { 19, 21, 22, 23 };
+        ResearchList[6].connectedResearch = new[] { 17,18,20 };
+        ResearchList[7].connectedResearch = new[] { 21,19,22,23};
         ResearchList[8].connectedResearch = new[] { 10 };
-        ResearchList[9].connectedResearch = new[] { 11, 12, 13, 14 };
-        ResearchList[12].connectedResearch = new[] { 15 };
+        ResearchList[9].connectedResearch = new[] { 11, 12,13, 14 };
+        ResearchList[10].connectedResearch = new[] { 36 };
+        ResearchList[11].connectedResearch = new[] { 33 };
+        ResearchList[12].connectedResearch = new[] {15};
+        ResearchList[13].connectedResearch = new[] { 32};
+        ResearchList[14].connectedResearch = new[] { 31 };
+        //ResearchList[15].connectedResearch = new[] { };
+        //ResearchList[16].connectedResearch = new[] { };
+        //ResearchList[17].connectedResearch = new[] { };
         ResearchList[18].connectedResearch = new[] { 16 };
-        ResearchList[21].connectedResearch = new[] { 31 };
+        ResearchList[19].connectedResearch = new[] { 34 };
+        //ResearchList[20].connectedResearch = new[] { };
+        //ResearchList[21].connectedResearch = new[] {};
         ResearchList[22].connectedResearch = new[] { 30 };
         ResearchList[23].connectedResearch = new[] { 24 };
+        //ResearchList[24].connectedResearch = new[] { };
         ResearchList[25].connectedResearch = new[] { 26 };
-        ResearchList[27].connectedResearch = new[] { 28, 29 };
+        //ResearchList[26].connectedResearch = new[] { };
+        ResearchList[27].connectedResearch = new[] { 28,29 };
+        //ResearchList[28].connectedResearch = new[] { };
+        //ResearchList[29].connectedResearch = new[] { };
+        //ResearchList[30].connectedResearch = new[] { };
 
         UpdateAllResearchUI();
     }

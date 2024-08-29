@@ -55,7 +55,7 @@ public class ResourcesManager : MonoBehaviour
             playerStats.resource3 = Mathf.Min(playerStats.resource3 + playerStats.resources3PerSecond, maxResource);
             playerStats.resource4 = Mathf.Min(playerStats.resource4 + playerStats.resources4PerSecond, maxResource);
 
-            Debug.Log("Ressources générées: \n Ressource1 : " + playerStats.resource1 + " Ressource2 : " + playerStats.resource2 + " Ressource3 : " + playerStats.resource3 + " Ressource4 : " + playerStats.resource4);
+            Debug.Log("Ressources gï¿½nï¿½rï¿½es: \n Ressource1 : " + playerStats.resource1 + " Ressource2 : " + playerStats.resource2 + " Ressource3 : " + playerStats.resource3 + " Ressource4 : " + playerStats.resource4);
         }
     }
 
@@ -114,4 +114,25 @@ public class ResourcesManager : MonoBehaviour
     {
         playerStats.Save();
     }
+    public void IncreaseResource1Production()
+    {
+        resources1PerSecond = Mathf.FloorToInt(resources1PerSecond + 1f);
+    }
+
+    public void IncreaseResource2Production()
+    {
+        resources2PerSecond = Mathf.FloorToInt(resources2PerSecond + 1f);
+    }
+
+    public void IncreaseResource3Production()
+    {
+        resources3PerSecond = Mathf.FloorToInt(resources4PerSecond + 1f);
+    }
+
+    public void IncreaseResource4Production()
+    {
+        resources4PerSecond = Mathf.FloorToInt(resources4PerSecond + 1f);
+    }
+
+
 }

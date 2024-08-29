@@ -42,16 +42,16 @@ public class Recherche : MonoBehaviour
                     }
                     else if (canBePurchased)
                     {
-                        connectionImage.color = Color.green; // Liaison entre une technologie acquise et une technologie qui peut être achetée
+                        connectionImage.color = Color.green; // Liaison entre une technologie acquise et une technologie qui peut ï¿½tre achetï¿½e
                     }
                     else
                     {
-                        connectionImage.color = Color.red; // Liaison entre une technologie acquise et une technologie qui ne peut pas être achetée
+                        connectionImage.color = Color.red; // Liaison entre une technologie acquise et une technologie qui ne peut pas ï¿½tre achetï¿½e
                     }
                 }
                 else
                 {
-                    connection.SetActive(false); // Désactiver la liaison
+                    connection.SetActive(false); // Dï¿½sactiver la liaison
                 }
             }
         }
@@ -63,6 +63,27 @@ public class Recherche : MonoBehaviour
 
         ReseachTree.reseachTree.ResearchPoint -= 1;
         ReseachTree.reseachTree.isbuyed[id] = 1;
+        
+        //ReseachTree.reseachTree.SaveGameState();
         ReseachTree.reseachTree.UpdateAllResearchUI();
+
+        // Vï¿½rifier si la recherche 1 a ï¿½tï¿½ achetï¿½e pour augmenter la production de ressource viande
+        if (id == 0 || id == 1 || id == 2 || id == 6 || id == 17 || id == 18 || id == 20 || id == 21 || id == 24)
+        {
+            FindObjectOfType<ResourcesManager>().IncreaseResource1Production();
+        }
+
+        // Vï¿½rifier si la recherche 1 a ï¿½tï¿½ achetï¿½e pour augmenter la production de ressource pierre
+        if (id == 1 || id == 27 || id == 28 || id == 29)
+        {
+            FindObjectOfType<ResourcesManager>().IncreaseResource2Production();
+        }
+
+        // Vï¿½rifier si la recherche 1 a ï¿½tï¿½ achetï¿½e pour augmenter la production de ressource bois
+        if (id == 4 || id == 25 || id == 26)
+        {
+            FindObjectOfType<ResourcesManager>().IncreaseResource3Production();
+        }
+
     }
 }
