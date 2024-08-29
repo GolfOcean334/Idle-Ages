@@ -65,13 +65,13 @@ public class ReseachTree : MonoBehaviour
             
     };
         ResearchDesc = new[] {
-            "0",
-            "1",
-            "2",
+            "+1 production nourriture",
+            "+1 production nourriture \n +1 production pierre",
+            "+1 production nourriture",
             "3",
-            "4",
+            "+1 production de bois",
             "5",
-            "6",
+            "+1 production nourriture",
             "7",
             "8",
             "9",
@@ -82,13 +82,14 @@ public class ReseachTree : MonoBehaviour
             "14",
             "15",
             "16",
-            "17",
-            "18",
+            "+1 production nourriture",
+            "+1 production nourriture",
             "19",
-            "20",
-            "21",
+            "+1 production nourriture",
+            "+1 production nourriture",
             "22",
             "23",
+<<<<<<< Updated upstream
             "24",
             "25",
             "26",
@@ -96,6 +97,16 @@ public class ReseachTree : MonoBehaviour
             "28",
             "29",
             "30"
+=======
+            "+1 production nourriture",
+            "+1 production de bois",
+            "+1 production de bois",
+            "+1 production pierre",
+            "+1 production pierre",
+            "+1 production pierre",
+            "30",
+            "31"
+>>>>>>> Stashed changes
         };
 
         // Initialiser les listes

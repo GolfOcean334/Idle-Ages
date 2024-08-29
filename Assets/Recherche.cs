@@ -65,5 +65,24 @@ public class Recherche : MonoBehaviour
         ReseachTree.reseachTree.isbuyed[id] = 1;
         //ReseachTree.reseachTree.SaveGameState();
         ReseachTree.reseachTree.UpdateAllResearchUI();
+
+        // Vérifier si la recherche 1 a été achetée pour augmenter la production de ressource viande
+        if (id == 0 || id == 1 || id == 2 || id == 6 || id == 17 || id == 18 || id == 20 || id == 21 || id == 24)
+        {
+            FindObjectOfType<ResourcesManager>().IncreaseResource1Production();
+        }
+
+        // Vérifier si la recherche 1 a été achetée pour augmenter la production de ressource pierre
+        if (id == 1 || id == 27 || id == 28 || id == 29)
+        {
+            FindObjectOfType<ResourcesManager>().IncreaseResource2Production();
+        }
+
+        // Vérifier si la recherche 1 a été achetée pour augmenter la production de ressource bois
+        if (id == 4 || id == 25 || id == 26)
+        {
+            FindObjectOfType<ResourcesManager>().IncreaseResource3Production();
+        }
+
     }
 }

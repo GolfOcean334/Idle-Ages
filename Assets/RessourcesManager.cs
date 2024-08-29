@@ -16,10 +16,10 @@ public class ResourcesManager : MonoBehaviour
     public int resource3;
     public int resource4;
 
-    private readonly int resources1PerSecond = 5;
-    private readonly int resources2PerSecond = 5;
-    private readonly int resources3PerSecond = 5;
-    private readonly int resources4PerSecond = 5;
+    private int resources1PerSecond = 5;
+    private int resources2PerSecond = 5;
+    private int resources3PerSecond = 5;
+    private int resources4PerSecond = 5;
 
     private readonly int maxResource = 500000000;
 
@@ -127,4 +127,25 @@ public class ResourcesManager : MonoBehaviour
     {
         SaveResources();
     }
+    public void IncreaseResource1Production()
+    {
+        resources1PerSecond = Mathf.FloorToInt(resources1PerSecond + 1f);
+    }
+
+    public void IncreaseResource2Production()
+    {
+        resources2PerSecond = Mathf.FloorToInt(resources2PerSecond + 1f);
+    }
+
+    public void IncreaseResource3Production()
+    {
+        resources3PerSecond = Mathf.FloorToInt(resources4PerSecond + 1f);
+    }
+
+    public void IncreaseResource4Production()
+    {
+        resources4PerSecond = Mathf.FloorToInt(resources4PerSecond + 1f);
+    }
+
+
 }
