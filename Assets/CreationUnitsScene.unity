@@ -477,7 +477,6 @@ MonoBehaviour:
   UnitsT1CooldownText: {fileID: 1598098545}
   UnitsT2CooldownText: {fileID: 997286326}
   UnitsT3CooldownText: {fileID: 1196793260}
-  resourcesManager: {fileID: 1975616390}
   playerStats: {fileID: 11400000, guid: 0406183f2d2a2c84f8a612c43c46b64d, type: 2}
 --- !u!1 &207376471
 GameObject:
@@ -3081,6 +3080,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51f0e7e8a553b084fa1c372d1b95cea7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerStats: {fileID: 11400000, guid: 0406183f2d2a2c84f8a612c43c46b64d, type: 2}
 --- !u!114 &1296061805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4401,14 +4401,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e42289d363c6b3458a6b5472c9354cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerStats: {fileID: 11400000, guid: 0406183f2d2a2c84f8a612c43c46b64d, type: 2}
   resource1Text: {fileID: 1809357853}
   resource2Text: {fileID: 1085300284}
   resource3Text: {fileID: 802480464}
   resource4Text: {fileID: 1792142696}
-  resource1: 0
-  resource2: 0
-  resource3: 0
-  resource4: 0
 --- !u!4 &1975616391
 Transform:
   m_ObjectHideFlags: 0

@@ -22,7 +22,6 @@ public class UnitsManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI UnitsT1CooldownText;
     [SerializeField] private TextMeshProUGUI UnitsT2CooldownText;
     [SerializeField] private TextMeshProUGUI UnitsT3CooldownText;
-    [SerializeField] private ResourcesManager resourcesManager;
     [SerializeField] private PlayerStats playerStats;
 
     private readonly int[] multiplicators = { 1, 5, 10, 50 };
@@ -45,9 +44,8 @@ public class UnitsManager : MonoBehaviour
 
     void Start()
     {
+        playerStats.Load();
         playerStats.Initialize();
-
-        LoadUnits();
 
         buttonT1.onClick.AddListener(() => OnStartButtonClick("T1"));
         buttonT2.onClick.AddListener(() => OnStartButtonClick("T2"));
@@ -72,14 +70,14 @@ public class UnitsManager : MonoBehaviour
 
     void OnApplicationQuit()
     {
-        SaveUnits();
+        playerStats.Save();
     }
 
     void OnApplicationPause(bool pauseStatus)
     {
         if (pauseStatus)
         {
-            SaveUnits();
+            playerStats.Save();
         }
     }
 
@@ -103,22 +101,22 @@ public class UnitsManager : MonoBehaviour
         int multiplier = multiplicators[currentMultiplicatorIndex];
         int resourceCost = 2 * multiplicators[currentMultiplicatorIndex];
 
-        if (unitType == "T1" && resourcesManager.resource1 >= resourceCost)
+        if (unitType == "T1" && playerStats.resource1 >= resourceCost)
         {
-            resourcesManager.resource1 -= resourceCost;
+            playerStats.resource1 -= resourceCost;
             playerStats.EnqueueUnits("T1", multiplier);
         }
-        else if (unitType == "T2" && resourcesManager.resource2 >= resourceCost)
+        else if (unitType == "T2" && playerStats.resource2 >= resourceCost)
         {
-            resourcesManager.resource2 -= resourceCost;
+            playerStats.resource2 -= resourceCost;
             playerStats.EnqueueUnits("T2", multiplier);
         }
-        else if (unitType == "T3" && resourcesManager.resource3 >= resourceCost)
+        else if (unitType == "T3" && playerStats.resource3 >= resourceCost)
         {
-            resourcesManager.resource3 -= resourceCost;
+            playerStats.resource3 -= resourceCost;
             playerStats.EnqueueUnits("T3", multiplier);
         }
-        SaveUnits();
+        playerStats.Save();
     }
 
     void UpdateUnitsT1Text()
@@ -134,20 +132,6 @@ public class UnitsManager : MonoBehaviour
     void UpdateUnitsT3Text()
     {
         UnitsT3Text.text = "Units T3: " + playerStats.UnitsT3;
-    }
-
-    public void SaveUnits()
-    {
-        playerStats.SaveAllUnits();
-    }
-
-    void LoadUnits()
-    {
-        playerStats.LoadSaveUnits();
-
-        UpdateUnitsT1Text();
-        UpdateUnitsT2Text();
-        UpdateUnitsT3Text();
     }
 
     public void UpdateLoadingBar(string unitType, float progress)

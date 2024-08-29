@@ -2,13 +2,28 @@ using UnityEngine;
 using System.Collections;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using TMPro;
+using Unity.VisualScripting;
 
 [CreateAssetMenu(fileName = "PlayerStats", menuName = "ScriptableObjects/PlayerStats", order = 1)]
 public class PlayerStats : ScriptableObject
 {
+    private string SaveFilePath => Path.Combine(Application.persistentDataPath, "playerSave.json");
+
     public int UnitsT1;
     public int UnitsT2;
     public int UnitsT3;
+
+    public int resource1;
+    public int resource2;
+    public int resource3;
+    public int resource4;
+
+    public int resources1PerSecond = 0;
+    public int resources2PerSecond = 0;
+    public int resources3PerSecond = 0;
+    public int resources4PerSecond = 0;
 
     private readonly float MainMultiplicator = 1f;
     private readonly float SecondaryMultiplicator = 0.5f;
@@ -48,7 +63,6 @@ public class PlayerStats : ScriptableObject
         UnitsT1 = Mathf.Max(UnitsT1 - unitsT1, 0);
         UnitsT2 = Mathf.Max(UnitsT2 - unitsT2, 0);
         UnitsT3 = Mathf.Max(UnitsT3 - unitsT3, 0);
-        SaveAllUnits();
     }
 
 
@@ -64,7 +78,6 @@ public class PlayerStats : ScriptableObject
 
     public void Initialize()
     {
-        LoadSaveUnits();
         StartProduction();
     }
 
@@ -131,8 +144,6 @@ public class PlayerStats : ScriptableObject
             {
                 UnitsT3++;
             }
-
-            SaveAllUnits();
         }
     }
 
@@ -160,57 +171,91 @@ public class PlayerStats : ScriptableObject
         }
     }
 
-    public void SaveAllUnits()
+    public void Save()
     {
-        PlayerPrefs.SetInt("UnitsT1", UnitsT1);
-        PlayerPrefs.SetInt("UnitsT2", UnitsT2);
-        PlayerPrefs.SetInt("UnitsT3", UnitsT3);
-        PlayerPrefs.SetString("UnitT1Queue", string.Join(",", unitT1Queue.ToArray()));
-        PlayerPrefs.SetString("UnitT2Queue", string.Join(",", unitT2Queue.ToArray()));
-        PlayerPrefs.SetString("UnitT3Queue", string.Join(",", unitT3Queue.ToArray()));
-        PlayerPrefs.SetString("LastSaveTime", DateTime.Now.ToBinary().ToString());
+        // Crée une instance de PlayerData avec les données actuelles
+        PlayerData data = new PlayerData
+        {
+            UnitsT1 = UnitsT1,
+            UnitsT2 = UnitsT2,
+            UnitsT3 = UnitsT3,
+            UnitT1Queue = new List<string>(unitT1Queue),
+            UnitT2Queue = new List<string>(unitT2Queue),
+            UnitT3Queue = new List<string>(unitT3Queue),
+            resource1 = resource1,
+            resource2 = resource2,
+            resource3 = resource3,
+            resource4 = resource4,
+            resources1PerSecond = resources1PerSecond,
+            resources2PerSecond = resources2PerSecond,
+            resources3PerSecond = resources3PerSecond,
+            resources4PerSecond = resources4PerSecond,
+            LastSaveTime = DateTime.Now.ToBinary().ToString()
+        };
+
+        // Sérialiser les données en JSON
+        string jsonData = JsonUtility.ToJson(data, true);
+
+        // Écrire les données JSON dans un fichier
+        File.WriteAllText(SaveFilePath, jsonData);
+
+        Debug.Log("Données sauvegardées dans " + SaveFilePath);
     }
 
-    public void LoadSaveUnits()
+    public void Load()
     {
-        UnitsT1 = PlayerPrefs.GetInt("UnitsT1", 0);
-        UnitsT2 = PlayerPrefs.GetInt("UnitsT2", 0);
-        UnitsT3 = PlayerPrefs.GetInt("UnitsT3", 0);
-
-        string savedUnitT1Queue = PlayerPrefs.GetString("UnitT1Queue", "");
-        string savedUnitT2Queue = PlayerPrefs.GetString("UnitT2Queue", "");
-        string savedUnitT3Queue = PlayerPrefs.GetString("UnitT3Queue", "");
-
-        unitT1Queue.Clear();
-        unitT2Queue.Clear();
-        unitT3Queue.Clear();
-
-        if (!string.IsNullOrEmpty(savedUnitT1Queue))
+        if (File.Exists(SaveFilePath))
         {
-            foreach (string unit in savedUnitT1Queue.Split(','))
+            // Lire les données JSON du fichier
+            string jsonData = File.ReadAllText(SaveFilePath);
+
+            // Désérialiser les données JSON en une instance de PlayerData
+            PlayerData data = JsonUtility.FromJson<PlayerData>(jsonData);
+
+            // Charger les données dans les variables du script
+            UnitsT1 = data.UnitsT1;
+            UnitsT2 = data.UnitsT2;
+            UnitsT3 = data.UnitsT3;
+
+
+            unitT1Queue.Clear();
+            unitT2Queue.Clear();
+            unitT3Queue.Clear();
+
+            foreach (string unit in data.UnitT1Queue)
             {
                 unitT1Queue.Enqueue(unit);
             }
-        }
-        if (!string.IsNullOrEmpty(savedUnitT2Queue))
-        {
-            foreach (string unit in savedUnitT2Queue.Split(','))
+            foreach (string unit in data.UnitT2Queue)
             {
                 unitT2Queue.Enqueue(unit);
             }
-        }
-        if (!string.IsNullOrEmpty(savedUnitT3Queue))
-        {
-            foreach (string unit in savedUnitT3Queue.Split(','))
+            foreach (string unit in data.UnitT3Queue)
             {
                 unitT3Queue.Enqueue(unit);
             }
-        }
 
-        if (long.TryParse(PlayerPrefs.GetString("LastSaveTime", ""), out long lastSaveTimeBinary))
+            resource1 = data.resource1;
+            resource2 = data.resource2;
+            resource3 = data.resource3;
+            resource4 = data.resource4;
+
+            resources1PerSecond = data.resources1PerSecond;
+            resources2PerSecond = data.resources2PerSecond;
+            resources3PerSecond = data.resources3PerSecond;
+            resources4PerSecond = data.resources4PerSecond;
+
+            if (long.TryParse(data.LastSaveTime, out long lastSaveTimeBinary))
+            {
+                DateTime lastSaveTime = DateTime.FromBinary(lastSaveTimeBinary);
+                ProcessOfflineProduction(lastSaveTime);
+            }
+
+            Debug.Log("Données chargées depuis " + SaveFilePath);
+        }
+        else
         {
-            DateTime lastSaveTime = DateTime.FromBinary(lastSaveTimeBinary);
-            ProcessOfflineProduction(lastSaveTime);
+            Debug.LogWarning("Aucun fichier de sauvegarde trouvé à " + SaveFilePath);
         }
     }
 
@@ -222,8 +267,6 @@ public class PlayerStats : ScriptableObject
         ProduceOfflineUnits(unitT1Queue, ref UnitsT1, secondsOffline);
         ProduceOfflineUnits(unitT2Queue, ref UnitsT2, secondsOffline);
         ProduceOfflineUnits(unitT3Queue, ref UnitsT3, secondsOffline);
-
-        SaveAllUnits();
     }
 
     private void ProduceOfflineUnits(Queue<string> unitQueue, ref int unitCount, int secondsOffline)
@@ -243,7 +286,5 @@ public class PlayerStats : ScriptableObject
         UnitsT1 = 0;
         UnitsT2 = 0;
         UnitsT3 = 0;
-        SaveAllUnits();
-        PlayerPrefs.Save();
     }
 }

@@ -229,9 +229,9 @@ public class BaseButtonHandler : MonoBehaviour
     {
         return resource switch
         {
-            ResourceType.Wood => resourcesManager.resource3 >= fightCost,
-            ResourceType.Stone => resourcesManager.resource2 >= fightCost,
-            ResourceType.Food => resourcesManager.resource1 >= fightCost,
+            ResourceType.Wood => playerStats.resource3 >= fightCost,
+            ResourceType.Stone => playerStats.resource2 >= fightCost,
+            ResourceType.Food => playerStats.resource1 >= fightCost,
             _ => false,
         };
     }

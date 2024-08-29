@@ -3024,14 +3024,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e42289d363c6b3458a6b5472c9354cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerStats: {fileID: 11400000, guid: 0406183f2d2a2c84f8a612c43c46b64d, type: 2}
   resource1Text: {fileID: 1290702575}
   resource2Text: {fileID: 1073909842}
   resource3Text: {fileID: 863230382}
   resource4Text: {fileID: 1648513329}
-  resource1: 0
-  resource2: 0
-  resource3: 0
-  resource4: 0
 --- !u!1 &957710025
 GameObject:
   m_ObjectHideFlags: 0
@@ -5547,6 +5544,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51f0e7e8a553b084fa1c372d1b95cea7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerStats: {fileID: 11400000, guid: 0406183f2d2a2c84f8a612c43c46b64d, type: 2}
 --- !u!114 &2045612933
 MonoBehaviour:
   m_ObjectHideFlags: 0
