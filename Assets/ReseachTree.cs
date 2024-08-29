@@ -89,15 +89,6 @@ public class ReseachTree : MonoBehaviour
             "+1 production nourriture",
             "22",
             "23",
-<<<<<<< Updated upstream
-            "24",
-            "25",
-            "26",
-            "27",
-            "28",
-            "29",
-            "30"
-=======
             "+1 production nourriture",
             "+1 production de bois",
             "+1 production de bois",
@@ -106,7 +97,6 @@ public class ReseachTree : MonoBehaviour
             "+1 production pierre",
             "30",
             "31"
->>>>>>> Stashed changes
         };
 
         // Initialiser les listes
