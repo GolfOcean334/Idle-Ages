@@ -36,6 +36,7 @@ public class CaptureBaseHandler : MonoBehaviour
         CapturedBaseData capturedBaseData = new CapturedBaseData(localPosition, resource, resourceAmount, resourcesPerSecond);
         capturedBasesList.Add(capturedBaseData);
         SaveCapturedBases();
+        RestoreCapturedBases();
     }
 
 
