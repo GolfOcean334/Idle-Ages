@@ -8,7 +8,8 @@ public class Recherche : MonoBehaviour
     public int id;
     public TMP_Text TitleText;
     public TMP_Text DescText;
-    public List<Recherche> connectedResearchObjects; // Set in Inspector
+    public List<Recherche> connectedResearchObjects; // List of research objects this node is connected to
+    public List<GameObject> connectionsToOthers; // List of connection lines corresponding to the research objects
 
     public void UpdateUI()
     {
@@ -23,27 +24,26 @@ public class Recherche : MonoBehaviour
                 ? Color.green
                 : Color.red;
 
-        // Toggle visibility of connected research and connections
-        foreach (var connectedResearch in connectedResearchObjects)
+        // Update visibility and color of connected research and connections
+        for (int i = 0; i < connectedResearchObjects.Count; i++)
         {
-            bool isPurchased = ReseachTree.reseachTree.isbuyed[id] > 0;
-            connectedResearch.gameObject.SetActive(isPurchased);
-
-            // Toggle visibility of connection line
-            int connectionIndex = connectedResearchObjects.IndexOf(connectedResearch);
-            if (connectionIndex >= 0 && connectionIndex < ReseachTree.reseachTree.Connectionlist.Count)
+            // Check if corresponding connection exists
+            if (i >= connectionsToOthers.Count)
             {
-                GameObject connection = ReseachTree.reseachTree.Connectionlist[connectionIndex];
-                connection.SetActive(isPurchased);
-
-                if (isPurchased)
-                {
-                    // Update the color of the connection line
-                    connection.GetComponent<Image>().color = ReseachTree.reseachTree.isbuyed[connectedResearch.id] > 0
-                        ? Color.black // Both are purchased
-                        : Color.green; // Connected item is purchasable
-                }
+                Debug.LogWarning($"Mismatch in list sizes for {gameObject.name}. connectedResearchObjects.Count = {connectedResearchObjects.Count}, connectionsToOthers.Count = {connectionsToOthers.Count}");
+                continue; // Skip if there is a mismatch in the list sizes
             }
+
+            var connectedResearch = connectedResearchObjects[i];
+            var connection = connectionsToOthers[i];
+
+            // Connection should always be active
+            connection.SetActive(true);
+
+            // Set the connection color based on whether the connected research is purchased
+            connection.GetComponent<Image>().color = ReseachTree.reseachTree.isbuyed[connectedResearch.id] > 0
+                ? Color.black  // Connected research is purchased
+                : Color.green; // Connected research is not purchased
         }
     }
 
@@ -75,5 +75,8 @@ public class Recherche : MonoBehaviour
         {
             FindObjectOfType<ResourcesManager>().IncreaseResource3Production();
         }
+
+        // After purchase, update the UI to reflect the changes
+        UpdateUI();
     }
 }

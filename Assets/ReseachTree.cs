@@ -60,8 +60,6 @@ public class ReseachTree : MonoBehaviour
             "Systèmes de grappins pour l'extraction de pierre",
             "Mines de silex",
             "Antiquité",
-            "Médecine précoce"
-
     };
         ResearchDesc = new[] {
             "+1 production nourriture",
@@ -95,7 +93,6 @@ public class ReseachTree : MonoBehaviour
             "+1 production pierre",
             "+1 production pierre",
             "30",
-            "31"
         };
 
 
