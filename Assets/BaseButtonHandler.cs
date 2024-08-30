@@ -180,7 +180,7 @@ public class BaseButtonHandler : MonoBehaviour
 
             if (Random.value <= chanceOfVictory)
             {
-                captureBaseHandler.CaptureBase(gameObject, resourcesManager, resource, resourceAmount, resourcesPerSecond);
+                captureBaseHandler.CaptureBase(gameObject, resource, resourceAmount, resourcesPerSecond);
                 Debug.Log("Le joueur a réussi à capturer la base.");
             }
             else
