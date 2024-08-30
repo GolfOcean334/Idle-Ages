@@ -21,7 +21,6 @@ public class CaptureBaseHandler : MonoBehaviour
     {
         // Convertir la position en espace local avant d'instancier la base capturée
         Vector3 localPosition = allBasesParent.transform.InverseTransformPoint(baseToCapture.transform.position);
-        GameObject newBase = Instantiate(capturedBasePrefab, localPosition, baseToCapture.transform.rotation, allBasesParent.transform);
         Destroy(baseToCapture);
 
         resourcesManager.AddResources(resource, resourceAmount);
@@ -30,14 +29,13 @@ public class CaptureBaseHandler : MonoBehaviour
         resourcesManager.AddResourcesPerSecond(resource, resourcesPerSecond);
         Debug.Log("Ressources par seconde ajoutées: " + resourcesPerSecond + " de type " + resource);
 
-        baseToCapture.GetComponent<BaseButtonHandler>().HideInfoPanel();
-
         // Enregistrer la position locale
         CapturedBaseData capturedBaseData = new CapturedBaseData(localPosition, resource, resourceAmount, resourcesPerSecond);
         capturedBasesList.Add(capturedBaseData);
         SaveCapturedBases();
         RestoreCapturedBases();
     }
+
 
 
     void SaveCapturedBases()
