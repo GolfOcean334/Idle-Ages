@@ -19,7 +19,9 @@ public class CaptureBaseHandler : MonoBehaviour
 
     public void CaptureBase(GameObject baseToCapture, ResourceType resource, int resourceAmount, int resourcesPerSecond)
     {
-        GameObject newBase = Instantiate(capturedBasePrefab, baseToCapture.transform.position, baseToCapture.transform.rotation, allBasesParent.transform); // Utilisation du parent correct
+        // Convertir la position en espace local avant d'instancier la base capturée
+        Vector3 localPosition = allBasesParent.transform.InverseTransformPoint(baseToCapture.transform.position);
+        GameObject newBase = Instantiate(capturedBasePrefab, localPosition, baseToCapture.transform.rotation, allBasesParent.transform);
         Destroy(baseToCapture);
 
         resourcesManager.AddResources(resource, resourceAmount);
@@ -30,16 +32,20 @@ public class CaptureBaseHandler : MonoBehaviour
 
         baseToCapture.GetComponent<BaseButtonHandler>().HideInfoPanel();
 
-        CapturedBaseData capturedBaseData = new CapturedBaseData(baseToCapture.transform.position, resource, resourceAmount, resourcesPerSecond);
+        // Enregistrer la position locale
+        CapturedBaseData capturedBaseData = new CapturedBaseData(localPosition, resource, resourceAmount, resourcesPerSecond);
         capturedBasesList.Add(capturedBaseData);
         SaveCapturedBases();
     }
 
+
     void SaveCapturedBases()
     {
         string json = JsonUtility.ToJson(new CapturedBaseDataList { CapturedBases = capturedBasesList });
+        Debug.Log("Saving captured bases: " + json); // Ajouter cette ligne pour vérifier
         File.WriteAllText(Application.persistentDataPath + "/capturedBases.json", json);
     }
+
 
     // Méthode pour charger les bases capturées
     void LoadCapturedBases()
@@ -48,23 +54,29 @@ public class CaptureBaseHandler : MonoBehaviour
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path);
+            Debug.Log("Loading captured bases: " + json); // Ajouter cette ligne pour vérifier
             CapturedBaseDataList loadedData = JsonUtility.FromJson<CapturedBaseDataList>(json);
             capturedBasesList = loadedData.CapturedBases;
         }
     }
+
 
     // Exemple de vérification des positions
     void RestoreCapturedBases()
     {
         foreach (var baseData in capturedBasesList)
         {
-            Debug.Log("Position chargée : " + baseData.Position);
-
-            GameObject newBase = Instantiate(capturedBasePrefab, baseData.Position, Quaternion.identity, allBasesParent.transform); // Utilisation du parent correct
+            // Convertir la position locale en position world space
+            Vector3 worldPosition = allBasesParent.transform.TransformPoint(baseData.Position);
+            Debug.Log("Restoring base at position: " + worldPosition); // Vérifiez les positions restaurées
+            GameObject newBase = Instantiate(capturedBasePrefab, worldPosition, Quaternion.identity, allBasesParent.transform);
             resourcesManager.AddResources(baseData.Resource, baseData.ResourceAmount);
             resourcesManager.AddResourcesPerSecond(baseData.Resource, baseData.ResourcesPerSecond);
         }
     }
+
+
+
 
 }
 
