@@ -52,6 +52,13 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("InventoryScene");
     }
 
+    public void ReturnForge()
+    {
+        SaveResources();
+        SaveUnits();
+        SceneManager.LoadScene("ForgeScene");
+    }
+
     public void QuitGame()
     {
         SaveUnits();

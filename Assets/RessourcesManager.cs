@@ -126,4 +126,24 @@ public class ResourcesManager : MonoBehaviour
     {
         SaveResources();
     }
+
+    public void LoseResources(int resourceType, int amount)
+    {
+        switch (resourceType)
+        {
+            case 1:
+                resource1 = Mathf.Max(resource1 - amount, 0);
+                break;
+            case 2:
+                resource2 = Mathf.Max(resource2 - amount, 0);
+                break;
+            case 3:
+                resource3 = Mathf.Max(resource3 - amount, 0);
+                break;
+            case 4:
+                resource4 = Mathf.Max(resource4 - amount, 0);
+                break;
+        }
+        UpdateResourceTexts();
+    }
 }

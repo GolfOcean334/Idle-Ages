@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
     [SerializeField] private InventoryDisplay display;
     [SerializeField] private InventoryData data;
-
+    public List<Item> items = new List<Item>();
     private InventoryContext context;
 
     private void Awake()
@@ -14,6 +15,30 @@ public class Inventory : MonoBehaviour
         data = new InventoryData(_slotCount);
 
         display.UpdateDisplay(data.items);
+
+        DontDestroyOnLoad(gameObject);
+
+    }
+    public void SaveInventory()
+    {
+        for (int i = 0; i < items.Count; i++)
+        {
+            PlayerPrefs.SetString("Item_" + i, JsonUtility.ToJson(items[i]));
+        }
+        PlayerPrefs.SetInt("ItemCount", items.Count);
+        PlayerPrefs.Save();
+    }
+
+    public void LoadInventory()
+    {
+        items.Clear();
+        int itemCount = PlayerPrefs.GetInt("ItemCount", 0);
+        for (int i = 0; i < itemCount; i++)
+        {
+            string itemJson = PlayerPrefs.GetString("Item_" + i);
+            Item item = JsonUtility.FromJson<Item>(itemJson);
+            items.Add(item);
+        }
     }
 
     public Item AddItem(Item _item)
@@ -46,3 +71,4 @@ public class Inventory : MonoBehaviour
     public Item[] Data => data.items;
     public InventoryContext Context => context;
 }
+
