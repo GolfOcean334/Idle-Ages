@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -9,52 +8,48 @@ public class Recherche : MonoBehaviour
     public int id;
     public TMP_Text TitleText;
     public TMP_Text DescText;
-    public int[] connectedResearch;
+    public List<Recherche> connectedResearchObjects; // Set in Inspector
 
     public void UpdateUI()
     {
+        // Update the title and description
         TitleText.text = $"{ReseachTree.reseachTree.ResearchName[id]}";
         DescText.text = $"{ReseachTree.reseachTree.ResearchDesc[id]}\nCost: 1 RP";
 
-        GetComponent<Image>().color = ReseachTree.reseachTree.isbuyed[id] > 0 ? Color.white : ReseachTree.reseachTree.ResearchPoint > 0 ? Color.green : Color.red;
+        // Update the color of the research item based on its purchase status
+        GetComponent<Image>().color = ReseachTree.reseachTree.isbuyed[id] > 0
+            ? Color.white
+            : CanBePurchased()
+                ? Color.green
+                : Color.red;
 
-        foreach (var connectedResearchId in connectedResearch)
+        // Toggle visibility of connected research and connections
+        foreach (var connectedResearch in connectedResearchObjects)
         {
-            bool isUnlocked = ReseachTree.reseachTree.isbuyed[id] > 0;
-            bool canBePurchased = ReseachTree.reseachTree.ResearchPoint > 0 && ReseachTree.reseachTree.isbuyed[connectedResearchId] == 0;
+            bool isPurchased = ReseachTree.reseachTree.isbuyed[id] > 0;
+            connectedResearch.gameObject.SetActive(isPurchased);
 
-            if (connectedResearchId >= 0 && connectedResearchId < ReseachTree.reseachTree.ResearchList.Count)
+            // Toggle visibility of connection line
+            int connectionIndex = connectedResearchObjects.IndexOf(connectedResearch);
+            if (connectionIndex >= 0 && connectionIndex < ReseachTree.reseachTree.Connectionlist.Count)
             {
-                ReseachTree.reseachTree.ResearchList[connectedResearchId].gameObject.SetActive(isUnlocked);
-            }
+                GameObject connection = ReseachTree.reseachTree.Connectionlist[connectionIndex];
+                connection.SetActive(isPurchased);
 
-            if (connectedResearchId >= 0 && connectedResearchId < ReseachTree.reseachTree.Connectionlist.Count)
-            {
-                GameObject connection = ReseachTree.reseachTree.Connectionlist[connectedResearchId];
-                Image connectionImage = connection.GetComponent<Image>();
-
-                if (isUnlocked)
+                if (isPurchased)
                 {
-                    connection.SetActive(true); // Activer la connexion
-                    if (ReseachTree.reseachTree.isbuyed[connectedResearchId] > 0)
-                    {
-                        connectionImage.color = Color.black; // Liaison entre deux technologies acquises
-                    }
-                    else if (canBePurchased)
-                    {
-                        connectionImage.color = Color.green; // Liaison entre une technologie acquise et une technologie qui peut �tre achet�e
-                    }
-                    else
-                    {
-                        connectionImage.color = Color.red; // Liaison entre une technologie acquise et une technologie qui ne peut pas �tre achet�e
-                    }
-                }
-                else
-                {
-                    connection.SetActive(false); // D�sactiver la liaison
+                    // Update the color of the connection line
+                    connection.GetComponent<Image>().color = ReseachTree.reseachTree.isbuyed[connectedResearch.id] > 0
+                        ? Color.black // Both are purchased
+                        : Color.green; // Connected item is purchasable
                 }
             }
         }
+    }
+
+    public bool CanBePurchased()
+    {
+        return ReseachTree.reseachTree.isbuyed[id] == 0 && ReseachTree.reseachTree.ResearchPoint > 0;
     }
 
     public void Buy()
@@ -63,27 +58,22 @@ public class Recherche : MonoBehaviour
 
         ReseachTree.reseachTree.ResearchPoint -= 1;
         ReseachTree.reseachTree.isbuyed[id] = 1;
-        
-        //ReseachTree.reseachTree.SaveGameState();
         ReseachTree.reseachTree.UpdateAllResearchUI();
 
-        // V�rifier si la recherche 1 a �t� achet�e pour augmenter la production de ressource viande
+        // Example: Check if a specific research increases production
         if (id == 0 || id == 1 || id == 2 || id == 6 || id == 17 || id == 18 || id == 20 || id == 21 || id == 24)
         {
             FindObjectOfType<ResourcesManager>().IncreaseResource1Production();
         }
 
-        // V�rifier si la recherche 1 a �t� achet�e pour augmenter la production de ressource pierre
         if (id == 1 || id == 27 || id == 28 || id == 29)
         {
             FindObjectOfType<ResourcesManager>().IncreaseResource2Production();
         }
 
-        // V�rifier si la recherche 1 a �t� achet�e pour augmenter la production de ressource bois
         if (id == 4 || id == 25 || id == 26)
         {
             FindObjectOfType<ResourcesManager>().IncreaseResource3Production();
         }
-
     }
 }
