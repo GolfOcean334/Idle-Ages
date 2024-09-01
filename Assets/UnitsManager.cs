@@ -121,17 +121,17 @@ public class UnitsManager : MonoBehaviour
 
     void UpdateUnitsT1Text()
     {
-        UnitsT1Text.text = "Units T1: " + playerStats.UnitsT1;
+        UnitsT1Text.text = "" + playerStats.UnitsT1;
     }
 
     void UpdateUnitsT2Text()
     {
-        UnitsT2Text.text = "Units T2: " + playerStats.UnitsT2;
+        UnitsT2Text.text = "" + playerStats.UnitsT2;
     }
 
     void UpdateUnitsT3Text()
     {
-        UnitsT3Text.text = "Units T3: " + playerStats.UnitsT3;
+        UnitsT3Text.text = "" + playerStats.UnitsT3;
     }
 
     public void UpdateLoadingBar(string unitType, float progress)
