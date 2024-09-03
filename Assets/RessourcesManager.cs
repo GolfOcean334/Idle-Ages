@@ -30,19 +30,6 @@ public class ResourcesManager : MonoBehaviour
         resource4Text.text = FormatResource(playerStats.resource4);
     }
 
-    void OnApplicationQuit()
-    {
-        playerStats.Save();
-    }
-
-    void OnApplicationPause(bool pauseStatus)
-    {
-        if (pauseStatus)
-        {
-            playerStats.Save();
-        }
-    }
-
     IEnumerator GenerateResources()
     {
         while (true)
