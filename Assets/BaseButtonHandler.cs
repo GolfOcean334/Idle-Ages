@@ -180,7 +180,9 @@ public class BaseButtonHandler : MonoBehaviour
 
             if (Random.value <= chanceOfVictory)
             {
-                captureBaseHandler.CaptureBase(gameObject, resourcesManager, resource, resourceAmount, resourcesPerSecond);
+                captureBaseHandler.CaptureBase(gameObject, resource, resourceAmount, resourcesPerSecond);
+                battlePanel.SetActive(false);
+                currentInfoPanel.SetActive(false);
                 Debug.Log("Le joueur a réussi à capturer la base.");
             }
             else
@@ -213,10 +215,6 @@ public class BaseButtonHandler : MonoBehaviour
         unitT1Slider.maxValue = playerStats.UnitsT1;
         unitT2Slider.maxValue = playerStats.UnitsT2;
         unitT3Slider.maxValue = playerStats.UnitsT3;
-
-        unitT1CountText.text = unitT1Slider.value + "/" + playerStats.UnitsT1;
-        unitT2CountText.text = unitT2Slider.value + "/" + playerStats.UnitsT2;
-        unitT3CountText.text = unitT3Slider.value + "/" + playerStats.UnitsT3;
     }
 
     public void HideInfoPanel()

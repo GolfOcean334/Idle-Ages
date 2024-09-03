@@ -145,6 +145,17 @@ public class EnemyBaseSpawner : MonoBehaviour
         }
     }
 
+    public void CaptureEnemyBase(Vector3 position)
+    {
+        // Trouvez et retirez la base capturée de la liste
+        var baseToRemove = enemyBaseDataList.Find(b => b.Position == position);
+        if (baseToRemove != null)
+        {
+            enemyBaseDataList.Remove(baseToRemove);
+            SaveEnemyBases();
+        }
+    }
+
     Vector3 GenerateRandomPosition()
     {
         Vector2 randomDirection = Random.insideUnitCircle.normalized;
@@ -222,6 +233,7 @@ public class EnemyBaseSpawner : MonoBehaviour
         File.WriteAllText(Application.persistentDataPath + "/enemyBases.json", json);
     }
 
+
     // Méthode pour charger les bases ennemies
     void LoadEnemyBases()
     {
@@ -233,6 +245,7 @@ public class EnemyBaseSpawner : MonoBehaviour
             enemyBaseDataList = loadedData.Bases;
         }
     }
+
 
     // Méthode pour restaurer les bases ennemies à partir des données chargées
     void RestoreEnemyBases()
