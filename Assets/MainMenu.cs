@@ -6,9 +6,20 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     [SerializeField] private PlayerStats playerStats;
-    // Variable statique pour stocker le nom de la scène précédente
     private static string previousScene;
 
+    public static int ScreenWidth = Screen.width;
+    public static int ScreenHeight = Screen.height;
+
+    private void Start()
+    {
+        if(ScreenWidth == Screen.width || ScreenHeight == Screen.height)
+        {
+            ScreenHeight = Screen.width - (640 * 2);
+            ScreenWidth = Screen.height - (360 * 2);
+            Screen.SetResolution(ScreenWidth, ScreenHeight, true);
+        }
+    }
     public void ReturnGame()
     {
         playerStats.Save();
