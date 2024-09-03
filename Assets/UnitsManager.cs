@@ -68,19 +68,6 @@ public class UnitsManager : MonoBehaviour
         UpdateUnitsT3Text();
     }
 
-    void OnApplicationQuit()
-    {
-        playerStats.Save();
-    }
-
-    void OnApplicationPause(bool pauseStatus)
-    {
-        if (pauseStatus)
-        {
-            playerStats.Save();
-        }
-    }
-
     void ChangeMultiplicator()
     {
         currentMultiplicatorIndex = (currentMultiplicatorIndex + 1) % multiplicators.Length;
@@ -122,6 +109,7 @@ public class UnitsManager : MonoBehaviour
     void UpdateUnitsT1Text()
     {
         UnitsT1Text.text = "" + playerStats.UnitsT1;
+        Debug.Log("Troupe généré: \n Troupe1 : " + playerStats.UnitsT1);
     }
 
     void UpdateUnitsT2Text()

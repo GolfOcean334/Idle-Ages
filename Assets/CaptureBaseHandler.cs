@@ -41,7 +41,6 @@ public class CaptureBaseHandler : MonoBehaviour
     void SaveCapturedBases()
     {
         string json = JsonUtility.ToJson(new CapturedBaseDataList { CapturedBases = capturedBasesList });
-        Debug.Log("Saving captured bases: " + json); // Ajouter cette ligne pour vérifier
         File.WriteAllText(Application.persistentDataPath + "/capturedBases.json", json);
     }
 
@@ -53,7 +52,6 @@ public class CaptureBaseHandler : MonoBehaviour
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path);
-            Debug.Log("Loading captured bases: " + json); // Ajouter cette ligne pour vérifier
             CapturedBaseDataList loadedData = JsonUtility.FromJson<CapturedBaseDataList>(json);
             capturedBasesList = loadedData.CapturedBases;
         }

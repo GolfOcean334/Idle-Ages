@@ -21,5 +21,7 @@ EditorBuildSettings:
     path: Assets/ResearchTreeMenu.unity
     guid: e480d83095b858945b87154a4abe83fd
   m_configObjects:
+    com.unity.adaptiveperformance.google.android.provider_settings: {fileID: 11400000, guid: 1d7ee11ad5da1af44814d4047094fd93, type: 2}
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: cedd599f8023d1444b2d395ef994dd5b, type: 2}
+    com.unity.adaptiveperformance.samsung.android.provider_settings: {fileID: 11400000, guid: 1ab3bfd786fc81849b9d1af492e7e897, type: 2}
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: c7a83538444907e478563cf22c7d4345, type: 2}
