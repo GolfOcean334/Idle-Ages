@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using System;
 
@@ -47,14 +48,14 @@ public class UnitsManager : MonoBehaviour
         playerStats.Load();
         playerStats.Initialize();
 
+        UpdateUnitsT1Text();
+        UpdateUnitsT2Text();
+        UpdateUnitsT3Text();
+
         buttonT1.onClick.AddListener(() => OnStartButtonClick("T1"));
         buttonT2.onClick.AddListener(() => OnStartButtonClick("T2"));
         buttonT3.onClick.AddListener(() => OnStartButtonClick("T3"));
         multiplicatorButton.onClick.AddListener(ChangeMultiplicator);
-
-        UpdateUnitsT1Text();
-        UpdateUnitsT2Text();
-        UpdateUnitsT3Text();
 
         multiplicatorButton.GetComponentInChildren<TextMeshProUGUI>().text = "x" + multiplicators[currentMultiplicatorIndex];
 
@@ -109,7 +110,6 @@ public class UnitsManager : MonoBehaviour
     void UpdateUnitsT1Text()
     {
         UnitsT1Text.text = "" + playerStats.UnitsT1;
-        Debug.Log("Troupe généré: \n Troupe1 : " + playerStats.UnitsT1);
     }
 
     void UpdateUnitsT2Text()
@@ -149,17 +149,8 @@ public class UnitsManager : MonoBehaviour
 
         if (cooldownText != null)
         {
-            // Formater le temps restant
             string formattedTime = FormatTime(totalTimeInSeconds);
-            if (totalTimeInSeconds > 0)
-            {
-                cooldownText.text = formattedTime;
-            }
-            else
-            {
-                cooldownText.text = string.Empty;
-            }
-            
+            cooldownText.text = totalTimeInSeconds > 0 ? formattedTime : string.Empty;
         }
 
         if (loadingBar != null)
@@ -168,7 +159,6 @@ public class UnitsManager : MonoBehaviour
         }
     }
 
-    // Fonction de formatage du temps
     private string FormatTime(float seconds)
     {
         if (seconds >= 3600)
@@ -189,6 +179,4 @@ public class UnitsManager : MonoBehaviour
             return $"{Mathf.FloorToInt(seconds)}s";
         }
     }
-
-
 }

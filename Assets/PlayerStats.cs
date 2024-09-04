@@ -15,9 +15,9 @@ public class PlayerStats : ScriptableObject
     public int UnitsT2;
     public int UnitsT3;
 
-    public int resource1;
-    public int resource2;
-    public int resource3;
+    public int resource1 = 500;
+    public int resource2 = 500;
+    public int resource3 = 500;
     public int resource4;
 
     public int resources1PerSecond = 0;

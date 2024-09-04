@@ -1,25 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour
+public class MainMenu : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] private PlayerStats playerStats;
     private static string previousScene;
 
-    public static int ScreenWidth = Screen.width;
-    public static int ScreenHeight = Screen.height;
 
-    private void Start()
+    public void OnPointerClick(PointerEventData eventData)
     {
-        if(ScreenWidth == Screen.width || ScreenHeight == Screen.height)
+        // Log pour vérifier que le clic fonctionne
+        Debug.Log("Button clicked: " + eventData.pointerCurrentRaycast.gameObject.name);
+
+        // Exécutez des actions en fonction du bouton cliqué
+        if (eventData.pointerCurrentRaycast.gameObject.name == "ReturnGameButton")
         {
-            ScreenHeight = Screen.width - (640 * 2);
-            ScreenWidth = Screen.height - (360 * 2);
-            Screen.SetResolution(ScreenWidth, ScreenHeight, true);
+            ReturnGame();
+        }
+        else if (eventData.pointerCurrentRaycast.gameObject.name == "ReturnSettingButton")
+        {
+            ReturnSetting();
+        }
+        else if (eventData.pointerCurrentRaycast.gameObject.name == "ReturnMapButton")
+        {
+            ReturnMap();
+        }
+        else if (eventData.pointerCurrentRaycast.gameObject.name == "ReturnUnitsCreationButton")
+        {
+            ReturnUnitsCreation();
+        }
+        else if (eventData.pointerCurrentRaycast.gameObject.name == "ReturnTechnoTreeButton")
+        {
+            ReturnTechnoTree();
+        }
+        else if (eventData.pointerCurrentRaycast.gameObject.name == "QuitGameButton")
+        {
+            QuitGame();
         }
     }
+
     public void ReturnGame()
     {
         playerStats.Save();
