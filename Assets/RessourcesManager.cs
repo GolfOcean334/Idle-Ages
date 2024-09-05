@@ -19,7 +19,6 @@ public class ResourcesManager : MonoBehaviour
     {
         playerStats.Load();
         StartCoroutine(GenerateResources());
-        SceneManager.activeSceneChanged += OnSceneChanged;
     }
 
     void Update()
@@ -97,10 +96,6 @@ public class ResourcesManager : MonoBehaviour
         }
     }
 
-    void OnSceneChanged(Scene current, Scene next)
-    {
-        playerStats.Save();
-    }
     public void IncreaseResource1Production()
     {
         playerStats.resources1PerSecond = Mathf.FloorToInt(playerStats.resources1PerSecond + 1f);

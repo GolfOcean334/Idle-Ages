@@ -104,7 +104,6 @@ public class UnitsManager : MonoBehaviour
             playerStats.resource3 -= resourceCost;
             playerStats.EnqueueUnits("T3", multiplier);
         }
-        playerStats.Save();
     }
 
     void UpdateUnitsT1Text()
