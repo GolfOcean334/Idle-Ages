@@ -277,9 +277,9 @@ MonoBehaviour:
   ResearchDesc: []
   Connectionlist: []
   ConnectionHolder: {fileID: 146544634}
+  ResearchPoint: 0
   ResearchList: []
   ResearchHolder: {fileID: 653559089}
-  ResearchPoint: 0
 --- !u!1001 &91914896
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8449,9 +8449,9 @@ MonoBehaviour:
   ResearchDesc: []
   Connectionlist: []
   ConnectionHolder: {fileID: 146544634}
+  ResearchPoint: 0
   ResearchList: []
   ResearchHolder: {fileID: 653559089}
-  ResearchPoint: 0
 --- !u!1 &1821488790
 GameObject:
   m_ObjectHideFlags: 0
