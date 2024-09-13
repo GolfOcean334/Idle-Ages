@@ -7,6 +7,7 @@ public class CaptureBaseHandler : MonoBehaviour
 {
     [SerializeField] private GameObject capturedBasePrefab;
     [SerializeField] private ResourcesManager resourcesManager;
+    [SerializeField] private PlayerStats playerStats;
     [SerializeField] private GameObject allBasesParent;
 
     private List<CapturedBaseData> capturedBasesList = new List<CapturedBaseData>();
@@ -29,6 +30,7 @@ public class CaptureBaseHandler : MonoBehaviour
         resourcesManager.AddResourcesPerSecond(resource, resourcesPerSecond);
         Debug.Log("Ressources par seconde ajoutées: " + resourcesPerSecond + " de type " + resource);
 
+        ReseachTree.reseachTree.ResearchPoint += 1;
         // Enregistrer la position locale
         CapturedBaseData capturedBaseData = new CapturedBaseData(localPosition, resource, resourceAmount, resourcesPerSecond);
         capturedBasesList.Add(capturedBaseData);

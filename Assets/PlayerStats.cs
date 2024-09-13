@@ -190,6 +190,7 @@ public class PlayerStats : ScriptableObject
             resources2PerSecond = resources2PerSecond,
             resources3PerSecond = resources3PerSecond,
             resources4PerSecond = resources4PerSecond,
+            ResearchPoint = ReseachTree.reseachTree.ResearchPoint,
             LastSaveTime = DateTime.Now.ToBinary().ToString()
         };
 
@@ -244,6 +245,8 @@ public class PlayerStats : ScriptableObject
             resources2PerSecond = data.resources2PerSecond;
             resources3PerSecond = data.resources3PerSecond;
             resources4PerSecond = data.resources4PerSecond;
+
+            ReseachTree.reseachTree.ResearchPoint = data.ResearchPoint;
 
             if (long.TryParse(data.LastSaveTime, out long lastSaveTimeBinary))
             {

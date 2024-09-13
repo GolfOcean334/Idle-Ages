@@ -17,5 +17,6 @@ public class PlayerData
     public int resources2PerSecond;
     public int resources3PerSecond;
     public int resources4PerSecond;
+    public int ResearchPoint;
     public string LastSaveTime;
 }

@@ -57,6 +57,7 @@ public class Recherche : MonoBehaviour
         if (ReseachTree.reseachTree.ResearchPoint < 1 || ReseachTree.reseachTree.isbuyed[id] == 1) return;
 
         ReseachTree.reseachTree.ResearchPoint -= 1;
+        //playerStats.AddResearchPoint(-1);
         ReseachTree.reseachTree.isbuyed[id] = 1;
         ReseachTree.reseachTree.UpdateAllResearchUI();
 

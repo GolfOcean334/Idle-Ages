@@ -3335,6 +3335,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   capturedBasePrefab: {fileID: 2848228737237606631, guid: 1fedc7dffdbd6364d9c3210515c0f815, type: 3}
   resourcesManager: {fileID: 166674954}
+  playerStats: {fileID: 11400000, guid: 0406183f2d2a2c84f8a612c43c46b64d, type: 2}
   allBasesParent: {fileID: 1630458354}
 --- !u!114 &1045926083
 MonoBehaviour:

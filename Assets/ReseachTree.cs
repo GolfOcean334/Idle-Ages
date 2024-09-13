@@ -12,10 +12,10 @@ public class ReseachTree : MonoBehaviour
     public List<GameObject> Connectionlist;
     public GameObject ConnectionHolder;
 
+    public int ResearchPoint;
+
     public List<Recherche> ResearchList;
     public GameObject ResearchHolder;
-
-    public int ResearchPoint;
 
     private void Awake()
     {
@@ -26,7 +26,6 @@ public class ReseachTree : MonoBehaviour
     {
         isbuyed = new int[37];
         //LoadGameState();
-        ResearchPoint = 1000000;
 
         ResearchName = new[] {
             "Feu maîtrisé",
