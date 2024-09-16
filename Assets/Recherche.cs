@@ -49,14 +49,14 @@ public class Recherche : MonoBehaviour
 
     public bool CanBePurchased()
     {
-        return ReseachTree.reseachTree.isbuyed[id] == 0 && ReseachTree.reseachTree.ResearchPoint > 0;
+        return ReseachTree.reseachTree.isbuyed[id] == 0 && PlayerStats.playerStats.ResearchPoint > 0;
     }
 
     public void Buy()
     {
-        if (ReseachTree.reseachTree.ResearchPoint < 1 || ReseachTree.reseachTree.isbuyed[id] == 1) return;
+        if (PlayerStats.playerStats.ResearchPoint < 1 || ReseachTree.reseachTree.isbuyed[id] == 1) return;
 
-        ReseachTree.reseachTree.ResearchPoint -= 1;
+        PlayerStats.playerStats.ResearchPoint -= 1;
         //playerStats.AddResearchPoint(-1);
         ReseachTree.reseachTree.isbuyed[id] = 1;
         ReseachTree.reseachTree.UpdateAllResearchUI();

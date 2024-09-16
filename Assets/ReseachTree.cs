@@ -12,8 +12,6 @@ public class ReseachTree : MonoBehaviour
     public List<GameObject> Connectionlist;
     public GameObject ConnectionHolder;
 
-    public int ResearchPoint;
-
     public List<Recherche> ResearchList;
     public GameObject ResearchHolder;
 
