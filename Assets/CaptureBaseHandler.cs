@@ -67,7 +67,7 @@ public class CaptureBaseHandler : MonoBehaviour
         {
             // Convertir la position locale en position world space
             Vector3 worldPosition = allBasesParent.transform.TransformPoint(baseData.Position);
-            Debug.Log("Restoring base at position: " + worldPosition); // Vérifiez les positions restaurées
+            Debug.Log("Restoring base at position: " + worldPosition);
             GameObject newBase = Instantiate(capturedBasePrefab, worldPosition, Quaternion.identity, allBasesParent.transform);
             resourcesManager.AddResources(baseData.Resource, baseData.ResourceAmount);
             resourcesManager.AddResourcesPerSecond(baseData.Resource, baseData.ResourcesPerSecond);
@@ -84,7 +84,7 @@ public class CaptureBaseHandler : MonoBehaviour
 public class CapturedBaseData
 {
     public Vector3 Position;
-    public ResourceType Resource; // Assurez-vous que ResourceType est défini quelque part dans votre projet
+    public ResourceType Resource;
     public int ResourceAmount;
     public int ResourcesPerSecond;
 
