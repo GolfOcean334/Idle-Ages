@@ -1,13 +1,21 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ReseachTree : MonoBehaviour
 {
     public static ReseachTree reseachTree;
 
+    private string SaveFilePath => Path.Combine(Application.persistentDataPath, "playerSave.json");
+
     public int[] isbuyed;
     public string[] ResearchName;
     public string[] ResearchDesc;
+
+    public int ResearchPoint;
+
 
     public List<GameObject> Connectionlist;
     public GameObject ConnectionHolder;
@@ -26,29 +34,32 @@ public class ReseachTree : MonoBehaviour
         InitializeConnections();
         AssignResearchIDs();
         UpdateAllResearchUI();
+
+        Load();
     }
 
     private void InitializeResearchTree()
     {
         isbuyed = new int[37];
-        ResearchPoint = 10000;
+
+        ResearchPoint = 1;
 
         ResearchName = new[]
-        {
-            "Feu ma�tris�", "Fabrication d'outils en pierre", "Fabrication d'armes",
-            "Navigation rudimentaire", "Technologie d'abattage d'arbres am�lior�e",
-            "Outils de taille de pierre sp�cialis�s", "Techniques de chasse",
+            {
+            "Feu maetrise", "Fabrication d'outils en pierre", "Fabrication d'armes",
+            "Navigation rudimentaire", "Technologie d'abattage d'arbres amelioree",
+            "Outils de taille de pierre specialises", "Techniques de chasse",
             "Construction de structure simples", "Guerrier", "Lancier",
             "Construction de boucliers rudimentaires", "Formation de groupes de chasseurs-guerriers",
-            "D�veloppement de signaux de communication", "Techniques de camouflage",
-            "Fabrication de pointes de fl�ches am�lior�es", "Arm�e pr�historique",
-            "Cavalier", "Techniques de p�che", "Domestication des animaux",
+            "Developpement de signaux de communication", "Techniques de camouflage",
+            "Fabrication de pointes de fleches ameliorees", "Armee prehistorique",
+            "Cavalier", "Techniques de peche", "Domestication des animaux",
             "Poterie rudimentaire", "Techniques de conservation des aliments",
-            "�levage de plantes comestibles", "R�seaux de routes", "Technique de collecte de l'eau",
-            "Agriculture primitive", "Syst�me de poulies pour le transport du bois",
-            "Technologie de coupe du bois sous l'eau", "Techniques d'extraction mini�re",
-            "Syst�mes de grappins pour l'extraction de pierre", "Mines de silex",
-            "Antiquit�", "Invention de l'�criture", "Roue", "M�tallurgie",
+            "elevage de plantes comestibles", "Reseaux de routes", "Technique de collecte de l'eau",
+            "Agriculture primitive", "Systeme de poulies pour le transport du bois",
+            "Technologie de coupe du bois sous l'eau", "Techniques d'extraction miniere",
+            "Systemes de grappins pour l'extraction de pierre", "Mines de silex",
+            "Antiquite", "Invention de l'ecriture", "Roue", "Metallurgie",
             "Construction navale", "Astronomie ancienne", "Cartographie primitive"
         };
 
@@ -98,6 +109,40 @@ public class ReseachTree : MonoBehaviour
         foreach (var recherche in ResearchList)
         {
             recherche.UpdateUI();
+        }
+
+        Save();
+    }
+
+
+    public void Save()
+    {
+        // Crée une instance de PlayerData avec les données actuelles
+        PlayerData data = new PlayerData
+        {
+            ResearchPoint = ResearchPoint,
+        };
+
+        // Sérialiser les données en JSON
+        string jsonData = JsonUtility.ToJson(data, true);
+
+        // Écrire les données JSON dans un fichier
+        File.WriteAllText(SaveFilePath, jsonData);
+
+        Debug.Log("Données sauvegardées dans " + SaveFilePath);
+    }
+
+    public void Load()
+    {
+        if (File.Exists(SaveFilePath))
+        {
+            // Lire les données JSON du fichier
+            string jsonData = File.ReadAllText(SaveFilePath);
+
+            // Désérialiser les données JSON en une instance de PlayerData
+            PlayerData data = JsonUtility.FromJson<PlayerData>(jsonData);
+
+            ResearchPoint = data.ResearchPoint;
         }
     }
 }
