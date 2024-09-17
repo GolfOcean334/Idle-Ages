@@ -15,8 +15,6 @@ public class ReseachTree : MonoBehaviour
     public List<Recherche> ResearchList;
     public GameObject ResearchHolder;
 
-    public int ResearchPoint;
-
     private void Awake()
     {
         reseachTree = this;
@@ -37,20 +35,20 @@ public class ReseachTree : MonoBehaviour
 
         ResearchName = new[]
         {
-            "Feu maîtrisé", "Fabrication d'outils en pierre", "Fabrication d'armes",
-            "Navigation rudimentaire", "Technologie d'abattage d'arbres améliorée",
-            "Outils de taille de pierre spécialisés", "Techniques de chasse",
+            "Feu maï¿½trisï¿½", "Fabrication d'outils en pierre", "Fabrication d'armes",
+            "Navigation rudimentaire", "Technologie d'abattage d'arbres amï¿½liorï¿½e",
+            "Outils de taille de pierre spï¿½cialisï¿½s", "Techniques de chasse",
             "Construction de structure simples", "Guerrier", "Lancier",
             "Construction de boucliers rudimentaires", "Formation de groupes de chasseurs-guerriers",
-            "Développement de signaux de communication", "Techniques de camouflage",
-            "Fabrication de pointes de flèches améliorées", "Armée préhistorique",
-            "Cavalier", "Techniques de pêche", "Domestication des animaux",
+            "Dï¿½veloppement de signaux de communication", "Techniques de camouflage",
+            "Fabrication de pointes de flï¿½ches amï¿½liorï¿½es", "Armï¿½e prï¿½historique",
+            "Cavalier", "Techniques de pï¿½che", "Domestication des animaux",
             "Poterie rudimentaire", "Techniques de conservation des aliments",
-            "Élevage de plantes comestibles", "Réseaux de routes", "Technique de collecte de l'eau",
-            "Agriculture primitive", "Système de poulies pour le transport du bois",
-            "Technologie de coupe du bois sous l'eau", "Techniques d'extraction minière",
-            "Systèmes de grappins pour l'extraction de pierre", "Mines de silex",
-            "Antiquité", "Invention de l'écriture", "Roue", "Métallurgie",
+            "ï¿½levage de plantes comestibles", "Rï¿½seaux de routes", "Technique de collecte de l'eau",
+            "Agriculture primitive", "Systï¿½me de poulies pour le transport du bois",
+            "Technologie de coupe du bois sous l'eau", "Techniques d'extraction miniï¿½re",
+            "Systï¿½mes de grappins pour l'extraction de pierre", "Mines de silex",
+            "Antiquitï¿½", "Invention de l'ï¿½criture", "Roue", "Mï¿½tallurgie",
             "Construction navale", "Astronomie ancienne", "Cartographie primitive"
         };
 
