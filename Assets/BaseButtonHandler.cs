@@ -108,10 +108,10 @@ public class BaseButtonHandler : MonoBehaviour
         else
         {
             currentInfoPanel.SetActive(true);
-            currentPowerEnemiesText.text = "Puissance: " + FormatPower(power);
-            currentResourceEnemiesText.text = "Ressource: " + resource.ToString() + "\nQuantité: " + resourceAmount;
+            currentPowerEnemiesText.text = FormatPower(power);
+            currentResourceEnemiesText.text = resource.ToString() + " " + resourceAmount;
             currentUnitsEnemyText.text = string.Join(", ", unitsEnemies);
-            currentresourcesPerSecondText.text = "Ressource par seconde: " + resourcesPerSecond.ToString();
+            currentresourcesPerSecondText.text = resourcesPerSecond.ToString();
             currentBase = this;
 
             // Calculer le prix pour lancer le combat
@@ -153,7 +153,7 @@ public class BaseButtonHandler : MonoBehaviour
         if (currentChanceOfVictoryText != null)
         {
             currentChanceOfVictoryText.gameObject.SetActive(true);
-            currentChanceOfVictoryText.text = "Chance de victoire: " + (chanceOfVictory * 100).ToString("F1") + "%";
+            currentChanceOfVictoryText.text = (chanceOfVictory * 100).ToString("F1") + "%";
         }
         else
         {
