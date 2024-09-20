@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4da2e368ec4a156449d5d6b777c20831, type: 3}
+  m_Name: test
+  m_EditorClassIdentifier: 
+  itemName: tedt
+  stackMaxCount: 1
+  icon: {fileID: 21300000, guid: 79bcd20dc15bccc46a4f6240c6aa53bf, type: 3}
+  durability: 75
+  Stat1: 5
+  Stat2: 12
+  TypeStat1: 2
+  TypeStat2: 2
+  StatPerc: 0.083962806
+  title: Equipement_144
+  description: Description_540
+  price: 413
+  priceType: 1

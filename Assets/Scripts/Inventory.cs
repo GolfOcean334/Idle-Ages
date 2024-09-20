@@ -1,8 +1,17 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO; // Ajout de l'espace de noms System.IO
+using Debug = UnityEngine.Debug; // Alias pour UnityEngine.Debug
+using Console = System.Diagnostics.Debug; // Alias pour System.Diagnostics.Debug
 
 public class Inventory : MonoBehaviour
 {
+    public static Inventory Instance { get; private set; }
+
     [SerializeField] private InventoryDisplay display;
     [SerializeField] private InventoryData data;
     public List<Item> items = new List<Item>();
@@ -16,34 +25,26 @@ public class Inventory : MonoBehaviour
 
         display.UpdateDisplay(data.items);
 
-        DontDestroyOnLoad(gameObject);
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // Assurez-vous que l'objet persiste entre les scènes
+            Debug.Log("Inventory persiste entre les scènes.");
+
+
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
 
     }
-    public void SaveInventory()
-    {
-        for (int i = 0; i < items.Count; i++)
-        {
-            PlayerPrefs.SetString("Item_" + i, JsonUtility.ToJson(items[i]));
-        }
-        PlayerPrefs.SetInt("ItemCount", items.Count);
-        PlayerPrefs.Save();
-    }
 
-    public void LoadInventory()
-    {
-        items.Clear();
-        int itemCount = PlayerPrefs.GetInt("ItemCount", 0);
-        for (int i = 0; i < itemCount; i++)
-        {
-            string itemJson = PlayerPrefs.GetString("Item_" + i);
-            Item item = JsonUtility.FromJson<Item>(itemJson);
-            items.Add(item);
-        }
-    }
+
 
     public Item AddItem(Item _item)
     {
-        if(!data.SlotAvailable(_item)) return _item;
+        if (!data.SlotAvailable(_item)) return _item;
 
         data.AddItem(ref _item);
 
@@ -71,4 +72,3 @@ public class Inventory : MonoBehaviour
     public Item[] Data => data.items;
     public InventoryContext Context => context;
 }
-

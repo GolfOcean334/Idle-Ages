@@ -1,8 +1,20 @@
+using System;
+using System.Collections.Generic; // Ajout de l'espace de noms System.Collections.Generic
+
+[Serializable]
 public class InventoryData
 {
     public InventoryData(int _slotCount)
     {
         items = new Item[_slotCount];
+    }
+
+    public List<Item> saveditems;
+
+    public InventoryData(List<Item> items)
+    {
+        this.saveditems = items;
+        this.items = items.ToArray(); // Conversion de la liste en tableau
     }
 
     public Item[] items { private set; get; }
@@ -21,7 +33,7 @@ public class InventoryData
     {
         for (int i = 0; i < items.Length; i++)
         {
-            if (_itemToAdd.Empty) return;//Finished
+            if (_itemToAdd.Empty) return; // Finished
 
             if (items[i].AvailableFor(_itemToAdd))
             {

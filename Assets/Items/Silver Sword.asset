@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4da2e368ec4a156449d5d6b777c20831, type: 3}
+  m_Name: Silver Sword
+  m_EditorClassIdentifier: 
+  itemName: Silver Sword
+  stackMaxCount: 1
+  icon: {fileID: 21300000, guid: c993edc074874de44874a5781d660dc0, type: 3}
+  durability: 179
+  Stat1: 28
+  Stat2: 34
+  TypeStat1: 2
+  TypeStat2: 3
+  StatPerc: 0.051232845
+  title: Silver Sword
+  description: A Sharp silver Sword
+  price: 1467
+  priceType: 2
