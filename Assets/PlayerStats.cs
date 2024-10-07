@@ -78,6 +78,49 @@ public class PlayerStats : ScriptableObject
         return Mathf.RoundToInt(power);
     }
 
+    public void EquipItem(Equipement item)
+    {
+        if (inventoryContext.EquipItem(item))
+        {
+            UpdateUnitStats();
+        }
+    }
+
+    public void UnequipItem(Equipement item)
+    {
+        if (inventoryContext.UnequipItem(item))
+        {
+            UpdateUnitStats();
+        }
+    }
+
+    private void UpdateUnitStats()
+    {
+        // Réinitialiser les stats des unités
+        ResetUnitStats();
+
+        // Appliquer les bonus des items équipés
+        foreach (var item in inventoryContext.equippedItems)
+        {
+            if (item != null)
+            {
+                ApplyItemStats(item);
+            }
+        }
+    }
+
+    private void ResetUnitStats()
+    {
+        // Réinitialiser les stats des unités ici
+    }
+
+    private void ApplyItemStats(Equipement item)
+    {
+        // Appliquer les stats de l'item aux unités
+        item.ApplyStats(inventoryContext);
+    }
+
+
     public void Initialize()
     {
         StartProduction();
