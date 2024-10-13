@@ -1,34 +1,28 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
+using System.IO;
 using UnityEngine;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO; // Ajout de l'espace de noms System.IO
-using Debug = UnityEngine.Debug; // Alias pour UnityEngine.Debug
-using Console = System.Diagnostics.Debug; // Alias pour System.Diagnostics.Debug
 
 public class InventoryManager : MonoBehaviour
 {
     private string saveFilePath;
-    private InventoryData currentInventory;
 
     private void Awake()
     {
         saveFilePath = Path.Combine(UnityEngine.Application.persistentDataPath, "inventory.json");
-        //LoadInventory();
+        LoadInventory();
     }
 
     private void OnApplicationQuit()
     {
-        //SaveInventory();
+        SaveInventory();
     }
 
     public void SaveInventory()
     {
         try
         {
-            string json = JsonUtility.ToJson(currentInventory);
+            InventoryData inventoryData = new InventoryData(10); // Remplacez par votre méthode pour obtenir l'inventaire actuel
+            string json = JsonUtility.ToJson(inventoryData);
             File.WriteAllText(saveFilePath, json);
             UnityEngine.Debug.Log("Inventory saved successfully.");
         }
@@ -45,13 +39,12 @@ public class InventoryManager : MonoBehaviour
             if (File.Exists(saveFilePath))
             {
                 string json = File.ReadAllText(saveFilePath);
-                currentInventory = JsonUtility.FromJson<InventoryData>(json);
-                DisplayInventory();
+                InventoryData inventoryData = JsonUtility.FromJson<InventoryData>(json);
+                // Remplacez par votre méthode pour afficher l'inventaire
                 UnityEngine.Debug.Log("Inventory loaded successfully.");
             }
             else
             {
-                currentInventory = new InventoryData(10); // Initialiser avec un inventaire vide
                 UnityEngine.Debug.Log("No inventory file found, starting with an empty inventory.");
             }
         }
@@ -63,22 +56,9 @@ public class InventoryManager : MonoBehaviour
 
     public void AddBoughtItem(Item newItem)
     {
-        currentInventory.AddItem(ref newItem);
+        // Ajoutez l'item à l'inventaire
+        InventoryData inventoryData = new InventoryData(10); // Remplacez par votre méthode pour obtenir l'inventaire actuel
+        inventoryData.AddItem(ref newItem);
         SaveInventory();
     }
-
-    public InventoryData GetCurrentInventory()
-    {
-        return currentInventory;
-    }
-
-    private void DisplayInventory()
-    {
-        // Ajoutez ici la logique pour afficher l'inventaire
-        foreach (var item in currentInventory.items)
-        {
-            UnityEngine.Debug.Log($"Item: {item.Title}, Count: {item.Count}");
-        }
-    }
 }
-

@@ -41,13 +41,15 @@ public class MainMenu : MonoBehaviour
 
     public void ReturnInventory()
     {
-
+        SaveResources();
+        SaveUnits();
         SceneManager.LoadScene("InventoryScene");
     }
 
     public void ReturnForge()
     {
-
+        SaveResources();
+        SaveUnits();
         SceneManager.LoadScene("ForgeScene");
     }
 

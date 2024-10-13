@@ -244,7 +244,7 @@ public class PlayerStats : ScriptableObject
         // Écrire les données JSON dans un fichier
         File.WriteAllText(SaveFilePath, jsonData);
 
-        //Debug.Log("Données sauvegardées dans " + SaveFilePath);
+        Debug.Log("Données sauvegardées dans " + SaveFilePath);
     }
 
     public void Load()

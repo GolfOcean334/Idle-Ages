@@ -111,18 +111,19 @@ public class ResourcesManager : MonoBehaviour
         switch (resourceType)
         {
             case 1:
-                playerStats.resource1 = Mathf.Max(playerStats.resource1 - amount, 0);
+                resource1 = Mathf.Max(resource1 - amount, 0);
                 break;
             case 2:
-                playerStats.resource2 = Mathf.Max(playerStats.resource2 - amount, 0);
+                resource2 = Mathf.Max(resource2 - amount, 0);
                 break;
             case 3:
-                playerStats.resource3 = Mathf.Max(playerStats.resource3 - amount, 0);
+                resource3 = Mathf.Max(resource3 - amount, 0);
                 break;
             case 4:
-                playerStats.resource4 = Mathf.Max(playerStats.resource4 - amount, 0);
+                resource4 = Mathf.Max(resource4 - amount, 0);
                 break;
         }
+        UpdateResourceTexts();
     }
     public void IncreaseResource3Production()
     {

@@ -3,14 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement; // Importer SceneManager
 using Debug = UnityEngine.Debug; // Alias pour UnityEngine.Debug
 using Console = System.Diagnostics.Debug; // Alias pour System.Diagnostics.Debug
 
 public class ShopManager : MonoBehaviour
 {
-    [SerializeField] private PlayerStats playerStats;
-
     public Equipement[] shopItemSO;
     public ShopTemplate[] shopPanels;
     public GameObject[] shopPanelGO;
@@ -18,15 +15,11 @@ public class ShopManager : MonoBehaviour
 
     private ResourcesManager resourcesManager;
     private Inventory inventory;
-    public InventoryManager inventoryManager;
 
     void Start()
     {
         resourcesManager = FindObjectOfType<ResourcesManager>();
         inventory = Inventory.Instance;
-
-        // Charger la scène Inventory
-        StartCoroutine(LoadInventoryScene());
 
         if (resourcesManager == null)
         {
@@ -45,26 +38,6 @@ public class ShopManager : MonoBehaviour
         LoadPanels();
     }
 
-    IEnumerator LoadInventoryScene()
-    {
-        // Charger la scène Inventory de manière asynchrone
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("InventoryScene", LoadSceneMode.Additive);
-
-        // Attendre que la scène soit complètement chargée
-        while (!asyncLoad.isDone)
-        {
-            yield return null;
-        }
-
-        // Trouver InventoryManager dans la scène chargée
-        inventoryManager = FindObjectOfType<InventoryManager>();
-
-        if (inventoryManager == null)
-        {
-            Debug.LogError("InventoryManager n'a pas été trouvé dans la scène Inventory !");
-        }
-    }
-
     void Update()
     {
         for (int i = 0; i < shopItemSO.Length; i++)
@@ -77,78 +50,71 @@ public class ShopManager : MonoBehaviour
     {
         if (shopItemSO[index].PriceType == 1)
         {
-            if (shopItemSO[index].Price >= playerStats.resource1)
+            if (shopItemSO[index].Price <= resourcesManager.resource1)
             {
-                myPurchaseBtns[index].interactable = false;
+                myPurchaseBtns[index].interactable = true;
             }
         }
         else if (shopItemSO[index].PriceType == 2)
         {
-            if (shopItemSO[index].Price >= playerStats.resource2)
+            if (shopItemSO[index].Price <= resourcesManager.resource2)
             {
-                myPurchaseBtns[index].interactable = false;
+                myPurchaseBtns[index].interactable = true;
             }
         }
         else if (shopItemSO[index].PriceType == 3)
         {
-            if (shopItemSO[index].Price >= playerStats.resource3)
+            if (shopItemSO[index].Price <= resourcesManager.resource3)
             {
-                myPurchaseBtns[index].interactable = false;
+                myPurchaseBtns[index].interactable = true;
 
             }
         }
         else if (shopItemSO[index].PriceType == 4)
         {
-            if (shopItemSO[index].Price >= playerStats.resource4)
+            if (shopItemSO[index].Price <= resourcesManager.resource4)
             {
-                myPurchaseBtns[index].interactable = false;
+                myPurchaseBtns[index].interactable = true;
 
             }
         }
         else
         {
-            myPurchaseBtns[index].interactable = true;
+            myPurchaseBtns[index].interactable = false;
         }
     }
 
     public void buyItem(int index)
     {
-        if (resourcesManager == null || inventory == null || inventoryManager == null)
+        if (resourcesManager == null || inventory == null)
         {
-            Debug.LogError("ResourcesManager, Inventory ou InventoryManager n'est pas initialisé !");
+            Debug.LogError("ResourcesManager ou Inventory n'est pas initialisé !");
             return;
         }
 
         if (shopItemSO[index].PriceType == 1)
         {
-            playerStats.resource1 -= shopItemSO[index].Price;
+            resourcesManager.resource1 -= shopItemSO[index].Price;
             inventory.AddItem(ConvertToItem(shopItemSO[index])); // Convertir et ajouter l'item à l'inventaire du joueur
             Debug.Log("Item acheté");
-            //inventoryManager.SaveInventory();
         }
         else if (shopItemSO[index].PriceType == 2)
         {
-            playerStats.resource2 -= shopItemSO[index].Price;
+            resourcesManager.resource2 -= shopItemSO[index].Price;
             inventory.AddItem(ConvertToItem(shopItemSO[index])); // Convertir et ajouter l'item à l'inventaire du joueur
             Debug.Log("Item acheté");
-            //inventoryManager.SaveInventory();
-
         }
         else if (shopItemSO[index].PriceType == 3)
         {
-            playerStats.resource3 -= shopItemSO[index].Price;
+            resourcesManager.resource3 -= shopItemSO[index].Price;
             inventory.AddItem(ConvertToItem(shopItemSO[index])); // Convertir et ajouter l'item à l'inventaire du joueur
             Debug.Log("Item acheté");
-            //inventoryManager.SaveInventory();
-
         }
         else if (shopItemSO[index].PriceType == 4)
         {
-            playerStats.resource4 -= shopItemSO[index].Price;
+            resourcesManager.resource4 -= shopItemSO[index].Price;
             inventory.AddItem(ConvertToItem(shopItemSO[index])); // Convertir et ajouter l'item à l'inventaire du joueur
             Debug.Log("Item acheté");
-            //inventoryManager.SaveInventory();
-
         }
     }
 
