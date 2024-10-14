@@ -19,11 +19,6 @@ public class Inventory : MonoBehaviour
 
     private void Awake()
     {
-        int _slotCount = display.Initialize(this);
-
-        data = new InventoryData(_slotCount);
-
-        display.UpdateDisplay(data.items);
 
         if (Instance == null)
         {
@@ -36,7 +31,16 @@ public class Inventory : MonoBehaviour
         else
         {
             Destroy(gameObject);
+            return;
         }
+
+        int _slotCount = display.Initialize(this);
+
+        data = new InventoryData(_slotCount);
+
+        display.UpdateDisplay(data.items);
+
+
 
     }
 

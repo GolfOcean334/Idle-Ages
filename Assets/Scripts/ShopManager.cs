@@ -26,7 +26,7 @@ public class ShopManager : MonoBehaviour
         inventory = Inventory.Instance;
 
         // Charger la scène Inventory
-        StartCoroutine(LoadInventoryScene());
+        //StartCoroutine(LoadInventoryScene());
 
         if (resourcesManager == null)
         {
@@ -45,7 +45,7 @@ public class ShopManager : MonoBehaviour
         LoadPanels();
     }
 
-    IEnumerator LoadInventoryScene()
+    /*IEnumerator LoadInventoryScene()
     {
         // Charger la scène Inventory de manière asynchrone
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("InventoryScene", LoadSceneMode.Additive);
@@ -63,7 +63,7 @@ public class ShopManager : MonoBehaviour
         {
             Debug.LogError("InventoryManager n'a pas été trouvé dans la scène Inventory !");
         }
-    }
+    }*/
 
     void Update()
     {
@@ -113,9 +113,20 @@ public class ShopManager : MonoBehaviour
 
     public void buyItem(int index)
     {
-        if (resourcesManager == null || inventory == null || inventoryManager == null)
+        if (resourcesManager == null )
         {
-            Debug.LogError("ResourcesManager, Inventory ou InventoryManager n'est pas initialisé !");
+            Debug.LogError("RessourceManager marche pas");
+            
+            return;
+        }
+        if (inventory == null)
+        {
+            Debug.LogError("Inventory marche pas");
+            return;
+        }
+        if(inventoryManager == null)
+        {
+            Debug.LogError("Inv manager marche pas");
             return;
         }
 
