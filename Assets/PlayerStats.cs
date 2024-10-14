@@ -6,6 +6,7 @@ using System.IO;
 using TMPro;
 using Unity.VisualScripting;
 
+
 [CreateAssetMenu(fileName = "PlayerStats", menuName = "ScriptableObjects/PlayerStats", order = 1)]
 public class PlayerStats : ScriptableObject
 {
@@ -51,12 +52,135 @@ public class PlayerStats : ScriptableObject
     public readonly Queue<string> unitT2Queue = new();
     public readonly Queue<string> unitT3Queue = new();
 
+    public List<Item> EquippedItems = new List<Item>();
+
+    public void EquipItem(Item item)
+    {
+        if (EquippedItems.Contains(item))
+        {
+            UnequipItem(item);
+            return;
+        }
+
+        if (EquippedItems.Count >= 3)
+        {
+            UnityEngine.Debug.Log("Cannot equip more than 3 items.");
+            return;
+        }
+
+        EquippedItems.Add(item);
+        UpdateStats(item, true);
+    }
+
+    public void UnequipItem(Item item)
+    {
+        if (EquippedItems.Contains(item))
+        {
+            EquippedItems.Remove(item);
+            UpdateStats(item, false);
+        }
+    }
+
+    private void UpdateStats(Item item, bool isEquipping)
+    {
+        int modifier = isEquipping ? 1 : -1;
+
+        switch (item.TypeStat1)
+        {
+            case 1:
+                UnitsT1 += item.Stat1 * modifier;
+                break;
+            case 2:
+                UnitsT1 += (int)(UnitsT1 * item.StatPerc * modifier);
+                break;
+            case 3:
+                UnitsT2 += item.Stat1 * modifier;
+                break;
+            case 4:
+                UnitsT2 += (int)(UnitsT2 * item.StatPerc * modifier);
+                break;
+            case 5:
+                UnitsT3 += item.Stat1 * modifier;
+                break;
+            case 6:
+                UnitsT3 += (int)(UnitsT3 * item.StatPerc * modifier);
+                break;
+        }
+
+        switch (item.TypeStat2)
+        {
+            case 1:
+                UnitsT1 += item.Stat2 * modifier;
+                break;
+            case 2:
+                UnitsT1 += (int)(UnitsT1 * item.StatPerc * modifier);
+                break;
+            case 3:
+                UnitsT2 += item.Stat2 * modifier;
+                break;
+            case 4:
+                UnitsT2 += (int)(UnitsT2 * item.StatPerc * modifier);
+                break;
+            case 5:
+                UnitsT3 += item.Stat2 * modifier;
+                break;
+            case 6:
+                UnitsT3 += (int)(UnitsT3 * item.StatPerc * modifier);
+                break;
+        }
+    }
+
     public int CalculatePlayerPower()
     {
         float power = UnitsT1 * ((AttUnit1 * MainMultiplicator) + (DefUnit1 * SecondaryMultiplicator) + (PvUnit1 * SecondaryMultiplicator))
                     + UnitsT2 * ((AttUnit2 * MainMultiplicator) + (DefUnit2 * SecondaryMultiplicator) + (PvUnit2 * SecondaryMultiplicator))
                     + UnitsT3 * ((AttUnit3 * MainMultiplicator) + (DefUnit3 * SecondaryMultiplicator) + (PvUnit3 * SecondaryMultiplicator));
+        foreach (var item in EquippedItems)
+        {
+            switch (item.TypeStat1)
+            {
+                case 1:
+                    power += item.Stat1;
+                    break;
+                case 2:
+                    power += (int)(power * item.StatPerc);
+                    break;
+                case 3:
+                    power += item.Stat1;
+                    break;
+                case 4:
+                    power += (int)(power * item.StatPerc);
+                    break;
+                case 5:
+                    power += item.Stat1;
+                    break;
+                case 6:
+                    power += (int)(power * item.StatPerc);
+                    break;
+            }
 
+            switch (item.TypeStat2)
+            {
+                case 1:
+                    power += item.Stat2;
+                    break;
+                case 2:
+                    power += (int)(power * item.StatPerc);
+                    break;
+                case 3:
+                    power += item.Stat2;
+                    break;
+                case 4:
+                    power += (int)(power * item.StatPerc);
+                    break;
+                case 5:
+                    power += item.Stat2;
+                    break;
+                case 6:
+                    power += (int)(power * item.StatPerc);
+                    break;
+            }
+        }
         return Mathf.RoundToInt(power);
     }
 
@@ -288,5 +412,15 @@ public class PlayerStats : ScriptableObject
         UnitsT1 = 0;
         UnitsT2 = 0;
         UnitsT3 = 0;
+    }
+}
+
+public class InventoryContext
+{
+    public PlayerStats playerStats;
+
+    public InventoryContext(PlayerStats playerStats)
+    {
+        this.playerStats = playerStats;
     }
 }
