@@ -38,6 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1906,7 +1907,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   display: {fileID: 1725413676}
   data:
-    saveditems: []
+    saveditems:
+    - count: 1
+      data: {fileID: 11400000, guid: 44762ccff59739a47b9f01baef9ef3ea, type: 2}
+      slotID: 0
   items: []
 --- !u!114 &861951603
 MonoBehaviour:
@@ -2871,7 +2875,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1165028871}
-  - component: {fileID: 1165028872}
   m_Layer: 0
   m_Name: SceneContoller
   m_TagString: Untagged
@@ -2894,18 +2897,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 861951601}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1165028872
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1165028870}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b6de7eb3a7d7624fbc24de168b9194d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1175261979
 GameObject:
   m_ObjectHideFlags: 0

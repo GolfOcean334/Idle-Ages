@@ -23,10 +23,7 @@ public class ShopManager : MonoBehaviour
     void Start()
     {
         resourcesManager = FindObjectOfType<ResourcesManager>();
-        inventory = Inventory.Instance;
-
-        // Charger la scène Inventory
-        //StartCoroutine(LoadInventoryScene());
+        inventory = Inventory.Instance; // Accédez à l'instance de Inventory
 
         if (resourcesManager == null)
         {
@@ -44,26 +41,6 @@ public class ShopManager : MonoBehaviour
         }
         LoadPanels();
     }
-
-    /*IEnumerator LoadInventoryScene()
-    {
-        // Charger la scène Inventory de manière asynchrone
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("InventoryScene", LoadSceneMode.Additive);
-
-        // Attendre que la scène soit complètement chargée
-        while (!asyncLoad.isDone)
-        {
-            yield return null;
-        }
-
-        // Trouver InventoryManager dans la scène chargée
-        inventoryManager = FindObjectOfType<InventoryManager>();
-
-        if (inventoryManager == null)
-        {
-            Debug.LogError("InventoryManager n'a pas été trouvé dans la scène Inventory !");
-        }
-    }*/
 
     void Update()
     {
@@ -94,7 +71,6 @@ public class ShopManager : MonoBehaviour
             if (shopItemSO[index].Price >= playerStats.resource3)
             {
                 myPurchaseBtns[index].interactable = false;
-
             }
         }
         else if (shopItemSO[index].PriceType == 4)
@@ -102,7 +78,6 @@ public class ShopManager : MonoBehaviour
             if (shopItemSO[index].Price >= playerStats.resource4)
             {
                 myPurchaseBtns[index].interactable = false;
-
             }
         }
         else
@@ -113,10 +88,9 @@ public class ShopManager : MonoBehaviour
 
     public void buyItem(int index)
     {
-        if (resourcesManager == null )
+        if (resourcesManager == null)
         {
             Debug.LogError("RessourceManager marche pas");
-            
             return;
         }
         if (inventory == null)
@@ -124,11 +98,11 @@ public class ShopManager : MonoBehaviour
             Debug.LogError("Inventory marche pas");
             return;
         }
-        if(inventoryManager == null)
+        /*if (inventoryManager == null)
         {
             Debug.LogError("Inv manager marche pas");
             return;
-        }
+        }*/
 
         if (shopItemSO[index].PriceType == 1)
         {
@@ -143,7 +117,6 @@ public class ShopManager : MonoBehaviour
             inventory.AddItem(ConvertToItem(shopItemSO[index])); // Convertir et ajouter l'item à l'inventaire du joueur
             Debug.Log("Item acheté");
             //inventoryManager.SaveInventory();
-
         }
         else if (shopItemSO[index].PriceType == 3)
         {
@@ -151,7 +124,6 @@ public class ShopManager : MonoBehaviour
             inventory.AddItem(ConvertToItem(shopItemSO[index])); // Convertir et ajouter l'item à l'inventaire du joueur
             Debug.Log("Item acheté");
             //inventoryManager.SaveInventory();
-
         }
         else if (shopItemSO[index].PriceType == 4)
         {
@@ -159,7 +131,6 @@ public class ShopManager : MonoBehaviour
             inventory.AddItem(ConvertToItem(shopItemSO[index])); // Convertir et ajouter l'item à l'inventaire du joueur
             Debug.Log("Item acheté");
             //inventoryManager.SaveInventory();
-
         }
     }
 

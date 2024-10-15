@@ -19,14 +19,11 @@ public class Inventory : MonoBehaviour
 
     private void Awake()
     {
-
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject); // Assurez-vous que l'objet persiste entre les scènes
             Debug.Log("Inventory persiste entre les scènes.");
-
-
         }
         else
         {
@@ -35,13 +32,8 @@ public class Inventory : MonoBehaviour
         }
 
         int _slotCount = display.Initialize(this);
-
         data = new InventoryData(_slotCount);
-
         display.UpdateDisplay(data.items);
-
-
-
     }
 
 
