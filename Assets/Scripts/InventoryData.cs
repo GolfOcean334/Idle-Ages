@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic; // Ajout de l'espace de noms System.Collections.Generic
 
-[Serializable]
+[System.Serializable]
 public class InventoryData
 {
-    public InventoryData(int _slotCount)
-    {
-        items = new Item[_slotCount];
-    }
+    public Item[] items { private set; get; }
+
 
     public List<Item> saveditems;
 
@@ -17,7 +15,6 @@ public class InventoryData
         this.items = items.ToArray(); // Conversion de la liste en tableau
     }
 
-    public Item[] items { private set; get; }
 
     public bool SlotAvailable(Item _itemToAdd)
     {

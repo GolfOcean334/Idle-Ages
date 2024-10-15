@@ -17,7 +17,7 @@ public class Inventory : MonoBehaviour
     public List<Item> items = new List<Item>();
     private InventoryContext context;
 
-    private void Awake()
+    public void Awake()
     {
         if (Instance == null)
         {

@@ -109,28 +109,35 @@ public class ShopManager : MonoBehaviour
             playerStats.resource1 -= shopItemSO[index].Price;
             inventory.AddItem(ConvertToItem(shopItemSO[index])); // Convertir et ajouter l'item à l'inventaire du joueur
             Debug.Log("Item acheté");
-            //inventoryManager.SaveInventory();
+            inventoryManager.DisplayInventory();
+
+            inventoryManager.SaveInventory();
         }
         else if (shopItemSO[index].PriceType == 2)
         {
             playerStats.resource2 -= shopItemSO[index].Price;
             inventory.AddItem(ConvertToItem(shopItemSO[index])); // Convertir et ajouter l'item à l'inventaire du joueur
             Debug.Log("Item acheté");
-            //inventoryManager.SaveInventory();
+            inventoryManager.DisplayInventory();
+
+            inventoryManager.SaveInventory();
         }
         else if (shopItemSO[index].PriceType == 3)
         {
             playerStats.resource3 -= shopItemSO[index].Price;
             inventory.AddItem(ConvertToItem(shopItemSO[index])); // Convertir et ajouter l'item à l'inventaire du joueur
             Debug.Log("Item acheté");
-            //inventoryManager.SaveInventory();
+            inventoryManager.DisplayInventory();
+            inventoryManager.SaveInventory();
         }
         else if (shopItemSO[index].PriceType == 4)
         {
             playerStats.resource4 -= shopItemSO[index].Price;
             inventory.AddItem(ConvertToItem(shopItemSO[index])); // Convertir et ajouter l'item à l'inventaire du joueur
             Debug.Log("Item acheté");
-            //inventoryManager.SaveInventory();
+            inventoryManager.DisplayInventory();
+
+            inventoryManager.SaveInventory();
         }
     }
 

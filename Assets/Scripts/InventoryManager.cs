@@ -12,52 +12,53 @@ public class InventoryManager : MonoBehaviour
 {
     private string saveFilePath;
     private InventoryData currentInventory;
+    private Inventory inventory;
 
     private void Awake()
     {
         saveFilePath = Path.Combine(UnityEngine.Application.persistentDataPath, "inventory.json");
-        //LoadInventory();
+        LoadInventory();
     }
 
     private void OnApplicationQuit()
     {
-        //SaveInventory();
+        SaveInventory();
+    }
+
+    private void Start()
+    {
+        inventory = Inventory.Instance;
+        LoadInventory();
     }
 
     public void SaveInventory()
     {
-        try
-        {
-            string json = JsonUtility.ToJson(currentInventory);
-            File.WriteAllText(saveFilePath, json);
-            UnityEngine.Debug.Log("Inventory saved successfully.");
-        }
-        catch (Exception ex)
-        {
-            UnityEngine.Debug.LogError($"Failed to save inventory: {ex.Message}");
-        }
+        BinaryFormatter formatter = new BinaryFormatter();
+        string path = Application.persistentDataPath + "/inventory.save";
+        FileStream stream = new FileStream(path, FileMode.Create);
+
+        InventoryData data = new InventoryData(inventory.items);
+        formatter.Serialize(stream, data);
+        stream.Close();
     }
 
     public void LoadInventory()
     {
-        try
+        string path = Application.persistentDataPath + "/inventory.save";
+        if (File.Exists(path))
         {
-            if (File.Exists(saveFilePath))
-            {
-                string json = File.ReadAllText(saveFilePath);
-                currentInventory = JsonUtility.FromJson<InventoryData>(json);
-                DisplayInventory();
-                UnityEngine.Debug.Log("Inventory loaded successfully.");
-            }
-            else
-            {
-                currentInventory = new InventoryData(10); // Initialiser avec un inventaire vide
-                UnityEngine.Debug.Log("No inventory file found, starting with an empty inventory.");
-            }
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+
+            InventoryData data = formatter.Deserialize(stream) as InventoryData;
+            stream.Close();
+
+            inventory.items = new List<Item>(data.items); // Convertir le tableau en liste
+            inventory.display.UpdateDisplay(inventory.items);
         }
-        catch (Exception ex)
+        else
         {
-            UnityEngine.Debug.LogError($"Failed to load inventory: {ex.Message}");
+            Debug.LogError("Save file not found in " + path);
         }
     }
 
@@ -72,7 +73,7 @@ public class InventoryManager : MonoBehaviour
         return currentInventory;
     }
 
-    private void DisplayInventory()
+    public void DisplayInventory()
     {
         // Ajoutez ici la logique pour afficher l'inventaire
         foreach (var item in currentInventory.items)
@@ -81,4 +82,3 @@ public class InventoryManager : MonoBehaviour
         }
     }
 }
-
