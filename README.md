@@ -46,14 +46,19 @@ Technologies Used
 -----------------
 
 *   **Unity / C#** 
-    
+
+
+License
+-------
+
+This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License. See the [LICENSE](https://github.com/GolfOcean334/Astro-Shift-Unity/blob/main/LICENSE) file for more details.
 
 Contact
 -------
 
 For any questions or concerns, please contact the project maintainers:
 
-*   **Axel GATHELIER** - [gathelieraxel45@gmail.com](mailto:email@example.com)
+*   **Axel GATHELIER** - [gathelieraxel45@gmail.com](mailto:gathelieraxel45@gmail.com)
     
 *   **Hugo ROY** - 
     
@@ -108,14 +113,20 @@ Technologies Utilisées
 ----------------------
 
 *   **Unity / C#** 
-    
+
+
+License
+-------
+
+Ce projet est sous la Creative Commons Attribution-NonCommercial 4.0 International License. Voir le fichier [LICENSE](https://github.com/GolfOcean334/Astro-Shift-Unity/blob/main/LICENSE) pour plus de détails.
+
 
 Contact
 -------
 
 Pour toute question ou préoccupation, veuillez contacter les responsables du projet :
 
-*   **Axel GATHELIER** - [gathelieraxel45@gmail.com](mailto:email@example.com)
+*   **Axel GATHELIER** - [gathelieraxel45@gmail.com](mailto:gathelieraxel45@gmail.com)
     
 *   **Hugo ROY** - 
     
