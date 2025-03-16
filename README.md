@@ -51,7 +51,7 @@ Technologies Used
 License
 -------
 
-This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License. See the [LICENSE](https://github.com/GolfOcean334/Astro-Shift-Unity/blob/main/LICENSE) file for more details.
+This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License. See the [LICENSE](https://github.com/GolfOcean334/Projet-Perso--Idle-Ages-/blob/main/LICENSE) file for more details.
 
 Contact
 -------
@@ -118,7 +118,7 @@ Technologies Utilisées
 License
 -------
 
-Ce projet est sous la Creative Commons Attribution-NonCommercial 4.0 International License. Voir le fichier [LICENSE](https://github.com/GolfOcean334/Astro-Shift-Unity/blob/main/LICENSE) pour plus de détails.
+Ce projet est sous la Creative Commons Attribution-NonCommercial 4.0 International License. Voir le fichier [LICENSE](https://github.com/GolfOcean334/Projet-Perso--Idle-Ages-/blob/main/LICENSE) pour plus de détails.
 
 
 Contact
