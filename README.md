@@ -1,6 +1,6 @@
-![Ton Projet Banner](https://capsule-render.vercel.app/api?type=waving&color=gradient&height=150&section=header&text=AstroShift%20&fontSize=50)
+![Ton Projet Banner](https://capsule-render.vercel.app/api?type=waving&color=gradient&height=150&section=header&text=Idle%20Ages&fontSize=50)
 [![Licence: CC BY-NC 4.0](https://licensebuttons.net/l/by-nc/4.0/88x31.png)](https://creativecommons.org/licenses/by-nc/4.0/)
-![Version](https://img.shields.io/badge/version-1.0.0-green.svg)
+![Version](https://img.shields.io/badge/version-0.5.0-green.svg)
 
 
 ### English
